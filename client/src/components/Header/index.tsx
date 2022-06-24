@@ -1,25 +1,50 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import Container from "../../styles/Container";
 import logo from "../../assets/logo.svg";
-import { GiHamburgerMenu } from "react-icons/gi";
-import { FiSearch, FiUser } from "react-icons/fi";
-import { BsBag } from "react-icons/bs";
 import { theme } from "../../styles/theme";
+import Desktop from "./Desktop";
+import Mobile from "./Mobile";
 
-let amount: number = 3;
+export interface IMenuItem {
+  name: string;
+  url: string;
+}
+
+export interface IHeaderProps {
+  logo: string;
+  menuItem: IMenuItem[];
+}
 
 interface ICart {
   amount: number;
 }
+
+const menuItem: IMenuItem[] = [
+  {
+    name: "Home",
+    url: "/",
+  },
+  {
+    name: "About",
+    url: "/about",
+  },
+  {
+    name: "Shop",
+    url: "/shop",
+  },
+  {
+    name: "Contact",
+    url: "/contact",
+  },
+];
 
 const StyledTopbar = styled.div`
   background-color: ${theme.col.skyblue};
   font-size: ${theme.fs.xs};
   font-weight: 500;
 `;
-const ContainerExtended = styled(Container)`
-  /* display: none; */
 
+const ContainerExtended = styled(Container)`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -27,7 +52,6 @@ const ContainerExtended = styled(Container)`
 
   ul {
     display: flex;
-
     li {
       list-style: none;
       margin-left: 16px;
@@ -52,12 +76,15 @@ const StyledNav = styled.div`
   padding: 30px 15px;
 `;
 
-const Icon = styled.span`
+export const Icon = styled.span`
   color: ${theme.col["black-2"]};
   font-size: ${theme.fs["md-2"]};
 `;
-const CartIcon = styled(Icon)<ICart>`
+export const CartIcon = styled(Icon)<ICart>`
   position: relative;
+  @media (min-width: ${theme.sc.lg}) {
+    margin-right: 35px;
+  }
   &::after {
     position: absolute;
     content: "${(props) => props.amount}";
@@ -72,17 +99,28 @@ const CartIcon = styled(Icon)<ICart>`
     display: flex;
     align-items: center;
     justify-content: center;
+    @media (min-width: ${theme.sc.lg}) {
+      right: -20px;
+      top: 2px;
+      width: 17px;
+      height: 17px;
+    }
   }
 `;
-const Logo = styled.img`
-  width: 60px;
-  margin-right: 15px;
-`;
-const Left = styled.div`
+export const Left = styled.div`
   display: flex;
   align-items: center;
 `;
-const Right = styled.div``;
+
+export const Logo = styled.img`
+  width: 60px;
+  margin-right: 15px;
+  align-self: center;
+  @media (min-width: ${theme.sc.lg}) {
+    justify-self: center;
+    width: 80px;
+  }
+`;
 
 export default function Header() {
   return (
@@ -100,31 +138,12 @@ export default function Header() {
       </StyledTopbar>
       {/* navbar */}
       <StyledNav>
-        <ContainerExtended>
-          <Left>
-            <Logo src={logo} alt="site logo" aria-label="logo" />
-            <Icon>
-              <GiHamburgerMenu />
-            </Icon>
-          </Left>
-          <ul>
-            <li>
-              <Icon>
-                <FiSearch />
-              </Icon>
-            </li>
-            <li>
-              <CartIcon amount={amount}>
-                <BsBag />
-              </CartIcon>
-            </li>
-            <li>
-              <Icon>
-                <FiUser />
-              </Icon>
-            </li>
-          </ul>
-        </ContainerExtended>
+        {/* <ContainerExtended>
+        </ContainerExtended> */}
+        <Container>
+          <Mobile logo={logo} menuItem={menuItem} />
+          <Desktop logo={logo} menuItem={menuItem} />
+        </Container>
       </StyledNav>
     </header>
   );
