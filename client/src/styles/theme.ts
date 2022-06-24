@@ -1,5 +1,5 @@
 const theme = {
-  colors: {
+  col: {
     skyblue: "#EBF6FC",
     "black-2": "#111E49",
     darkBlue: "#1E306E",
@@ -8,7 +8,7 @@ const theme = {
     white: "#ffffff",
     black: "#000000",
   },
-  fontSize: {
+  fs: {
     xxs: "10px",
     xs: "12px",
     sm: "14px",
@@ -20,12 +20,17 @@ const theme = {
     xl: "34px",
     "xl-2": "35px",
   },
-  screens: {
+  sc: {
     sm: "640px",
     md: "768px",
     lg: "1024px",
     xl: "1280px",
     "2xl": "1536px",
+  },
+  spacing: {
+    "5": "5px",
+    "15": "15px",
+    "30": "30px",
   },
 };
 
