@@ -1,9 +1,10 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import Container from "../../styles/Container";
 import logo from "../../assets/logo.svg";
 import { theme } from "../../styles/theme";
 import Desktop from "./Desktop";
 import Mobile from "./Mobile";
+import StyledBackground from "../../styles/StyledBackground";
 
 export interface IMenuItem {
   name: string;
@@ -67,15 +68,6 @@ const ContainerTop = styled(ContainerExtended)`
   }
 `;
 
-const StyledNav = styled.div`
-  background: linear-gradient(
-    90deg,
-    rgba(235, 246, 252, 1) 50%,
-    rgba(255, 255, 255, 1) 50%
-  );
-  padding: 30px 15px;
-`;
-
 export const Icon = styled.span`
   color: ${theme.col["black-2"]};
   font-size: ${theme.fs["md-2"]};
@@ -137,14 +129,12 @@ export default function Header() {
         </ContainerTop>
       </StyledTopbar>
       {/* navbar */}
-      <StyledNav>
-        {/* <ContainerExtended>
-        </ContainerExtended> */}
+      <StyledBackground>
         <Container>
           <Mobile logo={logo} menuItem={menuItem} />
           <Desktop logo={logo} menuItem={menuItem} />
         </Container>
-      </StyledNav>
+      </StyledBackground>
     </header>
   );
 }

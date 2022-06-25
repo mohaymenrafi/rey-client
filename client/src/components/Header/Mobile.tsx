@@ -10,6 +10,7 @@ let amount: number = 3;
 const MobileNav = styled.div`
   display: flex;
   justify-content: space-between;
+  padding: 30px 15px;
   ul {
     display: flex;
     justify-content: flex-end;

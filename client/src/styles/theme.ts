@@ -15,6 +15,7 @@ const theme = {
     base: "16px",
     md: "18px",
     "md-2": "20px",
+    "md-3": "24px",
     lg: "26px",
     "lg-2": "29px",
     xl: "34px",

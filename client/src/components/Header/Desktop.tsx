@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BsBag } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
@@ -8,6 +8,7 @@ import { theme } from "../../styles/theme";
 
 const DesktopNav = styled.div`
   display: none;
+  padding: 30px 15px;
   @media (min-width: ${theme.sc.lg}) {
     display: grid;
   }
@@ -32,8 +33,6 @@ const DesktopNav = styled.div`
       position: absolute;
       content: "";
       bottom: 0;
-      left: 0;
-      right: 0;
       width: 100%;
       height: 2px;
       background-color: ${theme.col.black};
