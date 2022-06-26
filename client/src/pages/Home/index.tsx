@@ -1,5 +1,10 @@
 import React from "react";
-import { Banner, DisplayCatOne, DisplayCatTwo } from "../../components";
+import {
+  Banner,
+  DisplayCatOne,
+  DisplayCatTwo,
+  TopPicks,
+} from "../../components";
 
 export default function Home() {
   return (
@@ -7,6 +12,7 @@ export default function Home() {
       <Banner />
       <DisplayCatOne />
       <DisplayCatTwo />
+      <TopPicks />
     </>
   );
 }

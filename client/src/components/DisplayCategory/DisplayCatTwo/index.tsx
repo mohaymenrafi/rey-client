@@ -23,7 +23,7 @@ const ExtendedContainer = styled(Container)`
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   grid-row-gap: 25px;
-  padding: 0 20px;
+  padding: 0 20px 50px;
   @media (min-width: ${theme.sc.md}) {
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 30px;

@@ -7,6 +7,7 @@ const theme = {
     gray: "#485056",
     white: "#ffffff",
     black: "#000000",
+    lightGray: "#EEEEEE",
   },
   fs: {
     xxs: "10px",
