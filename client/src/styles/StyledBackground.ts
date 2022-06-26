@@ -1,10 +1,11 @@
 import styled from "styled-components";
+import { theme } from "./theme";
 
 const StyledBackground = styled.div`
   background: linear-gradient(
     90deg,
-    rgba(235, 246, 252, 1) 50%,
-    rgba(255, 255, 255, 1) 50%
+    ${theme.col.skyblue} 50%,
+    ${theme.col.white} 50%
   );
 `;
 

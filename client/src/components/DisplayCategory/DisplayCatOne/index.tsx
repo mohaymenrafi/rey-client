@@ -4,13 +4,38 @@ import Container from "../../../styles/Container";
 import StyledBackground from "../../../styles/StyledBackground";
 import { theme } from "../../../styles/theme";
 import { FaFacebookF, FaInstagram, FaPinterestP } from "react-icons/fa";
-import { SmallText } from "../../../styles/SmallText";
+import Card from "../Card/Card";
+import Beds from "../../../assets/beds.jpeg";
+import Chair from "../../../assets/chairs.jpeg";
+
+const ExtendedContainer = styled(Container)`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-row-gap: 25px;
+  padding: 50px 20px;
+  @media (min-width: ${theme.sc.md}) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 30px;
+    grid-row-gap: 50px;
+    padding: 50px 0;
+  }
+  @media (min-width: ${theme.sc.lg}) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+`;
 
 const NewsletterContainer = styled.div`
   position: relative;
   border: 10px solid ${theme.col.gray};
   border-top: 0px;
-  margin-bottom: 50px; //TODO: remove it later
+  @media (min-width: ${theme.sc.md}) {
+    grid-column: 1/-1;
+  }
+  @media (min-width: ${theme.sc.lg}) {
+    grid-column: 1;
+    min-height: 435px;
+  }
+
   padding: 70px 30px 30px;
   color: ${theme.col.gray};
   min-height: 400px;
@@ -93,10 +118,16 @@ const Icon = styled.span`
   margin-right: 20px;
 `;
 
+const Middle = styled.div`
+  @media (min-width: ${theme.sc.lg}) {
+    grid-column: 2 / span 2;
+  }
+`;
+
 const DisplayCatOne = () => {
   return (
     <StyledBackground>
-      <Container>
+      <ExtendedContainer>
         <NewsletterContainer>
           <div>
             <h2>
@@ -129,7 +160,13 @@ const DisplayCatOne = () => {
             </Icon>
           </div>
         </NewsletterContainer>
-      </Container>
+        <Middle>
+          <Card text="BEDS & MATTRESES" image={Beds} height={400} />
+        </Middle>
+        <div>
+          <Card text="CHAIRS" image={Chair} height={400} />
+        </div>
+      </ExtendedContainer>
     </StyledBackground>
   );
 };
