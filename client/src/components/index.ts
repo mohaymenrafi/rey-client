@@ -4,3 +4,4 @@ export { default as Banner } from "./Banner/index";
 export { default as DisplayCatOne } from "./DisplayCategory/DisplayCatOne";
 export { default as DisplayCatTwo } from "./DisplayCategory/DisplayCatTwo";
 export { default as TopPicks } from "./TopPicks/index";
+export { default as HotspotBanner } from "./HotspotBanner/index";

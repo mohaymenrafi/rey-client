@@ -4,6 +4,7 @@ import {
   DisplayCatOne,
   DisplayCatTwo,
   TopPicks,
+  HotspotBanner,
 } from "../../components";
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
       <DisplayCatOne />
       <DisplayCatTwo />
       <TopPicks />
+      <HotspotBanner />
     </>
   );
 }
