@@ -16,11 +16,6 @@ const SectionTitle = styled.h2`
   font-weight: 600;
 `;
 
-const ShopNow = styled(SmallText)`
-  text-align: center;
-  margin-top: 10px;
-`;
-
 const CardContainer = styled.div`
   padding: 30px 0;
   display: grid;
@@ -39,7 +34,7 @@ const TopPicks = () => {
   return (
     <ContainerExtended>
       <SectionTitle>BEST SELLING PICKS</SectionTitle>
-      <ShopNow>SHOP NOW</ShopNow>
+
       <CardContainer>
         <TopPicksCard />
         <TopPicksCard />

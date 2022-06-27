@@ -6,7 +6,6 @@ import {
   TopPicks,
   HotspotBanner,
   Logos,
-  Footer,
 } from "../../components";
 
 export default function Home() {
@@ -18,7 +17,6 @@ export default function Home() {
       <TopPicks />
       <HotspotBanner />
       <Logos />
-      <Footer />
     </>
   );
 }

@@ -63,6 +63,10 @@ const LinksContainer = styled.div`
       margin-bottom: 7px;
       font-size: ${theme.fs.sm};
       font-weight: 500;
+      &:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
     }
   }
 `;
