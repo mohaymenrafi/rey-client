@@ -5,6 +5,8 @@ import {
   DisplayCatTwo,
   TopPicks,
   HotspotBanner,
+  Logos,
+  Footer,
 } from "../../components";
 
 export default function Home() {
@@ -15,6 +17,8 @@ export default function Home() {
       <DisplayCatTwo />
       <TopPicks />
       <HotspotBanner />
+      <Logos />
+      <Footer />
     </>
   );
 }

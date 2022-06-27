@@ -5,3 +5,5 @@ export { default as DisplayCatOne } from "./DisplayCategory/DisplayCatOne";
 export { default as DisplayCatTwo } from "./DisplayCategory/DisplayCatTwo";
 export { default as TopPicks } from "./TopPicks/index";
 export { default as HotspotBanner } from "./HotspotBanner/index";
+export { default as Logos } from "./Logos/index";
+export { default as Footer } from "./Footer/index";
