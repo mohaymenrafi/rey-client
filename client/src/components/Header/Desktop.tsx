@@ -59,7 +59,7 @@ const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
       <ul>
         {menuItem?.map((item, idx) => (
           <li key={idx}>
-            <a href={item.url}>{item.name}</a>
+            <Link to={item.url}>{item.name}</Link>
           </li>
         ))}
       </ul>
@@ -71,7 +71,7 @@ const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
           </Icon>
         </CartIcon>
         <SmallText>
-          <Link to="/">ACCOUNT</Link>
+          <Link to="/my-account">ACCOUNT</Link>
         </SmallText>
       </Right>
     </DesktopNav>

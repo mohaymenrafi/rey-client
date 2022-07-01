@@ -26,10 +26,6 @@ const menuItem: IMenuItem[] = [
     url: "/",
   },
   {
-    name: "About",
-    url: "/about",
-  },
-  {
     name: "Shop",
     url: "/shop",
   },

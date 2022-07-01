@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Container from "../../styles/Container";
 import { SmallText } from "../../styles/SmallText";
 import { theme } from "../../styles/theme";
-import TopPicksCard from "./TopPicksCard/index";
+import ProductCard from "../ProductCard/index";
 
 const ContainerExtended = styled(Container)`
   padding: 50px 15px;
@@ -36,10 +36,10 @@ const TopPicks = () => {
       <SectionTitle>BEST SELLING PICKS</SectionTitle>
 
       <CardContainer>
-        <TopPicksCard />
-        <TopPicksCard />
-        <TopPicksCard />
-        <TopPicksCard />
+        <ProductCard />
+        <ProductCard />
+        <ProductCard />
+        <ProductCard />
       </CardContainer>
     </ContainerExtended>
   );

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import ProductImg from "../../../assets/30.jpeg";
-import { theme } from "../../../styles/theme";
+import ProductImg from "../../assets/30.jpeg";
+import { theme } from "../../styles/theme";
 
 const CardContainer = styled.div`
   position: relative;
@@ -54,7 +54,7 @@ const Price = styled.p`
   font-size: ${theme.fs.sm};
   font-weight: 600;
 `;
-const index = () => {
+const ProductCard = () => {
   return (
     <CardContainer>
       <img src={ProductImg} alt="" />
@@ -65,4 +65,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default ProductCard;
