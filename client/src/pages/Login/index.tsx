@@ -3,29 +3,15 @@ import styled from "styled-components";
 import Container from "../../styles/Container";
 import { theme } from "../../styles/theme";
 import { useForm, SubmitHandler } from "react-hook-form";
-
-type Inputs = {
-	username: string;
-	password: string;
-	roles: string[];
-};
+import { Link } from "react-router-dom";
+import { LoginInputs } from "../../types/auth";
+import { Title } from "../../styles/CommonStyles";
 
 const ContainerExtended = styled(Container)`
 	padding: 50px;
 	display: flex;
 	justify-content: center;
 	align-content: center;
-`;
-
-const Title = styled.h2`
-	font-size: ${theme.fs.lg};
-	color: ${theme.col.gray};
-	margin-bottom: 20px;
-	text-align: center;
-	@media (min-width: ${theme.sc.md}) {
-		margin-bottom: 30px;
-		font-size: ${theme.fs.xl};
-	}
 `;
 
 const FormContainer = styled.form`
@@ -51,24 +37,30 @@ const FormContainer = styled.form`
 	}
 `;
 
+const Info = styled.div`
+	display: flex;
+	justify-content: space-between;
+	margin-top: 10px;
+	font-size: ${theme.fs.sm};
+`;
+
 const Login = () => {
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
-	} = useForm<Inputs>();
-	const onSubmit: SubmitHandler<Inputs> = (data) => {
+	} = useForm<LoginInputs>();
+	const onSubmit: SubmitHandler<LoginInputs> = (data) => {
 		data = {
 			...data,
 			roles: ["customer"],
 		};
-		console.log(data);
 	};
 
 	return (
 		<ContainerExtended>
 			<div>
-				<Title>Login</Title>
+				<Title>Sign In</Title>
 				<FormContainer onSubmit={handleSubmit(onSubmit)}>
 					<input
 						placeholder="username"
@@ -83,8 +75,16 @@ const Login = () => {
 
 					{errors.password && <span>This field is required</span>}
 
-					<input type="submit" value="Sign In" />
+					<input type="submit" value="Login" />
 				</FormContainer>
+				<Info>
+					<Link to="/auth/forget-password">
+						<p>Forgot Password</p>
+					</Link>
+					<Link to="/register">
+						<p>Signup</p>
+					</Link>
+				</Info>
 			</div>
 		</ContainerExtended>
 	);

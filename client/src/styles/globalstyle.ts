@@ -1,5 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 import { customFont } from "./font";
+import { theme } from "./theme";
 
 export default createGlobalStyle`
     ${customFont}
@@ -10,4 +11,12 @@ export default createGlobalStyle`
         box-sizing: border-box;
         outline:0;
     }
+    a {
+        color:${theme.col["black-2"]} ;
+        text-decoration: none;
+    }
+    a:hover {
+        color:${theme.col["darkBlue"]} ;
+    }
+    
 `;
