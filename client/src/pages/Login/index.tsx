@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import styled from "styled-components";
 import Container from "../../styles/Container";
 import { theme } from "../../styles/theme";
@@ -71,9 +70,10 @@ const Login = () => {
 		}
 	};
 
-	// useEffect(() => {
-	// 	console.log(user);
-	// }, [user]);
+	const handleClick = async () => {
+		const newToken = await refresh();
+		console.log(newToken);
+	};
 
 	return (
 		<ContainerExtended>
@@ -104,6 +104,7 @@ const Login = () => {
 					</Link>
 				</Info>
 			</div>
+			<button onClick={handleClick}>refresh</button>
 		</ContainerExtended>
 	);
 };

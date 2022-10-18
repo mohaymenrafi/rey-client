@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { publicReq } from "../../apis/apiConfig";
+import { axiosPublic } from "../../apis/apiConfig";
 import { AuthUser, LoginInputs } from "../../types/auth";
 import { RootState } from "../../app/store";
 
@@ -18,12 +18,12 @@ const initialState: AuthUser = {
 export const fetchUser = createAsyncThunk(
 	"auth/fetchUser",
 	async (data: LoginInputs) => {
-		const response = await publicReq.post("/auth", data);
+		const response = await axiosPublic.post("/auth", data);
 		return response.data;
 	}
 );
 export const refreshToken = createAsyncThunk("auth/refresh", async () => {
-	const response = await publicReq.get("/auth/refresh", {
+	const response = await axiosPublic.get("/auth/refresh", {
 		withCredentials: true,
 	});
 	return response.data;
@@ -42,8 +42,6 @@ export const authSlice = createSlice({
 				}
 			)
 			.addCase(refreshToken.fulfilled, (state, action) => {
-				// const updateUser = { ...state, ...action.payload };
-				// return updateUser;
 				state = { ...state, ...action.payload };
 				return state;
 			});
