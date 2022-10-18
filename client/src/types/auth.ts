@@ -1,7 +1,6 @@
 export type LoginInputs = {
 	username: string;
 	password: string;
-	roles: string[];
 };
 
 export type RegsiterInputs = {
@@ -11,4 +10,15 @@ export type RegsiterInputs = {
 	email: string;
 	password: string;
 	confirmPassword: string;
+};
+
+export type AuthUser = {
+	username: string;
+	firstname: string;
+	lastname: string;
+	email: string;
+	accessToken: string;
+	roles: string[];
+	active: boolean;
+	id: string;
 };

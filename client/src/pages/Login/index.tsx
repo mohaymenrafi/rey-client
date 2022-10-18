@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Container from "../../styles/Container";
 import { theme } from "../../styles/theme";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LoginInputs } from "../../types/auth";
 import { Title } from "../../styles/CommonStyles";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { fetchUser, selectAuthUser } from "../../features/auth/authSlice";
+import useRefreshToken from "../../hooks/useRefreshToken";
 
 const ContainerExtended = styled(Container)`
 	padding: 50px;
@@ -45,22 +48,37 @@ const Info = styled.div`
 `;
 
 const Login = () => {
+	const dispatch = useAppDispatch();
+	const user = useAppSelector(selectAuthUser);
+	const refresh = useRefreshToken();
+
+	const nagivate = useNavigate();
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm<LoginInputs>();
-	const onSubmit: SubmitHandler<LoginInputs> = (data) => {
-		data = {
-			...data,
-			roles: ["customer"],
-		};
+	const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
+		const authSuccess = await dispatch(fetchUser(data));
+		if (fetchUser.fulfilled.match(authSuccess)) {
+			// nagivate("/"); navigatet to the page after login
+		} else {
+			if (authSuccess.payload) {
+				console.error(authSuccess.payload);
+			} else {
+				console.error(authSuccess.error.message);
+			}
+		}
 	};
+
+	// useEffect(() => {
+	// 	console.log(user);
+	// }, [user]);
 
 	return (
 		<ContainerExtended>
 			<div>
-				<Title>Sign In</Title>
+				<Title>Sign In {user?.username}</Title>
 				<FormContainer onSubmit={handleSubmit(onSubmit)}>
 					<input
 						placeholder="username"
