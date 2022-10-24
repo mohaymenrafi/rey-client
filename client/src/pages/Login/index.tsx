@@ -49,7 +49,6 @@ const Info = styled.div`
 const Login = () => {
 	const dispatch = useAppDispatch();
 	const user = useAppSelector(selectAuthUser);
-	const refresh = useRefreshToken();
 
 	const nagivate = useNavigate();
 	const {
@@ -60,7 +59,7 @@ const Login = () => {
 	const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
 		const authSuccess = await dispatch(fetchUser(data));
 		if (fetchUser.fulfilled.match(authSuccess)) {
-			// nagivate("/"); navigatet to the page after login
+			nagivate("/");
 		} else {
 			if (authSuccess.payload) {
 				console.error(authSuccess.payload);
@@ -68,11 +67,6 @@ const Login = () => {
 				console.error(authSuccess.error.message);
 			}
 		}
-	};
-
-	const handleClick = async () => {
-		const newToken = await refresh();
-		console.log(newToken);
 	};
 
 	return (
@@ -104,7 +98,6 @@ const Login = () => {
 					</Link>
 				</Info>
 			</div>
-			<button onClick={handleClick}>refresh</button>
 		</ContainerExtended>
 	);
 };

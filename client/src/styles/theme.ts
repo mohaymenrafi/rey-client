@@ -22,6 +22,7 @@ const theme = {
 		"lg-2": "29px",
 		xl: "34px",
 		"xl-2": "35px",
+		xxxl: "60px",
 	},
 	sc: {
 		sm: "640px",
