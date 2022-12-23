@@ -10,6 +10,7 @@ const theme = {
 		black: "#000000",
 		lightGray: "#EEEEEE",
 		red: "#eb0014",
+		blueHover: "#000038",
 	},
 	fs: {
 		xxs: "10px",

@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import Container from "../../styles/Container";
 import { theme } from "../../styles/theme";
+import { BsPatchCheck } from "react-icons/bs";
+import React, { useState } from "react";
 
 const ContainerExtended = styled(Container)`
 	padding-top: 30px;
@@ -53,9 +55,64 @@ const Price = styled.p`
 	margin-bottom: 15px;
 `;
 
-const ShortDescription = styled.p``;
+const ShortDescription = styled.p`
+	margin-bottom: 15px;
+	line-height: 1.7em;
+`;
+
+const InStock = styled.p`
+	margin-bottom: 15px;
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
+	span {
+		margin-left: 10px;
+		text-transform: uppercase;
+		font-size: ${theme.fs.xs};
+		font-weight: 600;
+		color: ${theme.col.gray};
+	}
+`;
+
+const AddToCart = styled.div`
+	background-color: ${theme.col.darkBlue};
+	overflow: hidden;
+	border-radius: 2px;
+	display: flex;
+	align-items: stretch;
+
+	input[type="number"] {
+		font-weight: 600;
+		background: ${theme.col.white};
+		border: none;
+		outline: none;
+		width: 50px;
+		padding: 8px;
+		margin: 5px;
+	}
+	button {
+		flex-grow: 1;
+		background: transparent;
+		border: none;
+		color: ${theme.col.white};
+		text-transform: uppercase;
+		font-weight: 500;
+		font-size: ${theme.fs.sm};
+		cursor: pointer;
+		:hover {
+			background: ${theme.col.blueHover};
+		}
+	}
+`;
 
 const SingleProduct = () => {
+	const [cartAmount, setCartAmount] = useState<number>(1);
+
+	const handleCartAmount = (e: React.ChangeEvent<HTMLInputElement>): void => {
+		let { value } = e.target;
+		let intValue = parseInt(value);
+		if (intValue >= 1) setCartAmount(intValue);
+	};
 	return (
 		<ContainerExtended>
 			<Layout>
@@ -76,9 +133,19 @@ const SingleProduct = () => {
 						users. Rapidiously redefine front-end interfaces before go forward
 						process improvements.
 					</ShortDescription>
-					{/*<InStock>In stock</InStock>
-					<AddToCard>Add to Cart</AddToCard>
-					<AddToWishlist>Add to Wishlist</AddToWishlist>
+					<InStock>
+						<BsPatchCheck />
+						<span>In stock</span>
+					</InStock>
+					<AddToCart>
+						<input
+							type="number"
+							value={cartAmount}
+							onChange={handleCartAmount}
+						/>
+						<button>Add to cart</button>
+					</AddToCart>
+					{/*<AddToWishlist>Add to Wishlist</AddToWishlist>
 					<Share>Share Icons</Share> */}
 				</InfoDiv>
 				{/* <div>
