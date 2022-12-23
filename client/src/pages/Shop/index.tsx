@@ -1,14 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Container from "../../styles/Container";
 import ShopBanner from "../../assets/bg-cover.webp";
 import { theme } from "../../styles/theme";
 import { CardContainer } from "../../components/TopPicks";
 import { ProductCard } from "../../components";
-
-const productAmount: number[] = [
-	1, 23, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-];
+import { PRODUCTS, createFakeProduct } from "../../utils/generateFakeProduct";
 
 const ContainerExtended = styled(Container)`
 	background: url("${ShopBanner}") no-repeat center center;
@@ -77,6 +74,12 @@ const categories: string[] = [
 const SpacerDiv = styled.div``;
 
 const Shop = () => {
+	const generateFakeProduct = async () => {
+		await createFakeProduct();
+	};
+	useEffect(() => {
+		generateFakeProduct();
+	}, []);
 	return (
 		<>
 			<ContainerExtended>
@@ -92,7 +95,10 @@ const Shop = () => {
 			</ContainerExtended>
 			<Container>
 				<CardContainer>
-					{productAmount.map((item, index) => (
+					{/* {PRODUCTS.map((item, index) => (
+						<ProductCard key={index} />
+					))} */}
+					{Array.from({ length: 8 }).map((item, index) => (
 						<ProductCard key={index} />
 					))}
 				</CardContainer>

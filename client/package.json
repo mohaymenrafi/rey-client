@@ -49,6 +49,7 @@
     ]
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@types/styled-components": "^5.1.25",
     "react-icons": "^4.4.0"
   }
