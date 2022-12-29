@@ -17,7 +17,7 @@ function App() {
 			<Route path="/" element={<Laylout />}>
 				<Route index element={<Home />} />
 				<Route path="shop" element={<Shop />} />
-				<Route path="products/id" element={<SingleProduct />} />
+				<Route path="pid" element={<SingleProduct />} />
 				<Route path="cart" element={<CartPage />} />
 				<Route path="wishlist" element={<WishlistPage />} />
 				<Route path="contact" element={<Contact />} />

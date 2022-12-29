@@ -5,6 +5,8 @@ import { theme } from "../../styles/theme";
 import Desktop from "./Desktop";
 import Mobile from "./Mobile";
 import StyledBackground from "../../styles/StyledBackground";
+import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export interface IMenuItem {
 	name: string;
@@ -115,6 +117,11 @@ export const Logo = styled.img`
 `;
 
 export default function Header() {
+	const { pathname } = useLocation();
+	const [url, setUrl] = useState(pathname);
+	useEffect(() => {
+		setUrl(pathname);
+	}, [pathname]);
 	return (
 		<header>
 			{/* topbar */}
@@ -129,7 +136,7 @@ export default function Header() {
 				</ContainerTop>
 			</StyledTopbar>
 			{/* navbar */}
-			<StyledBackground>
+			<StyledBackground blue={url === "/" ? true : false}>
 				<Container>
 					<Mobile logo={logo} menuItem={menuItem} />
 					<Desktop logo={logo} menuItem={menuItem} />
