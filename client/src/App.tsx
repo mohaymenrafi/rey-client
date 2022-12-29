@@ -1,12 +1,15 @@
 import { Route, Routes } from "react-router-dom";
 import { Laylout } from "./components";
-import Contact from "./pages/Contact";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Shop from "./pages/Shop";
-import SingleProduct from "./pages/SingleProduct";
-import CartPage from "./pages/Cart";
+import {
+	Home,
+	Contact,
+	Shop,
+	Login,
+	Register,
+	WishlistPage,
+	CartPage,
+	SingleProduct,
+} from "./pages";
 
 function App() {
 	return (
@@ -16,6 +19,7 @@ function App() {
 				<Route path="shop" element={<Shop />} />
 				<Route path="products/id" element={<SingleProduct />} />
 				<Route path="cart" element={<CartPage />} />
+				<Route path="wishlist" element={<WishlistPage />} />
 				<Route path="contact" element={<Contact />} />
 				<Route path="login" element={<Login />} />
 				<Route path="register" element={<Register />} />
