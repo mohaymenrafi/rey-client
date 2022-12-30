@@ -5,6 +5,7 @@ import { theme } from "../../styles/theme";
 import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { localProduct } from "../../types/product";
 
 const CardContainer = styled.div`
 	position: relative;
@@ -58,6 +59,7 @@ const CardContainer = styled.div`
 const Category = styled.p`
 	color: #c7cace;
 	font-size: ${theme.fs.xxs};
+	text-transform: uppercase;
 	font-weight: 600;
 	@media (min-width: ${theme.sc.lg}) {
 		font-size: ${theme.fs.xs};
@@ -115,17 +117,34 @@ const View = styled.span`
 `;
 const Icon = styled.span``;
 
-const ProductCard = () => {
+const Image = styled.img`
+	width: auto;
+	max-height: 310;
+	/* object-fit: contain; */
+`;
+
+interface IProps {
+	item: localProduct;
+}
+
+const ProductCard: React.FC<IProps> = ({ item }) => {
 	const [isHover, setIsHover] = useState<boolean>(false);
+	console.log(item.img);
 	return (
 		<CardContainer
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
 		>
-			<img src={ProductImg} alt="" />
-			<Category>LIGHT</Category>
-			<h2>Chicago Large Pendant, Green & Brass</h2>
-			<Price isHover={isHover}>$129</Price>
+			<Image src={item?.img} alt={item.title} />
+			<Category>
+				{item?.categories.map((cat, idx) => (
+					<p key={idx}>{cat}</p>
+				))}
+				{/* sofas */}
+			</Category>
+			<h2>{item?.title}</h2>
+			{/* TODO: convert the prices from cent to actual prices and also use localization, use function */}
+			<Price isHover={isHover}>${item?.price}</Price>
 			<ViewDetails isHover={isHover}>
 				<Link to="/products/id">
 					<View>view details</View>

@@ -6,6 +6,7 @@ import { theme } from "../../styles/theme";
 import { CardContainer } from "../../components/TopPicks";
 import { ProductCard } from "../../components";
 import { PRODUCTS, createFakeProduct } from "../../utils/generateFakeProduct";
+import { localProduct } from "../../localData";
 
 const ContainerExtended = styled(Container)`
 	background: url("${ShopBanner}") no-repeat center center;
@@ -98,8 +99,8 @@ const Shop = () => {
 					{/* {PRODUCTS.map((item, index) => (
 						<ProductCard key={index} />
 					))} */}
-					{Array.from({ length: 8 }).map((item, index) => (
-						<ProductCard key={index} />
+					{localProduct.map((item, index) => (
+						<ProductCard item={item} key={index} />
 					))}
 				</CardContainer>
 			</Container>

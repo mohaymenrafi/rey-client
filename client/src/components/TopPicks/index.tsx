@@ -43,7 +43,8 @@ const TopPicks = () => {
 
 			<CardContainer>
 				{picks.map((item, index) => (
-					<ProductCard key={index} />
+					// <ProductCard key={index} />
+					<p key={index}>TOP picks , need to pass actual product items</p>
 				))}
 			</CardContainer>
 		</ContainerExtended>

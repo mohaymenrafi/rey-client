@@ -343,8 +343,9 @@ const SingleProduct = () => {
 				<RelatedProductsContainer>
 					<h2>Related Products</h2>
 					<RelatedProducts>
-						{Array.from({ length: 4 }).map((item) => (
-							<ProductCard />
+						{Array.from({ length: 4 }).map((item, idx) => (
+							// <ProductCard />
+							<p key={idx}> Need to add related products to show data</p>
 						))}
 					</RelatedProducts>
 				</RelatedProductsContainer>
