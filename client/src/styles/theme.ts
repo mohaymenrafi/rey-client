@@ -1,16 +1,17 @@
 const theme = {
 	col: {
 		skyblue: "#EBF6FC",
-		"black-2": "#111E49",
 		darkBlue: "#1E306E",
-		"white-2": "#F3F9FC",
+		blueHover: "#000038",
+		lightGray: "#EEEEEE",
 		gray: "#485056",
 		"gray-2": "#6D757E",
+		"gray-3": "#484f56",
 		white: "#ffffff",
+		"white-2": "#F3F9FC",
 		black: "#000000",
-		lightGray: "#EEEEEE",
+		"black-2": "#111E49",
 		red: "#eb0014",
-		blueHover: "#000038",
 	},
 	fs: {
 		xxs: "10px",

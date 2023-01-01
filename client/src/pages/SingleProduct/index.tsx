@@ -64,8 +64,25 @@ const Brand = styled.p`
 const Price = styled.p`
 	font-size: ${theme.fs["md-2"]};
 	font-weight: 600;
-	color: ${theme.col.gray};
 	margin-bottom: 15px;
+	display: flex;
+	column-gap: 20px;
+	align-items: center;
+`;
+const Regular = styled.p<{ sale: boolean }>`
+	color: ${theme.col.gray};
+	text-decoration: ${(props) => props.sale && "line-through"};
+	font-weight: ${(props) => props.sale && 500};
+`;
+const Sale = styled.p`
+	color: ${theme.col.darkBlue};
+`;
+const PriceOff = styled.p`
+	background: ${theme.col.darkBlue};
+	padding: 8px 13px;
+	color: ${theme.col.white};
+	font-size: ${theme.fs.sm};
+	font-weight: 500;
 `;
 
 const InStock = styled.p<{ stock: boolean }>`
@@ -230,6 +247,7 @@ const SingleProduct = () => {
 	const [product, setProduct] = useState<localProduct | undefined>();
 	const [stock, setStock] = useState<boolean>(true);
 	const [isSale, setIsSale] = useState<boolean>(false);
+	const [salePrice, setSalePrice] = useState<number>();
 
 	useEffect(() => {
 		const item = Products.find((item) => item.id === id);
@@ -237,6 +255,14 @@ const SingleProduct = () => {
 			setProduct(item);
 			setStock(item.inStock);
 			setIsSale(item.sale.active);
+			if (item.sale.active) {
+				if (item.sale.type === "flat") {
+					setSalePrice(item.price - item.sale.amount);
+				} else {
+					const saleAmount = (item.sale.amount / 100) * item.price;
+					setSalePrice(item.price - saleAmount);
+				}
+			}
 		}
 	}, [id]);
 
@@ -268,8 +294,22 @@ const SingleProduct = () => {
 					</Category>
 					<Title>{product?.title}</Title>
 					{/* <Brand>IGUERA</Brand> */}
-					{/* convert price from cents to price  */}
-					<Price>${product?.price}</Price>
+					{/* convert price from cents to price and also add localization  */}
+					<Price>
+						<Regular sale={isSale}>${product?.price}</Regular>
+						{isSale && (
+							<>
+								<Sale>${salePrice}</Sale>
+								<PriceOff>
+									{product?.sale?.type === "flat" ? (
+										<>-${product?.sale?.amount} FLAT OFF</>
+									) : (
+										<span>-{product?.sale?.amount}% OFF</span>
+									)}
+								</PriceOff>
+							</>
+						)}
+					</Price>
 					<Text>{product?.desc}</Text>
 					<InStock stock={stock}>
 						{product?.inStock ? (

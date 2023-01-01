@@ -12,7 +12,7 @@ export const localProduct = [
 		inStock: false,
 		id: "1",
 		sale: {
-			active: false,
+			active: true,
 			type: "flat",
 			amount: 50,
 		},
@@ -28,8 +28,8 @@ export const localProduct = [
 		inStock: true,
 		id: "2",
 		sale: {
-			active: false,
-			type: "flat",
+			active: true,
+			type: "percent",
 			amount: 50,
 		},
 	},
@@ -44,8 +44,8 @@ export const localProduct = [
 		inStock: true,
 		id: "3",
 		sale: {
-			active: false,
-			type: "flat",
+			active: true,
+			type: "percent",
 			amount: 50,
 		},
 	},

@@ -29,7 +29,7 @@ const menuItem: IMenuItem[] = [
 	},
 	{
 		name: "Shop",
-		url: "/shop",
+		url: "/products",
 	},
 	{
 		name: "Contact",

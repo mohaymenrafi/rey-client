@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { theme } from "../../styles/theme";
 import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
@@ -56,7 +56,7 @@ const CardContainer = styled.div`
 		cursor: pointer;
 	}
 	@media (min-width: ${theme.sc.lg}) {
-		padding: 50px 30px;
+		padding: 30px;
 		h2 {
 			font-size: ${theme.fs["md"]};
 		}
@@ -71,7 +71,7 @@ const Category = styled.p`
 		font-size: ${theme.fs.xs};
 	}
 `;
-const Price = styled.p<{ isHover: boolean }>`
+const Price = styled.p<{ isHover: boolean; sale: boolean }>`
 	color: ${theme.col.gray};
 	font-size: ${theme.fs.sm};
 	font-weight: 600;
@@ -79,13 +79,20 @@ const Price = styled.p<{ isHover: boolean }>`
 	opacity: ${(props) => (props.isHover ? 0 : 1)};
 	transform: ${(props) =>
 		props.isHover ? "translateY(-20px)" : "translateY(0px)"};
+	display: flex;
+	align-items: center;
+	column-gap: 20px;
+	.mainPrice {
+		text-decoration: ${(props) => props.sale && "line-through"};
+	}
+	.salePrice {
+		color: ${theme.col.darkBlue};
+	}
 
 	@media (min-width: ${theme.sc.lg}) {
 		font-size: ${theme.fs.base};
 	}
 `;
-
-const ViewDetailsContainer = styled.div``;
 
 const ViewDetails = styled.div<{ isHover: boolean }>`
 	display: flex;
@@ -141,17 +148,69 @@ const StockOut = styled.p`
 	color: ${theme.col.red};
 `;
 
+const SaleNotice = styled.p`
+	background: ${theme.col.darkBlue};
+	padding: 4px 12px;
+	color: ${theme.col.white};
+	font-size: ${theme.fs.xs};
+	font-weight: 600;
+	position: absolute;
+	top: 20px;
+	right: 15px;
+`;
+
 interface IProps {
 	item: localProduct;
 }
 
 const ProductCard: FC<IProps> = ({ item }) => {
-	const [isHover, setIsHover] = useState<boolean>(true);
+	const [isHover, setIsHover] = useState<boolean>(false);
+	const [isSale, setIsSale] = useState<boolean>(false);
+	const [salePrice, setSalePrice] = useState<number>();
+
+	useEffect(() => {
+		if (item.sale !== undefined) {
+			setIsSale(item?.sale?.active || false);
+			if (item.sale.active) {
+				if (item.sale.type === "flat") {
+					item.sale.amount && setSalePrice(item.price - item.sale.amount);
+				} else {
+					if (item.sale.amount !== undefined) {
+						const saleAmount = (item?.sale?.amount / 100) * item.price;
+						setSalePrice(item.price - saleAmount);
+					}
+				}
+			}
+		}
+	}, [item]);
 	return (
 		<CardContainer
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
 		>
+			{/* <SaleNotice>
+				{isSale && (
+							<>
+								<Sale>${salePrice}</Sale>
+								<PriceOff>
+									{product?.sale?.type === "flat" ? (
+										<>-${product?.sale?.amount} FLAT OFF</>
+									) : (
+										<span>-{product?.sale?.amount}% OFF</span>
+									)}
+								</PriceOff>
+							</>
+						)}
+			</SaleNotice> */}
+			{isSale && (
+				<SaleNotice>
+					{item?.sale?.type === "flat" ? (
+						<>-${item?.sale?.amount} FLAT OFF</>
+					) : (
+						<>-{item?.sale?.amount}% OFF</>
+					)}
+				</SaleNotice>
+			)}
 			<Thumbnail>
 				<Image src={item?.img} alt={item.title} />
 			</Thumbnail>
@@ -160,15 +219,20 @@ const ProductCard: FC<IProps> = ({ item }) => {
 					<p key={idx}>{cat}</p>
 				))}
 			</Category>
-			<h2>{item?.title}</h2>
+			<h2>
+				<Link to={`/products/${item?.id}`}>{item?.title}</Link>
+			</h2>
 			{/* TODO: convert the prices from cent to actual prices and also use localization, use function */}
-			<Price isHover={isHover}>${item?.price}</Price>
+			<Price isHover={isHover} sale={isSale}>
+				<p className="mainPrice">${item?.price}</p>
+				{isSale && <p className="salePrice">${salePrice}</p>}
+			</Price>
 			{/* TODO: later add tooltip from mui  */}
 
 			<ViewDetails isHover={isHover}>
 				{item?.inStock ? (
 					<>
-						<Link to={`/product/${item?.id}`}>
+						<Link to={`/products/${item?.id}`}>
 							<View>view details</View>
 						</Link>
 						<Icon>

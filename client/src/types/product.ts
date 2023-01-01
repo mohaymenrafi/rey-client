@@ -17,8 +17,8 @@ export type localProduct = {
 	inStock: boolean;
 	id: string;
 	sale?: {
-		active: boolean;
-		type: string;
-		amount: number;
+		active?: boolean;
+		type?: string;
+		amount?: number;
 	};
 };
