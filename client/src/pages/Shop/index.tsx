@@ -3,9 +3,9 @@ import styled from "styled-components";
 import Container from "../../styles/Container";
 import ShopBanner from "../../assets/bg-cover.webp";
 import { theme } from "../../styles/theme";
-import { CardContainer } from "../../components/TopPicks";
+// import { CardContainer } from "../../components/TopPicks";
 import { ProductCard } from "../../components";
-import { PRODUCTS, createFakeProduct } from "../../utils/generateFakeProduct";
+import { createFakeProduct } from "../../utils/generateFakeProduct";
 import { localProduct } from "../../localData";
 
 const ContainerExtended = styled(Container)`
@@ -15,6 +15,27 @@ const ContainerExtended = styled(Container)`
 	border-radius: 5px;
 	padding: 140px 40px 40px 40px;
 	margin: 20px auto;
+`;
+
+const CardContainer = styled.div`
+	padding: 30px 0;
+	display: grid;
+	grid-template-columns: repeat(1, 1fr);
+	grid-gap: 15px;
+	@media (min-width: ${theme.sc.xs}) {
+		grid-template-columns: repeat(2, 1fr);
+		grid-column-gap: 25px;
+	}
+	@media (min-width: ${theme.sc.lg}) {
+		padding-top: 50px;
+		grid-template-columns: repeat(3, 1fr);
+	}
+	@media (min-width: ${theme.sc.xl}) {
+		grid-template-columns: repeat(4, 1fr);
+	}
+	@media (min-width: ${theme.sc["2xl"]}) {
+		grid-template-columns: repeat(5, 1fr);
+	}
 `;
 const Title = styled.h1`
 	font-size: 60px;
@@ -96,9 +117,6 @@ const Shop = () => {
 			</ContainerExtended>
 			<Container>
 				<CardContainer>
-					{/* {PRODUCTS.map((item, index) => (
-						<ProductCard key={index} />
-					))} */}
 					{localProduct.map((item, index) => (
 						<ProductCard item={item} key={index} />
 					))}

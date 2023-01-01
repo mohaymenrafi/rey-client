@@ -1,7 +1,9 @@
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Container from "../../styles/Container";
 import { theme } from "../../styles/theme";
 import { BsPatchCheck } from "react-icons/bs";
+import { GiCancel } from "react-icons/gi";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import {
 	FaLinkedinIn,
@@ -10,9 +12,10 @@ import {
 	FaPinterest,
 	FaEnvelope,
 } from "react-icons/fa";
-import React, { useEffect, useState } from "react";
 import { Text } from "../../styles/text";
-import { ProductCard } from "../../components";
+import { useParams } from "react-router-dom";
+import { localProduct as Products } from "../../localData";
+import { localProduct } from "../../types/product";
 
 const ContainerExtended = styled(Container)`
 	padding-top: 30px;
@@ -65,17 +68,18 @@ const Price = styled.p`
 	margin-bottom: 15px;
 `;
 
-const InStock = styled.p`
+const InStock = styled.p<{ stock: boolean }>`
 	margin-bottom: 15px;
 	display: flex;
 	align-items: center;
 	margin-bottom: 20px;
+	color: ${(props) => (props.stock ? theme.col.gray : theme.col.red)};
 	span {
 		margin-left: 7px;
 		text-transform: uppercase;
 		font-size: ${theme.fs.xs};
 		font-weight: 600;
-		color: ${theme.col.gray};
+		/* color: ${theme.col.gray}; */
 	}
 `;
 
@@ -107,6 +111,9 @@ const AddToCart = styled.div`
 		cursor: pointer;
 		:hover {
 			background: ${theme.col.blueHover};
+		}
+		:disabled {
+			background: ${theme.col.gray};
 		}
 	}
 `;
@@ -217,8 +224,21 @@ const RelatedProducts = styled.div`
 `;
 
 const SingleProduct = () => {
+	const { id } = useParams();
 	const [cartAmount, setCartAmount] = useState<number>(1);
 	const [wishList, setWishList] = useState<boolean>(false);
+	const [product, setProduct] = useState<localProduct | undefined>();
+	const [stock, setStock] = useState<boolean>(true);
+	const [isSale, setIsSale] = useState<boolean>(false);
+
+	useEffect(() => {
+		const item = Products.find((item) => item.id === id);
+		if (item) {
+			setProduct(item);
+			setStock(item.inStock);
+			setIsSale(item.sale.active);
+		}
+	}, [id]);
 
 	const handleCartAmount = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		let { value } = e.target;
@@ -238,34 +258,44 @@ const SingleProduct = () => {
 		<ContainerExtended>
 			<Layout>
 				<div>
-					<Image
-						src="https://demos.reytheme.com/frankfurt/wp-content/uploads/sites/15/2019/06/18-1536x1024.jpg"
-						alt="product-img"
-					/>
+					<Image src={product?.img} alt={product?.title} />
 				</div>
 				<InfoDiv>
-					<Category>Storage</Category>
-					<Title>Anderson Chest Of Drawers, Mocha</Title>
-					<Brand>IGUERA</Brand>
-					<Price>$99.99</Price>
-					<Text>
-						Proactively communicate corporate process improvements via corporate
-						scenarios. Progressively aggregate proactive data after diverse
-						users. Rapidiously redefine front-end interfaces before go forward
-						process improvements.
-					</Text>
-					<InStock>
-						<BsPatchCheck />
-						<span>In stock</span>
+					<Category>
+						{product?.categories.map((cat, idx) => (
+							<p key={idx}>{cat}</p>
+						))}
+					</Category>
+					<Title>{product?.title}</Title>
+					{/* <Brand>IGUERA</Brand> */}
+					{/* convert price from cents to price  */}
+					<Price>${product?.price}</Price>
+					<Text>{product?.desc}</Text>
+					<InStock stock={stock}>
+						{product?.inStock ? (
+							<>
+								<BsPatchCheck />
+								<span>In stock</span>
+							</>
+						) : (
+							<>
+								<GiCancel />
+								<span>Out of stock</span>
+							</>
+						)}
 					</InStock>
-					<AddToCart>
-						<input
-							type="number"
-							value={cartAmount}
-							onChange={handleCartAmount}
-						/>
-						<button onClick={handleAddToCart}>Add to cart</button>
-					</AddToCart>
+					{stock && (
+						<AddToCart>
+							<input
+								type="number"
+								value={cartAmount}
+								onChange={handleCartAmount}
+							/>
+							<button disabled={!product?.inStock} onClick={handleAddToCart}>
+								Add to cart
+							</button>
+						</AddToCart>
+					)}
 					<AddToWishlist onClick={handleWishlist}>
 						{wishList ? (
 							<>

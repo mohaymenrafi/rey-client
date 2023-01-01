@@ -9,8 +9,13 @@ export const localProduct = [
 		categories: ["lighting"],
 		size: ["sm", "md", "lg"],
 		color: ["white", "brown"],
-		inStock: true,
+		inStock: false,
 		id: "1",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399094/rey-furnisher/18-600x400_u5pjbc.jpg",
@@ -22,6 +27,11 @@ export const localProduct = [
 		color: ["grey", "white", "mustard"],
 		inStock: true,
 		id: "2",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399093/rey-furnisher/14-600x450_woiynx.jpg",
@@ -33,6 +43,11 @@ export const localProduct = [
 		color: ["grey", "white", "black"],
 		inStock: true,
 		id: "3",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399093/rey-furnisher/2-4-600x401_flzggb.jpg",
@@ -44,6 +59,11 @@ export const localProduct = [
 		color: ["grey", "white", "black"],
 		inStock: true,
 		id: "4",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672415126/rey-furnisher/30-600x600_u1i4dd.jpg",
@@ -55,6 +75,11 @@ export const localProduct = [
 		color: ["grey", "green", "black"],
 		inStock: true,
 		id: "5",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399093/rey-furnisher/2-5-600x442_ein1uf.jpg",
@@ -66,6 +91,11 @@ export const localProduct = [
 		color: ["grey", "white"],
 		inStock: true,
 		id: "6",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399093/rey-furnisher/1-600x401_vcbxtt.jpg",
@@ -77,6 +107,11 @@ export const localProduct = [
 		color: ["grey", "white"],
 		inStock: true,
 		id: "7",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399093/rey-furnisher/26-600x450.jpg_thh8wj.webp",
@@ -88,6 +123,11 @@ export const localProduct = [
 		color: ["grey", "white"],
 		inStock: true,
 		id: "8",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399093/rey-furnisher/1-11-600x593_gqvqdb.jpg",
@@ -99,6 +139,11 @@ export const localProduct = [
 		color: ["grey", "white"],
 		inStock: true,
 		id: "9",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399092/rey-furnisher/23-600x450_klowdc.jpg",
@@ -110,6 +155,11 @@ export const localProduct = [
 		color: ["grey", "white", "black"],
 		inStock: true,
 		id: "10",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399092/rey-furnisher/1-13-600x800_c7feck.jpg",
@@ -121,6 +171,11 @@ export const localProduct = [
 		color: ["red"],
 		inStock: true,
 		id: "11",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399092/rey-furnisher/capture2-600x319.jpg_c1fhrq.webp",
@@ -132,6 +187,11 @@ export const localProduct = [
 		color: ["grey", "black", "blue"],
 		inStock: true,
 		id: "12",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399092/rey-furnisher/1-7-600x900_cdlemu.jpg",
@@ -143,6 +203,11 @@ export const localProduct = [
 		color: ["grey", "wood"],
 		inStock: true,
 		id: "13",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399092/rey-furnisher/03-600x400_yuqynw.jpg",
@@ -154,6 +219,11 @@ export const localProduct = [
 		color: ["black", "white"],
 		inStock: true,
 		id: "14",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399092/rey-furnisher/25-600x450_l5yger.jpg",
@@ -165,6 +235,11 @@ export const localProduct = [
 		color: ["grey", "white", "golden"],
 		inStock: true,
 		id: "15",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399092/rey-furnisher/1-12-600x800.jpg_ev0f71.webp",
@@ -176,6 +251,11 @@ export const localProduct = [
 		color: ["golden", "black"],
 		inStock: true,
 		id: "16",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399092/rey-furnisher/1-8-600x401_l2ymrl.jpg",
@@ -187,6 +267,11 @@ export const localProduct = [
 		color: ["white"],
 		inStock: true,
 		id: "17",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399092/rey-furnisher/22-600x338_qqf6fo.jpg",
@@ -198,6 +283,11 @@ export const localProduct = [
 		color: ["black", "white"],
 		inStock: true,
 		id: "18",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399091/rey-furnisher/1-5-600x450_n8decv.jpg",
@@ -209,6 +299,11 @@ export const localProduct = [
 		color: ["grey", "white"],
 		inStock: true,
 		id: "19",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399091/rey-furnisher/20-600x600_py7vjh.jpg",
@@ -220,6 +315,11 @@ export const localProduct = [
 		color: ["grey", "cream"],
 		inStock: true,
 		id: "20",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399091/rey-furnisher/19-600x420_j123k2.jpg",
@@ -231,6 +331,11 @@ export const localProduct = [
 		color: ["white", "cream", "black"],
 		inStock: true,
 		id: "21",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399091/rey-furnisher/21_tqiukl.jpg",
@@ -242,6 +347,11 @@ export const localProduct = [
 		color: ["cream", "white"],
 		inStock: true,
 		id: "22",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399091/rey-furnisher/igp3305_1_-600x450_bhruzh.jpg",
@@ -253,6 +363,11 @@ export const localProduct = [
 		color: ["black", "blue"],
 		inStock: true,
 		id: "23",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399091/rey-furnisher/1-6-600x1086_b91dfc.jpg",
@@ -264,6 +379,11 @@ export const localProduct = [
 		color: ["skyblue", "cream"],
 		inStock: true,
 		id: "24",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399090/rey-furnisher/1-1-600x433_iflmw4.webp",
@@ -275,6 +395,11 @@ export const localProduct = [
 		color: ["cream", "white"],
 		inStock: false,
 		id: "25",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399090/rey-furnisher/1-2-600x296_gkcx0v.jpg",
@@ -286,6 +411,11 @@ export const localProduct = [
 		color: ["grey", "white"],
 		inStock: true,
 		id: "26",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399090/rey-furnisher/24-600x450_z0cues.jpg",
@@ -297,6 +427,11 @@ export const localProduct = [
 		color: ["grey", "white", "chocolate"],
 		inStock: true,
 		id: "27",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399090/rey-furnisher/igp3343-600x450_bnwfr7.jpg",
@@ -308,6 +443,11 @@ export const localProduct = [
 		color: ["grey", "black"],
 		inStock: true,
 		id: "28",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399090/rey-furnisher/1-3_cmspx7.jpg",
@@ -319,6 +459,11 @@ export const localProduct = [
 		color: ["yellow"],
 		inStock: true,
 		id: "29",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399090/rey-furnisher/1-4-600x900_sjt9yh.jpg",
@@ -330,5 +475,10 @@ export const localProduct = [
 		color: ["brown", "grey"],
 		inStock: true,
 		id: "30",
+		sale: {
+			active: false,
+			type: "flat",
+			amount: 50,
+		},
 	},
 ];

@@ -16,4 +16,9 @@ export type localProduct = {
 	color: string[];
 	inStock: boolean;
 	id: string;
+	sale?: {
+		active: boolean;
+		type: string;
+		amount: number;
+	};
 };

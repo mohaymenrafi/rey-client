@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import { FC, useState } from "react";
 import styled from "styled-components";
-import ProductImg from "../../assets/30.jpeg";
 import { theme } from "../../styles/theme";
 import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
 import { AiOutlineShoppingCart } from "react-icons/ai";
@@ -15,6 +14,13 @@ const CardContainer = styled.div`
 	flex-direction: column;
 	align-items: flex-start;
 	border: 3px solid ${theme.col.lightGray};
+
+	@media (min-width: ${theme.sc.xs}) {
+		padding: 15px;
+	}
+	@media (min-width: ${theme.sc.sm}) {
+		padding: 30px 15px;
+	}
 
 	&::before {
 		position: absolute;
@@ -36,10 +42,10 @@ const CardContainer = styled.div`
 		}
 	}
 
-	img {
+	/* img {
 		width: 65%;
 		align-self: center;
-	}
+	} */
 
 	h2 {
 		color: ${theme.col["black-2"]};
@@ -118,43 +124,63 @@ const View = styled.span`
 const Icon = styled.span``;
 
 const Image = styled.img`
-	width: auto;
-	max-height: 310;
-	/* object-fit: contain; */
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+`;
+const Thumbnail = styled.div`
+	height: 310px;
+	align-self: center;
+	@media (min-width: ${theme.sc.xs}) {
+		height: 210px;
+	}
+`;
+
+const StockOut = styled.p`
+	font-size: ${theme.fs.base};
+	color: ${theme.col.red};
 `;
 
 interface IProps {
 	item: localProduct;
 }
 
-const ProductCard: React.FC<IProps> = ({ item }) => {
-	const [isHover, setIsHover] = useState<boolean>(false);
-	console.log(item.img);
+const ProductCard: FC<IProps> = ({ item }) => {
+	const [isHover, setIsHover] = useState<boolean>(true);
 	return (
 		<CardContainer
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
 		>
-			<Image src={item?.img} alt={item.title} />
+			<Thumbnail>
+				<Image src={item?.img} alt={item.title} />
+			</Thumbnail>
 			<Category>
 				{item?.categories.map((cat, idx) => (
 					<p key={idx}>{cat}</p>
 				))}
-				{/* sofas */}
 			</Category>
 			<h2>{item?.title}</h2>
 			{/* TODO: convert the prices from cent to actual prices and also use localization, use function */}
 			<Price isHover={isHover}>${item?.price}</Price>
+			{/* TODO: later add tooltip from mui  */}
+
 			<ViewDetails isHover={isHover}>
-				<Link to="/products/id">
-					<View>view details</View>
-				</Link>
-				<Icon>
-					<AiOutlineShoppingCart />
-				</Icon>
-				<Icon>
-					<MdFavoriteBorder />
-				</Icon>
+				{item?.inStock ? (
+					<>
+						<Link to={`/product/${item?.id}`}>
+							<View>view details</View>
+						</Link>
+						<Icon>
+							<AiOutlineShoppingCart />
+						</Icon>
+						<Icon>
+							<MdFavoriteBorder />
+						</Icon>
+					</>
+				) : (
+					<StockOut>This product is currently out of stock.</StockOut>
+				)}
 			</ViewDetails>
 		</CardContainer>
 	);
