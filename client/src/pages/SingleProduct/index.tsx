@@ -240,6 +240,36 @@ const RelatedProducts = styled.div`
 	}
 `;
 
+const ColorVariation = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	column-gap: 15px;
+	span {
+		cursor: pointer;
+	}
+`;
+const SizeVariation = styled.div``;
+const Color = styled.p<{ color: string; selected: boolean }>`
+	height: 15px;
+	width: 15px;
+	background-color: ${(props) =>
+		props.color === "mustard" ? "#FFDB58" : props.color};
+	border-radius: 50%;
+	border: 1px solid rgba(0, 0, 0, 0.3);
+	cursor: pointer;
+	outline: ${(props) =>
+		props.selected === true
+			? "3px solid rgba(0, 0, 0, 0.1)"
+			: "3px solid transparent"};
+`;
+
+interface IColors {
+	id: number;
+	name: string;
+	selected: boolean;
+}
+
 const SingleProduct = () => {
 	const { id } = useParams();
 	const [cartAmount, setCartAmount] = useState<number>(1);
@@ -248,6 +278,20 @@ const SingleProduct = () => {
 	const [stock, setStock] = useState<boolean>(true);
 	const [isSale, setIsSale] = useState<boolean>(false);
 	const [salePrice, setSalePrice] = useState<number>();
+	const [color, setColor] = useState<string>();
+	const [productColor, setProductColor] = useState<IColors[]>();
+
+	useEffect(() => {
+		if (product !== undefined) {
+			setProductColor(
+				product.color.map((col, idx) => ({
+					id: idx + 1,
+					name: col,
+					selected: false,
+				}))
+			);
+		}
+	}, [product]);
 
 	useEffect(() => {
 		const item = Products.find((item) => item.id === id);
@@ -271,15 +315,43 @@ const SingleProduct = () => {
 		let intValue = parseInt(value);
 		if (intValue >= 1) setCartAmount(intValue);
 	};
-	const handleAddToCart = () => {
+	const handleAddToCart = (): void => {
 		console.log(cartAmount);
 	};
-	const handleWishlist = () => {
+	const handleWishlist = (): void => {
 		setWishList((prev) => !prev);
 	};
+	const handleColor = (
+		e: React.MouseEvent<HTMLElement>,
+		colorObj: IColors
+	): void => {
+		setColor(colorObj.name);
+
+		setProductColor(
+			productColor?.map((item) => {
+				const currentAttributeId = (e.target as HTMLElement).getAttribute(
+					"data-id"
+				);
+
+				if (currentAttributeId !== null) {
+					if (item.id === parseInt(currentAttributeId)) {
+						return { ...item, selected: true };
+					} else {
+						return { ...item, selected: false };
+					}
+				}
+
+				return item;
+			})
+		);
+	};
+	// useEffect(() => {
+	// 	console.log(wishList);
+	// }, [wishList]);
 	useEffect(() => {
-		console.log(wishList);
-	}, [wishList]);
+		console.log(color);
+	}, [color]);
+
 	return (
 		<ContainerExtended>
 			<Layout>
@@ -324,6 +396,29 @@ const SingleProduct = () => {
 							</>
 						)}
 					</InStock>
+					{/* add color variation here */}
+					<ColorVariation>
+						<p>Color: </p>
+
+						{productColor?.map((colorObj) => {
+							return (
+								<Color
+									data-id={colorObj.id}
+									onClick={(e) => handleColor(e, colorObj)}
+									key={colorObj.id}
+									color={colorObj.name}
+									selected={colorObj.selected && !!color}
+								></Color>
+							);
+						})}
+						{color && <span onClick={() => setColor("")}>Clear({color})</span>}
+					</ColorVariation>
+					{/* add size variation here */}
+					<SizeVariation>
+						{product?.size.map((item, idx) => (
+							<p key={idx}>{item}</p>
+						))}
+					</SizeVariation>
 					{stock && (
 						<AddToCart>
 							<input
