@@ -16,6 +16,16 @@ import { Text } from "../../styles/text";
 import { useParams } from "react-router-dom";
 import { localProduct as Products } from "../../localData";
 import { localProduct } from "../../types/product";
+import {
+	FacebookIcon,
+	FacebookShareButton,
+	LinkedinIcon,
+	LinkedinShareButton,
+	EmailShareButton,
+	EmailIcon,
+	TwitterIcon,
+	TwitterShareButton,
+} from "react-share";
 
 const ContainerExtended = styled(Container)`
 	padding-top: 30px;
@@ -153,8 +163,7 @@ const Share = styled.div`
 	align-items: center;
 	column-gap: 10px;
 	span {
-		margin-left: 7px;
-		margin-top: 2px;
+		margin-top: -2px;
 		text-transform: uppercase;
 		font-size: ${theme.fs.xs};
 		font-weight: 600;
@@ -294,7 +303,6 @@ const SingleProduct = () => {
 	const [color, setColor] = useState<string>();
 	const [productColor, setProductColor] = useState<IColors[]>();
 	const [size, setSize] = useState<string>();
-
 	useEffect(() => {
 		if (product !== undefined) {
 			setProductColor(
@@ -363,12 +371,6 @@ const SingleProduct = () => {
 	// useEffect(() => {
 	// 	console.log(wishList);
 	// }, [wishList]);
-	useEffect(() => {
-		console.log(color);
-	}, [color]);
-	useEffect(() => {
-		console.log(size);
-	}, [size]);
 
 	return (
 		<ContainerExtended>
@@ -442,7 +444,7 @@ const SingleProduct = () => {
 						>
 							{product?.size.map((item, idx) => (
 								<option value={item} key={idx}>
-									<>{item.toLocaleUpperCase()}</>
+									<>{item}</>
 								</option>
 							))}
 						</select>
@@ -475,11 +477,39 @@ const SingleProduct = () => {
 					<Share>
 						<span>Share</span>
 						<ShareIcons>
-							<FaLinkedinIn />
+							{/* <FaLinkedinIn />
 							<FaFacebook />
 							<FaTwitter />
 							<FaPinterest />
-							<FaEnvelope />
+							<FaEnvelope /> */}
+							<FacebookShareButton
+								url={
+									"https://stackoverflow.com/questions/28868071/onchange-event-using-react-js-for-drop-down"
+								}
+							>
+								<FacebookIcon size={20} round />
+							</FacebookShareButton>
+							<TwitterShareButton
+								url={
+									"https://stackoverflow.com/questions/28868071/onchange-event-using-react-js-for-drop-down"
+								}
+							>
+								<TwitterIcon size={20} round />
+							</TwitterShareButton>
+							<LinkedinShareButton
+								url={
+									"https://stackoverflow.com/questions/28868071/onchange-event-using-react-js-for-drop-down"
+								}
+							>
+								<LinkedinIcon size={20} round />
+							</LinkedinShareButton>
+							<EmailShareButton
+								url={
+									"https://stackoverflow.com/questions/28868071/onchange-event-using-react-js-for-drop-down"
+								}
+							>
+								<EmailIcon size={20} round />
+							</EmailShareButton>
 						</ShareIcons>
 					</Share>
 				</InfoDiv>
