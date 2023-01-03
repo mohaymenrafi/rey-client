@@ -108,7 +108,7 @@ const Footer: React.FC = () => {
 						<li>Shop</li>
 						<li>Custom Work</li>
 						<li>Lookbook</li>
-						<li>Wihlist</li>
+						<li>Wishlist</li>
 						<li>Cart</li>
 					</ul>
 				</LinksContainer>

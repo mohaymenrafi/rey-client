@@ -53,6 +53,9 @@ const Title = styled.h2`
 	color: ${theme.col.gray};
 	font-weight: 500;
 	margin-bottom: 20px;
+	@media (min-width: ${theme.sc.lg}) {
+		font-size: ${theme.fs["xl"]};
+	}
 `;
 
 const Brand = styled.p`
@@ -248,8 +251,11 @@ const ColorVariation = styled.div`
 	span {
 		cursor: pointer;
 	}
+	margin-bottom: 10px;
+	p {
+		font-weight: 500;
+	}
 `;
-const SizeVariation = styled.div``;
 const Color = styled.p<{ color: string; selected: boolean }>`
 	height: 15px;
 	width: 15px;
@@ -262,6 +268,13 @@ const Color = styled.p<{ color: string; selected: boolean }>`
 		props.selected === true
 			? "3px solid rgba(0, 0, 0, 0.1)"
 			: "3px solid transparent"};
+`;
+
+const SizeVariation = styled.div`
+	margin-bottom: 15px;
+	label {
+		font-weight: 500;
+	}
 `;
 
 interface IColors {
@@ -280,6 +293,7 @@ const SingleProduct = () => {
 	const [salePrice, setSalePrice] = useState<number>();
 	const [color, setColor] = useState<string>();
 	const [productColor, setProductColor] = useState<IColors[]>();
+	const [size, setSize] = useState<string>();
 
 	useEffect(() => {
 		if (product !== undefined) {
@@ -345,12 +359,16 @@ const SingleProduct = () => {
 			})
 		);
 	};
+
 	// useEffect(() => {
 	// 	console.log(wishList);
 	// }, [wishList]);
 	useEffect(() => {
 		console.log(color);
 	}, [color]);
+	useEffect(() => {
+		console.log(size);
+	}, [size]);
 
 	return (
 		<ContainerExtended>
@@ -411,13 +429,23 @@ const SingleProduct = () => {
 								></Color>
 							);
 						})}
-						{color && <span onClick={() => setColor("")}>Clear({color})</span>}
+						{color && <span onClick={() => setColor("")}>Clear ({color})</span>}
 					</ColorVariation>
-					{/* add size variation here */}
+
 					<SizeVariation>
-						{product?.size.map((item, idx) => (
-							<p key={idx}>{item}</p>
-						))}
+						<label htmlFor="sizes">Choose a size: </label>
+						<select
+							value={size}
+							name="sizes"
+							id="sizes"
+							onChange={(e) => setSize(e.target.value)}
+						>
+							{product?.size.map((item, idx) => (
+								<option value={item} key={idx}>
+									<>{item.toLocaleUpperCase()}</>
+								</option>
+							))}
+						</select>
 					</SizeVariation>
 					{stock && (
 						<AddToCart>
