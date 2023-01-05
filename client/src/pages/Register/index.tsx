@@ -7,7 +7,9 @@ import { theme } from "../../styles/theme";
 import { RegsiterInputs } from "../../types/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../app/hooks";
+import { registerUser } from "../../features/auth/authSlice";
 
 const ContainerExtended = styled(Container)`
 	padding: 50px;
@@ -77,6 +79,9 @@ const Regex =
 	/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
 const Register = () => {
+	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
+	const [loading, setLoading] = useState<boolean>(false);
 	const formSchema = Yup.object().shape({
 		firstname: Yup.string().trim(),
 		lastname: Yup.string().trim(),
@@ -88,7 +93,7 @@ const Register = () => {
 			.min(3, "minimun 3 characters required"),
 		password: Yup.string()
 			.required("Password is required")
-			.min(6, "Password length must be at least 6 characters"),
+			.min(5, "Password length must be at least 5 characters"),
 		confirmPassword: Yup.string()
 			.required("Confirm Password is required")
 			.oneOf([Yup.ref("password")], "Passwords does not match"),
@@ -101,10 +106,21 @@ const Register = () => {
 		resolver: yupResolver(formSchema),
 	});
 
-	const onSubmit: SubmitHandler<RegsiterInputs> = (data) => {
-		if (data.password !== data.confirmPassword) {
+	const onSubmit: SubmitHandler<RegsiterInputs> = async (data) => {
+		setLoading(true);
+
+		const registerSuccess = await dispatch(registerUser(data));
+		if (registerUser.fulfilled.match(registerSuccess)) {
+			setLoading(false);
+			navigate("/login");
+		} else {
+			setLoading(false);
+			if (registerSuccess.payload) {
+				console.error(registerSuccess.payload);
+			} else {
+				console.error(registerSuccess.error.message);
+			}
 		}
-		console.log(data);
 	};
 	return (
 		<ContainerExtended>

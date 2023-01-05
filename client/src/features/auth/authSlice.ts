@@ -1,18 +1,27 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { axiosPublic } from "../../apis/apiConfig";
-import { AuthUser, LoginInputs } from "../../types/auth";
+import { AuthUser, LoginInputs, RegsiterInputs } from "../../types/auth";
 import { RootState } from "../../app/store";
 
-const initialState: AuthUser = {
-	username: "",
-	firstname: "",
-	lastname: "",
-	email: "",
-	accessToken: "",
-	roles: [],
-	active: false,
-	id: "",
+interface IState {
+	user: AuthUser;
+	loading: "idle" | "pending" | "succeeded" | "failed";
+	error: string | undefined;
+}
+const initialState: IState = {
+	user: {
+		username: "",
+		firstname: "",
+		lastname: "",
+		email: "",
+		accessToken: "",
+		roles: [],
+		active: false,
+		id: "",
+	},
+	loading: "idle",
+	error: undefined,
 };
 
 export const fetchUser = createAsyncThunk(
@@ -29,22 +38,38 @@ export const refreshToken = createAsyncThunk("auth/refresh", async () => {
 	return response.data;
 });
 
+export const registerUser = createAsyncThunk(
+	"auth/registerUser",
+	async (data: RegsiterInputs) => {
+		const response = await axiosPublic.post("/users", data);
+		return response.data;
+	}
+);
+
 export const authSlice = createSlice({
 	name: "user",
 	initialState,
 	reducers: {},
 	extraReducers(builder) {
 		builder
-			.addCase(
-				fetchUser.fulfilled,
-				(state, action: PayloadAction<AuthUser>) => {
-					return action.payload;
-				}
-			)
+			.addCase(fetchUser.pending, (state, action) => {
+				state.loading = "pending";
+			})
+			.addCase(fetchUser.fulfilled, (state, action: PayloadAction<IState>) => {
+				state.loading = "succeeded";
+				state.user = action.payload.user;
+			})
+			.addCase(fetchUser.rejected, (state, action) => {
+				state.loading = "failed";
+				state.error = action.error.message;
+			})
 			.addCase(refreshToken.fulfilled, (state, action) => {
 				state = { ...state, ...action.payload };
 				return state;
 			});
+		// .addCase(registerNewUser.pending, (state,action) => {
+		// 	state.
+		// });
 	},
 });
 

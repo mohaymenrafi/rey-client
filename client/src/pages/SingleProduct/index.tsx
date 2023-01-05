@@ -5,13 +5,6 @@ import { theme } from "../../styles/theme";
 import { BsPatchCheck } from "react-icons/bs";
 import { GiCancel } from "react-icons/gi";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import {
-	FaLinkedinIn,
-	FaFacebook,
-	FaTwitter,
-	FaPinterest,
-	FaEnvelope,
-} from "react-icons/fa";
 import { Text } from "../../styles/text";
 import { useParams } from "react-router-dom";
 import { localProduct as Products } from "../../localData";

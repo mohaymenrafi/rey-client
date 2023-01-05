@@ -1,12 +1,11 @@
-import React, { useEffect } from "react";
 import styled from "styled-components";
 import Container from "../../styles/Container";
 import ShopBanner from "../../assets/bg-cover.webp";
 import { theme } from "../../styles/theme";
-// import { CardContainer } from "../../components/TopPicks";
 import { ProductCard } from "../../components";
-import { createFakeProduct } from "../../utils/generateFakeProduct";
-import { localProduct } from "../../localData";
+import { localProduct as ProductType } from "../../types/product";
+import { useAppSelector } from "../../app/hooks";
+import { selectProduct } from "../../features/product/productSlice";
 
 const ContainerExtended = styled(Container)`
 	background: url("${ShopBanner}") no-repeat center center;
@@ -96,12 +95,14 @@ const categories: string[] = [
 const SpacerDiv = styled.div``;
 
 const Shop = () => {
-	const generateFakeProduct = async () => {
-		await createFakeProduct();
-	};
-	useEffect(() => {
-		generateFakeProduct();
-	}, []);
+	const { products, loading, error } = useAppSelector(selectProduct);
+	if (loading === "loading") {
+		return <h2>Loading...</h2>;
+	}
+	if (error) {
+		return <h2>Error Loading Products</h2>;
+	}
+
 	return (
 		<>
 			<ContainerExtended>
@@ -117,7 +118,7 @@ const Shop = () => {
 			</ContainerExtended>
 			<Container>
 				<CardContainer>
-					{localProduct.map((item, index) => (
+					{products.map((item, index) => (
 						<ProductCard item={item} key={index} />
 					))}
 				</CardContainer>

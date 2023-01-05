@@ -12,6 +12,16 @@ export type RegsiterInputs = {
 	confirmPassword: string;
 };
 
+export type RegsiterPostInputs = {
+	firstname: string;
+	lastname: string;
+	email: string;
+	username: string;
+	password: string;
+	roles: string[];
+	active: boolean;
+};
+
 export type AuthUser = {
 	username: string;
 	firstname: string;

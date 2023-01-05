@@ -105,11 +105,21 @@ const Footer: React.FC = () => {
 				<LinksContainer>
 					<h2>SHOP</h2>
 					<ul>
-						<li>Shop</li>
-						<li>Custom Work</li>
-						<li>Lookbook</li>
-						<li>Wishlist</li>
-						<li>Cart</li>
+						<Link to="/products">
+							<li>Shop</li>
+						</Link>
+						<Link to="/wishlist">
+							<li>Wishlist</li>
+						</Link>
+						<Link to="/cart">
+							<li>Cart</li>
+						</Link>
+						<Link to="/register">
+							<li>Register</li>
+						</Link>
+						<Link to="/login">
+							<li>Login</li>
+						</Link>
 					</ul>
 				</LinksContainer>
 				<LinksContainer>

@@ -7,7 +7,7 @@ import { AxiosRequestConfig } from "axios";
 
 const useAxiosPrivate = () => {
 	const refresh = useRefreshToken();
-	const user = useAppSelector(selectAuthUser);
+	const { user } = useAppSelector(selectAuthUser);
 
 	useEffect(() => {
 		const requestIntercept = axiosPrivate.interceptors.request.use(
