@@ -9,3 +9,4 @@ export { default as Logos } from "./Logos/index";
 export { default as Footer } from "./Footer/index";
 export { default as Laylout } from "./Layout/index";
 export { default as ProductCard } from "./ProductCard/index";
+export { default as PrivateRoute } from "./PrivateRoute/index";

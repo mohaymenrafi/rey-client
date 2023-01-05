@@ -3,6 +3,8 @@ import { BsBag } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { CartIcon, Icon, IHeaderProps, Logo } from ".";
+import { useAppSelector } from "../../app/hooks";
+import { selectAuthUser } from "../../features/auth/authSlice";
 import { SmallText } from "../../styles/SmallText";
 import { theme } from "../../styles/theme";
 
@@ -54,6 +56,7 @@ const Right = styled.div`
 `;
 
 const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
+	const { user } = useAppSelector(selectAuthUser);
 	return (
 		<DesktopNav>
 			<ul>
@@ -71,7 +74,7 @@ const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 					</Icon>
 				</CartIcon>
 				<SmallText>
-					<Link to="/my-account">ACCOUNT</Link>
+					<Link to="/my-account">ACCOUNT {user && `(${user.username})`} </Link>
 				</SmallText>
 			</Right>
 		</DesktopNav>

@@ -6,3 +6,4 @@ export { default as Register } from "./Register";
 export { default as Shop } from "./Shop";
 export { default as SingleProduct } from "./SingleProduct";
 export { default as WishlistPage } from "./Wishlist";
+export { default as MyAccount } from "./MyAccount";

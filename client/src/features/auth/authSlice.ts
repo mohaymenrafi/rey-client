@@ -10,22 +10,12 @@ import {
 import { RootState } from "../../app/store";
 
 interface IState {
-	user: AuthUser;
+	user: AuthUser | null;
 	loading: "idle" | "pending" | "succeeded" | "failed";
 	error: string | undefined;
 }
 const initialState: IState = {
-	user: {
-		username: "",
-		firstname: "",
-		lastname: "",
-		email: "",
-		roles: [],
-		active: false,
-		id: "",
-		accessToken: "",
-		refreshToken: "",
-	},
+	user: null,
 	loading: "idle",
 	error: undefined,
 };

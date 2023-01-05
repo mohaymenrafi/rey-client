@@ -2,11 +2,11 @@ import styled, { keyframes } from "styled-components";
 import Container from "../../styles/Container";
 import { theme } from "../../styles/theme";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LoginInputs } from "../../types/auth";
 import { Title } from "../../styles/CommonStyles";
-import { useAppDispatch } from "../../app/hooks";
-import { fetchUser } from "../../features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { fetchUser, selectAuthUser } from "../../features/auth/authSlice";
 import { useState } from "react";
 
 //TODO: Need to implement forget password functionality
@@ -86,13 +86,31 @@ const Error = styled.div`
 	font-size: 20px;
 	margin: 10px auto;
 `;
+// declare function useLocation(): Location;
+interface CustomizedState {
+	from: {
+		hash: string;
+		key: string;
+		pathname: string;
+		search: string;
+		state: null;
+	};
+}
 
 const Login = () => {
 	const dispatch = useAppDispatch();
+	const { user } = useAppSelector(selectAuthUser);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | undefined>(undefined);
-
 	const nagivate = useNavigate();
+	const location = useLocation();
+	const state = location.state as CustomizedState | null;
+	let pathname;
+	if (state !== null) {
+		pathname = state?.from.pathname;
+	}
+	const from = pathname || "/";
+
 	const {
 		register,
 		handleSubmit,
@@ -104,7 +122,7 @@ const Login = () => {
 		const authSuccess = await dispatch(fetchUser(data));
 		if (fetchUser.fulfilled.match(authSuccess)) {
 			setLoading(false);
-			nagivate("/");
+			nagivate(from, { replace: true });
 		} else {
 			setLoading(false);
 			if (authSuccess.payload) {
