@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Title } from "../../styles/CommonStyles";
 import Container from "../../styles/Container";
 import { theme } from "../../styles/theme";
-import { RegsiterInputs } from "../../types/auth";
+import { RegsiterInputs, RegsiterPostInputs } from "../../types/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../app/hooks";
 import { registerUser } from "../../features/auth/authSlice";
+import swal from "sweetalert";
 
 const ContainerExtended = styled(Container)`
 	padding: 50px;
@@ -42,7 +43,16 @@ const Input = styled.input`
 	width: 100%;
 `;
 
-const FormSubmit = styled.input`
+const buttonLoadingSpinner = keyframes`
+	from {
+		transform: rotate(0turn);
+	}
+	to {
+		transform: rotate(1turn);
+	}
+`;
+
+const FormSubmit = styled.button<{ loading: boolean }>`
 	grid-column: 1/-1;
 	margin-top: 20px;
 	display: block;
@@ -51,13 +61,22 @@ const FormSubmit = styled.input`
 	cursor: pointer;
 	background-color: ${theme.col.lightGray};
 	transition: all 0.2s ease;
-	padding: 15px 48px;
+	padding: ${(props) => (props.loading ? "12.5px 48px" : "15px 48px")};
 	border: 1px solid ${theme.col.lightGray};
 	border-radius: 3px;
 	font-size: ${theme.fs.base};
 	:hover {
 		background-color: ${theme.col.black};
 		color: ${theme.col.white};
+	}
+	span {
+		display: inline-block;
+		width: 20px;
+		height: 20px;
+		border: 4px solid transparent;
+		border-top-color: ${theme.col.black};
+		border-radius: 50%;
+		animation: ${buttonLoadingSpinner} 1s ease infinite;
 	}
 `;
 
@@ -75,6 +94,12 @@ const Info = styled.p`
 	}
 `;
 
+const RegisterError = styled.div`
+	color: ${theme.col.red};
+	font-size: 20px;
+	margin: 10px auto;
+`;
+
 const Regex =
 	/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
@@ -82,6 +107,7 @@ const Register = () => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 	const [loading, setLoading] = useState<boolean>(false);
+	const [error, setError] = useState<string>("");
 	const formSchema = Yup.object().shape({
 		firstname: Yup.string().trim(),
 		lastname: Yup.string().trim(),
@@ -108,11 +134,30 @@ const Register = () => {
 
 	const onSubmit: SubmitHandler<RegsiterInputs> = async (data) => {
 		setLoading(true);
+		const dataWithAdditionalInfo: RegsiterPostInputs = {
+			firstname: data.firstname,
+			lastname: data.lastname,
+			email: data.email,
+			username: data.username,
+			password: data.password,
+			roles: ["customer"],
+			active: true,
+		};
 
-		const registerSuccess = await dispatch(registerUser(data));
+		const registerSuccess = await dispatch(
+			registerUser(dataWithAdditionalInfo)
+		);
 		if (registerUser.fulfilled.match(registerSuccess)) {
 			setLoading(false);
-			navigate("/login");
+
+			swal({
+				title: "Registration Successfull",
+				text: "Please login to access your account",
+				icon: "success",
+				// button: "Okay",
+			}).then(() => {
+				navigate("/login");
+			});
 		} else {
 			setLoading(false);
 			if (registerSuccess.payload) {
@@ -180,7 +225,10 @@ const Register = () => {
 					)}
 				</div>
 				{/* </InputContainer> */}
-				<FormSubmit type="submit" value="Register" />
+
+				<FormSubmit type="submit" loading={loading}>
+					{loading ? <span></span> : "Register"}
+				</FormSubmit>
 			</FormContainer>
 			<Info>
 				Already have an account?{" "}

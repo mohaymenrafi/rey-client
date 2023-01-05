@@ -27,8 +27,9 @@ export type AuthUser = {
 	firstname: string;
 	lastname: string;
 	email: string;
-	accessToken: string;
 	roles: string[];
 	active: boolean;
 	id: string;
+	accessToken: string;
+	refreshToken: string;
 };

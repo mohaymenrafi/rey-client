@@ -1,7 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { axiosPublic } from "../../apis/apiConfig";
-import { AuthUser, LoginInputs, RegsiterInputs } from "../../types/auth";
+import {
+	AuthUser,
+	LoginInputs,
+	RegsiterInputs,
+	RegsiterPostInputs,
+} from "../../types/auth";
 import { RootState } from "../../app/store";
 
 interface IState {
@@ -15,10 +20,11 @@ const initialState: IState = {
 		firstname: "",
 		lastname: "",
 		email: "",
-		accessToken: "",
 		roles: [],
 		active: false,
 		id: "",
+		accessToken: "",
+		refreshToken: "",
 	},
 	loading: "idle",
 	error: undefined,
@@ -40,7 +46,7 @@ export const refreshToken = createAsyncThunk("auth/refresh", async () => {
 
 export const registerUser = createAsyncThunk(
 	"auth/registerUser",
-	async (data: RegsiterInputs) => {
+	async (data: RegsiterPostInputs) => {
 		const response = await axiosPublic.post("/users", data);
 		return response.data;
 	}
@@ -55,10 +61,13 @@ export const authSlice = createSlice({
 			.addCase(fetchUser.pending, (state, action) => {
 				state.loading = "pending";
 			})
-			.addCase(fetchUser.fulfilled, (state, action: PayloadAction<IState>) => {
-				state.loading = "succeeded";
-				state.user = action.payload.user;
-			})
+			.addCase(
+				fetchUser.fulfilled,
+				(state, action: PayloadAction<AuthUser>) => {
+					state.loading = "succeeded";
+					state.user = action.payload;
+				}
+			)
 			.addCase(fetchUser.rejected, (state, action) => {
 				state.loading = "failed";
 				state.error = action.error.message;
@@ -67,9 +76,6 @@ export const authSlice = createSlice({
 				state = { ...state, ...action.payload };
 				return state;
 			});
-		// .addCase(registerNewUser.pending, (state,action) => {
-		// 	state.
-		// });
 	},
 });
 
