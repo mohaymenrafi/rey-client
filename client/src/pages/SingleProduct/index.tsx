@@ -75,15 +75,15 @@ const Price = styled.p`
 	column-gap: 20px;
 	align-items: center;
 `;
-const Regular = styled.p<{ sale: boolean }>`
+const Regular = styled.span<{ sale: boolean }>`
 	color: ${theme.col.gray};
 	text-decoration: ${(props) => props.sale && "line-through"};
 	font-weight: ${(props) => props.sale && 500};
 `;
-const Sale = styled.p`
+const Sale = styled.span`
 	color: ${theme.col.darkBlue};
 `;
-const PriceOff = styled.p`
+const PriceOff = styled.span`
 	background: ${theme.col.darkBlue};
 	padding: 8px 13px;
 	color: ${theme.col.white};
@@ -374,7 +374,7 @@ const SingleProduct = () => {
 				<InfoDiv>
 					<Category>
 						{product?.categories.map((cat, idx) => (
-							<p key={idx}>{cat}</p>
+							<span key={idx}>{cat}</span>
 						))}
 					</Category>
 					<Title>{product?.title}</Title>
@@ -470,11 +470,6 @@ const SingleProduct = () => {
 					<Share>
 						<span>Share</span>
 						<ShareIcons>
-							{/* <FaLinkedinIn />
-							<FaFacebook />
-							<FaTwitter />
-							<FaPinterest />
-							<FaEnvelope /> */}
 							<FacebookShareButton
 								url={
 									"https://stackoverflow.com/questions/28868071/onchange-event-using-react-js-for-drop-down"

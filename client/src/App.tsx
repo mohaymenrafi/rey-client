@@ -20,9 +20,6 @@ function App() {
 		<Routes>
 			<Route path="/" element={<Laylout />}>
 				<Route index element={<Home />} />
-				{/* <Route element={<PrivateRoute  />}>
-				</Route> */}
-
 				<Route
 					path="products"
 					element={
@@ -31,7 +28,6 @@ function App() {
 						</PrivateRoute>
 					}
 				/>
-
 				<Route path="products/:id" element={<SingleProduct />} />
 				<Route path="cart" element={<CartPage />} />
 				<Route path="wishlist" element={<WishlistPage />} />

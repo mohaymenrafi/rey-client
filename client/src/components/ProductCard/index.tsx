@@ -188,20 +188,6 @@ const ProductCard: FC<IProps> = ({ item }) => {
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
 		>
-			{/* <SaleNotice>
-				{isSale && (
-							<>
-								<Sale>${salePrice}</Sale>
-								<PriceOff>
-									{product?.sale?.type === "flat" ? (
-										<>-${product?.sale?.amount} FLAT OFF</>
-									) : (
-										<span>-{product?.sale?.amount}% OFF</span>
-									)}
-								</PriceOff>
-							</>
-						)}
-			</SaleNotice> */}
 			{isSale && (
 				<SaleNotice>
 					{item?.sale?.type === "flat" ? (
@@ -216,7 +202,7 @@ const ProductCard: FC<IProps> = ({ item }) => {
 			</Thumbnail>
 			<Category>
 				{item?.categories.map((cat, idx) => (
-					<p key={idx}>{cat}</p>
+					<span key={idx}>{cat}</span>
 				))}
 			</Category>
 			<h2>
@@ -224,8 +210,8 @@ const ProductCard: FC<IProps> = ({ item }) => {
 			</h2>
 			{/* TODO: convert the prices from cent to actual prices and also use localization, use function */}
 			<Price isHover={isHover} sale={isSale}>
-				<p className="mainPrice">${item?.price}</p>
-				{isSale && <p className="salePrice">${salePrice}</p>}
+				<span className="mainPrice">${item?.price}</span>
+				{isSale && <span className="salePrice">${salePrice}</span>}
 			</Price>
 			{/* TODO: later add tooltip from mui  */}
 
