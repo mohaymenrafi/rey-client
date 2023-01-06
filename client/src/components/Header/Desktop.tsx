@@ -3,10 +3,11 @@ import { BsBag } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { CartIcon, Icon, IHeaderProps, Logo } from ".";
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { selectAuthUser } from "../../features/auth/authSlice";
 import { SmallText } from "../../styles/SmallText";
 import { theme } from "../../styles/theme";
+import { Logout } from "../../features/auth/authSlice";
 
 const DesktopNav = styled.div`
 	display: none;
@@ -53,10 +54,19 @@ const Right = styled.div`
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
+	column-gap: 10px;
+`;
+const LogoutButton = styled(SmallText)`
+	cursor: pointer;
 `;
 
 const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
+	const dispatch = useAppDispatch();
 	const { user } = useAppSelector(selectAuthUser);
+	const handleLogout = async () => {
+		await dispatch(Logout());
+		console.log("logging out ");
+	};
 	return (
 		<DesktopNav>
 			<ul>
@@ -73,9 +83,22 @@ const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 						<BsBag />
 					</Icon>
 				</CartIcon>
-				<SmallText>
-					<Link to="/my-account">ACCOUNT {user && `(${user.username})`} </Link>
-				</SmallText>
+				{user ? (
+					<>
+						<SmallText>
+							<Link to="/my-account">
+								ACCOUNT {user && `(${user.username})`}{" "}
+							</Link>
+						</SmallText>
+						<LogoutButton onClick={handleLogout}>
+							<a>LOGOUT</a>
+						</LogoutButton>
+					</>
+				) : (
+					<SmallText>
+						<Link to="/login">Login </Link>
+					</SmallText>
+				)}
 			</Right>
 		</DesktopNav>
 	);

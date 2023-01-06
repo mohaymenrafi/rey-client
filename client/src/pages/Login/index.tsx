@@ -9,8 +9,6 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { fetchUser, selectAuthUser } from "../../features/auth/authSlice";
 import { useState } from "react";
 
-//TODO: Need to implement forget password functionality
-
 const ContainerExtended = styled(Container)`
 	padding: 50px;
 	display: flex;

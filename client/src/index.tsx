@@ -3,8 +3,9 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider } from "react-redux";
-import { store } from "./app/store";
+import { persistor, store } from "./app/store";
 import ScrollToTop from "./components/ScrollToTop";
+import { PersistGate } from "redux-persist/integration/react";
 
 const root = ReactDOM.createRoot(
 	document.getElementById("root") as HTMLElement
@@ -12,12 +13,14 @@ const root = ReactDOM.createRoot(
 root.render(
 	<React.StrictMode>
 		<Provider store={store}>
-			<BrowserRouter>
-				<ScrollToTop />
-				<Routes>
-					<Route path="/*" element={<App />} />
-				</Routes>
-			</BrowserRouter>
+			<PersistGate loading={null} persistor={persistor}>
+				<BrowserRouter>
+					<ScrollToTop />
+					<Routes>
+						<Route path="/*" element={<App />} />
+					</Routes>
+				</BrowserRouter>
+			</PersistGate>
 		</Provider>
 	</React.StrictMode>
 );

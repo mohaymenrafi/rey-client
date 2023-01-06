@@ -35,10 +35,6 @@ const menuItem: IMenuItem[] = [
 		name: "Contact",
 		url: "/contact",
 	},
-	{
-		name: "Login",
-		url: "/login",
-	},
 ];
 
 const StyledTopbar = styled.div`

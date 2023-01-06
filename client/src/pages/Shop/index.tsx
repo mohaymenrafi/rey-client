@@ -110,8 +110,8 @@ const Shop = () => {
 				<SpacerDiv />
 				<CategoryBox>
 					<ul>
-						{categories.map((item) => (
-							<li>{item}</li>
+						{categories.map((item, idx) => (
+							<li key={idx}>{item}</li>
 						))}
 					</ul>
 				</CategoryBox>
