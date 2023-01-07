@@ -9,7 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../app/hooks";
-import { registerUser } from "../../features/auth/authSlice";
+import { userRegistration } from "../../features/auth/authSlice";
 import swal from "sweetalert";
 
 const ContainerExtended = styled(Container)`
@@ -145,16 +145,15 @@ const Register = () => {
 		};
 
 		const registerSuccess = await dispatch(
-			registerUser(dataWithAdditionalInfo)
+			userRegistration(dataWithAdditionalInfo)
 		);
-		if (registerUser.fulfilled.match(registerSuccess)) {
+		if (userRegistration.fulfilled.match(registerSuccess)) {
 			setLoading(false);
 
 			swal({
 				title: "Registration Successfull",
 				text: "Please login to access your account",
 				icon: "success",
-				// button: "Okay",
 			}).then(() => {
 				navigate("/login");
 			});

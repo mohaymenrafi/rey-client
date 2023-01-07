@@ -1,13 +1,17 @@
 import { useEffect } from "react";
 import { axiosPrivate } from "../apis/apiConfig";
-import { useAppSelector } from "../app/hooks";
-import { selectAuthUser } from "../features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { userLogout, selectAuthUser } from "../features/auth/authSlice";
 import useRefreshToken from "./useRefreshToken";
 import { AxiosRequestConfig } from "axios";
+import { useNavigate } from "react-router-dom";
+import { Logout } from "../features/auth/authSlice";
 
 const useAxiosPrivate = () => {
 	const refresh = useRefreshToken();
 	const { user } = useAppSelector(selectAuthUser);
+
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
 		const requestIntercept = axiosPrivate.interceptors.request.use(
@@ -27,11 +31,16 @@ const useAxiosPrivate = () => {
 				const prevRequest = error?.config;
 				if (error?.response.status === 403 && !prevRequest?.sent) {
 					prevRequest.send = true;
-					const { accessToken } = await refresh();
+					const newToken = await refresh();
+					console.log(newToken);
+					const accessToken = newToken.accessToken;
 					prevRequest.headers["Authorization"] = `Bearer ${accessToken}`;
 					return axiosPrivate(prevRequest);
+				} else {
+					console.log(error);
+					dispatch(userLogout());
+					return Promise.reject(error);
 				}
-				return Promise.reject(error);
 			}
 		);
 		return () => {

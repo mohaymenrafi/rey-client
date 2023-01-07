@@ -1,11 +1,15 @@
+import { useEffect } from "react";
 import styled from "styled-components";
 import Container from "../../styles/Container";
 import ShopBanner from "../../assets/bg-cover.webp";
 import { theme } from "../../styles/theme";
 import { ProductCard } from "../../components";
 import { localProduct as ProductType } from "../../types/product";
-import { useAppSelector } from "../../app/hooks";
-import { selectProduct } from "../../features/product/productSlice";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import {
+	getAllProducts,
+	selectAllProducts,
+} from "../../features/product/productSlice";
 
 const ContainerExtended = styled(Container)`
 	background: url("${ShopBanner}") no-repeat center center;
@@ -82,6 +86,15 @@ const CategoryBox = styled.div`
 	}
 `;
 
+const NoProducts = styled.p`
+	color: ${theme.col.black};
+	font-size: ${theme.fs.xl};
+	font-weight: 600;
+	padding: 30px;
+	text-align: center;
+	grid-column: 1/-1;
+`;
+
 const categories: string[] = [
 	"All",
 	"Beds",
@@ -95,13 +108,23 @@ const categories: string[] = [
 const SpacerDiv = styled.div``;
 
 const Shop = () => {
-	const { products, loading, error } = useAppSelector(selectProduct);
-	if (loading === "loading") {
-		return <h2>Loading...</h2>;
-	}
-	if (error) {
-		return <h2>Error Loading Products</h2>;
-	}
+	const dispatch = useAppDispatch();
+	const { products, loading, error } = useAppSelector(selectAllProducts);
+
+	const loadProducts = async () => {
+		const response = await dispatch(getAllProducts());
+	};
+	useEffect(() => {
+		loadProducts();
+	}, [products]);
+
+	// if (loading === "pending") {
+	// 	return <h2>Loading...</h2>;
+	// }
+	// if (error) {
+	// 	console.log(error);
+	// 	return <h2>Error Loading Products</h2>;
+	// }
 
 	return (
 		<>
@@ -118,9 +141,13 @@ const Shop = () => {
 			</ContainerExtended>
 			<Container>
 				<CardContainer>
-					{products.map((item, index) => (
-						<ProductCard item={item} key={index} />
-					))}
+					{products.length ? (
+						products.map((item, index) => (
+							<ProductCard item={item} key={index} />
+						))
+					) : (
+						<NoProducts>No Products Found</NoProducts>
+					)}
 				</CardContainer>
 			</Container>
 		</>

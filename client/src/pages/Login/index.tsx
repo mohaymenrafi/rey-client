@@ -6,7 +6,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LoginInputs } from "../../types/auth";
 import { Title } from "../../styles/CommonStyles";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { fetchUser, selectAuthUser } from "../../features/auth/authSlice";
+import { userLogin, selectAuthUser } from "../../features/auth/authSlice";
 import { useState } from "react";
 
 const ContainerExtended = styled(Container)`
@@ -117,8 +117,8 @@ const Login = () => {
 	const onSubmit: SubmitHandler<LoginInputs> = async (data) => {
 		setError("");
 		setLoading(true);
-		const authSuccess = await dispatch(fetchUser(data));
-		if (fetchUser.fulfilled.match(authSuccess)) {
+		const authSuccess = await dispatch(userLogin(data));
+		if (userLogin.fulfilled.match(authSuccess)) {
 			setLoading(false);
 			nagivate(from, { replace: true });
 		} else {

@@ -4,10 +4,9 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { CartIcon, Icon, IHeaderProps, Logo } from ".";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectAuthUser } from "../../features/auth/authSlice";
+import { userLogout, selectAuthUser } from "../../features/auth/authSlice";
 import { SmallText } from "../../styles/SmallText";
 import { theme } from "../../styles/theme";
-import { Logout } from "../../features/auth/authSlice";
 
 const DesktopNav = styled.div`
 	display: none;
@@ -64,7 +63,7 @@ const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 	const dispatch = useAppDispatch();
 	const { user } = useAppSelector(selectAuthUser);
 	const handleLogout = async () => {
-		await dispatch(Logout());
+		await dispatch(userLogout());
 		console.log("logging out ");
 	};
 	return (
