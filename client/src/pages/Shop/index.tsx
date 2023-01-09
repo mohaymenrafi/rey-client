@@ -4,7 +4,6 @@ import Container from "../../styles/Container";
 import ShopBanner from "../../assets/bg-cover.webp";
 import { theme } from "../../styles/theme";
 import { ProductCard } from "../../components";
-import { localProduct as ProductType } from "../../types/product";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
 	getAllProducts,
@@ -109,22 +108,28 @@ const SpacerDiv = styled.div``;
 
 const Shop = () => {
 	const dispatch = useAppDispatch();
+
 	const { products, loading, error } = useAppSelector(selectAllProducts);
 
 	const loadProducts = async () => {
-		const response = await dispatch(getAllProducts());
+		try {
+			await dispatch(getAllProducts()).unwrap();
+		} catch (err) {
+			//TODO:handle product load error from here!!
+			console.error(err);
+		}
 	};
 	useEffect(() => {
 		loadProducts();
-	}, [products]);
+	}, []);
 
-	// if (loading === "pending") {
-	// 	return <h2>Loading...</h2>;
-	// }
-	// if (error) {
-	// 	console.log(error);
-	// 	return <h2>Error Loading Products</h2>;
-	// }
+	if (loading === "pending") {
+		return <h2>Loading...</h2>;
+	}
+	if (error) {
+		console.log(error);
+		return <h2>Error Loading Products</h2>;
+	}
 
 	return (
 		<>

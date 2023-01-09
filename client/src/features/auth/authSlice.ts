@@ -1,38 +1,60 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { axiosPublic } from "../../apis/apiConfig";
-import {
-	AuthUser,
-	LoginInputs,
-	RegsiterInputs,
-	RegsiterPostInputs,
-} from "../../types/auth";
+import { AuthUser, LoginInputs, RegsiterPostInputs } from "../../types/auth";
 import { RootState } from "../../app/store";
-import { stat } from "fs";
+import { IRejectError } from "../../types/error";
 
+interface IError {
+	message?: string;
+	status?: number;
+}
 interface IState {
 	user: AuthUser | null;
 	loading: "idle" | "pending" | "succeeded" | "failed";
-	error: string | undefined;
+	error: string | IError;
 }
+
+interface IRefreshToken {
+	accessToken: string;
+}
+
 const initialState: IState = {
 	user: null,
 	loading: "idle",
-	error: undefined,
+	error: "",
 };
 
 export const userLogin = createAsyncThunk(
 	"auth/fetchUser",
 	async (data: LoginInputs) => {
-		const response = await axiosPublic.post("/auth", data);
+		const response = await axiosPublic.post("/auth", data, {
+			withCredentials: true,
+			headers: {
+				"content-type": "application/json",
+			},
+		});
 		return response.data;
 	}
 );
-export const refreshToken = createAsyncThunk("auth/refresh", async () => {
-	const response = await axiosPublic.get("/auth/refresh", {
-		withCredentials: true,
-	});
-	return response.data;
+export const refreshToken = createAsyncThunk<
+	IRefreshToken,
+	void,
+	{
+		rejectValue: IRejectError;
+	}
+>("auth/refresh", async (_, { rejectWithValue }) => {
+	try {
+		const response = await axiosPublic.get("/auth/refresh", {
+			withCredentials: true,
+		});
+		return response.data as IRefreshToken;
+	} catch (err: any) {
+		if (!err.response) {
+			throw err;
+		}
+		return rejectWithValue(err.response);
+	}
 });
 
 export const userRegistration = createAsyncThunk(
@@ -70,12 +92,14 @@ export const authSlice = createSlice({
 			)
 			.addCase(userLogin.rejected, (state, action) => {
 				state.loading = "failed";
-				state.error = action.error.message;
+				state.error = { message: action.error.message };
 			})
 			.addCase(refreshToken.fulfilled, (state, action) => {
-				state = { ...state, ...action.payload };
-				return state;
+				if (state.user !== null) {
+					state.user.accessToken = action.payload.accessToken;
+				}
 			})
+
 			.addCase(userLogout.fulfilled, (state, action) => {
 				state.user = initialState.user;
 			});

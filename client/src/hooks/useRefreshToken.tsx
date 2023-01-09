@@ -1,12 +1,18 @@
 import { useAppDispatch } from "../app/hooks";
-import { refreshToken } from "../features/auth/authSlice";
+import { refreshToken, userLogout } from "../features/auth/authSlice";
 
 const useRefreshToken = () => {
 	const dispatch = useAppDispatch();
 	const refresh = async () => {
-		const updateRes = await dispatch(refreshToken());
-		console.log(updateRes);
-		return updateRes.payload;
+		try {
+			const response = await dispatch(refreshToken()).unwrap();
+			return response;
+		} catch (error: any) {
+			console.error("Token Expired", error);
+			if (error.status === 403) {
+				await dispatch(userLogout());
+			}
+		}
 	};
 	return refresh;
 };
