@@ -7,6 +7,9 @@ import { IRejectError } from "../../types/error";
 interface IError {
 	message?: string;
 	status?: number;
+	data?: {
+		message: string;
+	};
 }
 
 interface IState {
@@ -21,20 +24,27 @@ const initialState: IState = {
 	error: "",
 };
 
-export const getAllProducts = createAsyncThunk(
-	"/products",
-	async (_, { rejectWithValue }) => {
-		try {
-			const response = await axiosPrivate.get("/products");
-			return response.data as productType[];
-		} catch (error: any) {
-			if (!error.response) {
-				throw error;
-			}
-			return rejectWithValue(error);
-		}
+export const getAllProducts = createAsyncThunk<
+	productType[],
+	void,
+	{
+		rejectValue: IError;
 	}
-);
+>("/products", async (_, { rejectWithValue }) => {
+	try {
+		const response = await axiosPrivate.get("/products");
+		return response.data as productType[];
+	} catch (error: any) {
+		if (!error.response) {
+			throw error;
+		}
+		return rejectWithValue({
+			data: error.response.data,
+			status: error.reponse.status,
+			message: error.reponse.statusText,
+		} as IError);
+	}
+});
 
 export const productSlice = createSlice({
 	name: "products",
@@ -49,6 +59,7 @@ export const productSlice = createSlice({
 		builder
 			.addCase(getAllProducts.pending, (state) => {
 				state.loading = "pending";
+				state.error = "";
 			})
 			.addCase(
 				getAllProducts.fulfilled,
@@ -59,6 +70,12 @@ export const productSlice = createSlice({
 			)
 			.addCase(getAllProducts.rejected, (state, action) => {
 				state.loading = "failed";
+				if (action.payload) {
+					state.error = action.payload;
+					if (action.payload.status === 403) {
+						state.products = [];
+					}
+				}
 				state.error = {
 					message: action.error.message,
 				};

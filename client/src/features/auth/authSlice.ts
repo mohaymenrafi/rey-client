@@ -3,11 +3,13 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { axiosPublic } from "../../apis/apiConfig";
 import { AuthUser, LoginInputs, RegsiterPostInputs } from "../../types/auth";
 import { RootState } from "../../app/store";
-import { IRejectError } from "../../types/error";
 
 interface IError {
 	message?: string;
 	status?: number;
+	data?: {
+		message: string;
+	};
 }
 interface IState {
 	user: AuthUser | null;
@@ -41,7 +43,7 @@ export const refreshToken = createAsyncThunk<
 	IRefreshToken,
 	void,
 	{
-		rejectValue: IRejectError;
+		rejectValue: IError;
 	}
 >("auth/refresh", async (_, { rejectWithValue }) => {
 	try {
@@ -53,7 +55,11 @@ export const refreshToken = createAsyncThunk<
 		if (!err.response) {
 			throw err;
 		}
-		return rejectWithValue(err.response);
+		return rejectWithValue({
+			data: err.response.data,
+			status: err.response.status,
+			message: err.response.statusText,
+		} as IError);
 	}
 });
 
@@ -82,6 +88,7 @@ export const authSlice = createSlice({
 		builder
 			.addCase(userLogin.pending, (state, action) => {
 				state.loading = "pending";
+				state.error = "";
 			})
 			.addCase(
 				userLogin.fulfilled,
@@ -95,8 +102,17 @@ export const authSlice = createSlice({
 				state.error = { message: action.error.message };
 			})
 			.addCase(refreshToken.fulfilled, (state, action) => {
+				state.error = "";
 				if (state.user !== null) {
 					state.user.accessToken = action.payload.accessToken;
+				}
+			})
+			.addCase(refreshToken.rejected, (state, action) => {
+				state.loading = "failed";
+				if (action.payload) {
+					state.error = action.payload;
+				} else {
+					state.error = { message: action.error.message };
 				}
 			})
 
