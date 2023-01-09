@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAppSelector } from "../app/hooks";
 import { selectAuthUser } from "../features/auth/authSlice";
 import useRefreshToken from "../hooks/useRefreshToken";
@@ -72,7 +72,9 @@ interface IProps {
 const AxiosPrivateInterceptor = ({ children }: IProps) => {
 	const { user } = useAppSelector(selectAuthUser);
 	const refresh = useRefreshToken();
+
 	useEffect(() => {
+		console.log("REQ");
 		const requestIntercept = axiosPrivate.interceptors.request.use(
 			(config: AxiosRequestConfig) => {
 				config.headers = config.headers ?? {};
@@ -88,7 +90,10 @@ const AxiosPrivateInterceptor = ({ children }: IProps) => {
 			(response) => response,
 			async (error: AxiosError): Promise<AxiosError> => {
 				const prevRequest = error?.config as IReqConfig;
-				if (error?.response?.status === 403 && !prevRequest?.sent) {
+				if (
+					error?.response?.status === 403 ||
+					(error?.response?.status === 401 && !prevRequest?.sent)
+				) {
 					prevRequest.sent = true;
 					const newToken = await refresh();
 					const accessToken = newToken?.accessToken;
