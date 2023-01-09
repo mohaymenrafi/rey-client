@@ -9,6 +9,7 @@ import {
 	getAllProducts,
 	selectAllProducts,
 } from "../../features/product/productSlice";
+import { Puff } from "react-loader-spinner";
 
 const ContainerExtended = styled(Container)`
 	background: url("${ShopBanner}") no-repeat center center;
@@ -124,11 +125,27 @@ const Shop = () => {
 	}, []);
 
 	if (loading === "pending") {
-		return <h2>Loading...</h2>;
+		return (
+			<Puff
+				height="80"
+				width="80"
+				radius={1}
+				color={theme.col.darkBlue}
+				ariaLabel="puff-loading"
+				wrapperStyle={{
+					justifyContent: "center",
+					padding: "20px ",
+					minHeight: "calc(100vh - 398px)",
+					alignItems: "center",
+				}}
+				wrapperClass=""
+				visible={true}
+			/>
+		);
 	}
 	if (error) {
 		console.log(error);
-		return <h2>Error Loading Products</h2>;
+		return <h2>Error Loading Products, Please try again</h2>;
 	}
 
 	return (
