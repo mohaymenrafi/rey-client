@@ -89,10 +89,8 @@ const AxiosPrivateInterceptor = ({ children }: IProps) => {
 			(response) => response,
 			async (error: AxiosError): Promise<AxiosError> => {
 				const prevRequest = error?.config as IReqConfig;
-				if (
-					error?.response?.status === 403 ||
-					(error?.response?.status === 401 && !prevRequest?.sent)
-				) {
+				if (error?.response?.status === 403 && !prevRequest?.sent) {
+					console.log(prevRequest.sent);
 					prevRequest.sent = true;
 					const newToken = await refresh();
 					const accessToken = newToken?.accessToken;
@@ -100,6 +98,7 @@ const AxiosPrivateInterceptor = ({ children }: IProps) => {
 					prevRequest.headers["Authorization"] = `Bearer ${accessToken}`;
 					return axiosPrivate(prevRequest);
 				}
+				console.log(prevRequest);
 				return Promise.reject(error);
 			}
 		);
