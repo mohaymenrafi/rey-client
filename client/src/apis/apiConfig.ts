@@ -74,7 +74,6 @@ const AxiosPrivateInterceptor = ({ children }: IProps) => {
 	const refresh = useRefreshToken();
 
 	useEffect(() => {
-		console.log("REQ");
 		const requestIntercept = axiosPrivate.interceptors.request.use(
 			(config: AxiosRequestConfig) => {
 				config.headers = config.headers ?? {};

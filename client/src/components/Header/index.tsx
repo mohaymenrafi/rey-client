@@ -69,6 +69,7 @@ const ContainerTop = styled(ContainerExtended)`
 export const Icon = styled.span`
 	color: ${theme.col["black-2"]};
 	font-size: ${theme.fs["md-2"]};
+	cursor: pointer;
 `;
 export const CartIcon = styled(Icon)<ICart>`
 	position: relative;
@@ -106,6 +107,7 @@ export const Logo = styled.img`
 	width: 60px;
 	margin-right: 15px;
 	align-self: center;
+	cursor: pointer;
 	@media (min-width: ${theme.sc.lg}) {
 		justify-self: center;
 		width: 80px;

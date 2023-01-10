@@ -1,6 +1,6 @@
 import React from "react";
 import { BsBag } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { CartIcon, Icon, IHeaderProps, Logo } from ".";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
@@ -61,10 +61,14 @@ const LogoutButton = styled(SmallText)`
 
 const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
 	const { user } = useAppSelector(selectAuthUser);
 	const handleLogout = async () => {
 		await dispatch(userLogout());
 		console.log("logging out ");
+	};
+	const hanldeLogoClick = () => {
+		navigate("/");
 	};
 	return (
 		<DesktopNav>
@@ -75,7 +79,12 @@ const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 					</li>
 				))}
 			</ul>
-			<Logo src={logo} alt="site logo" aria-label="logo" />
+			<Logo
+				src={logo}
+				alt="site logo"
+				aria-label="logo"
+				onClick={hanldeLogoClick}
+			/>
 			<Right>
 				<CartIcon amount={4}>
 					<Icon>
