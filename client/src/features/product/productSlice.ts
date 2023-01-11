@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { localProduct as productType } from "../../types/product";
 import { RootState } from "../../app/store";
 import { axiosPrivate } from "../../apis/apiConfig";
-import { IRejectError } from "../../types/error";
 
 interface IError {
 	message?: string;

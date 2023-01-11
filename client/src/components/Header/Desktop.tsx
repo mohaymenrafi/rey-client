@@ -64,8 +64,11 @@ const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 	const navigate = useNavigate();
 	const { user } = useAppSelector(selectAuthUser);
 	const handleLogout = async () => {
-		await dispatch(userLogout());
-		console.log("logging out ");
+		try {
+			await dispatch(userLogout()).unwrap();
+		} catch (error) {
+			console.error("logout error", error);
+		}
 	};
 	const hanldeLogoClick = () => {
 		navigate("/");

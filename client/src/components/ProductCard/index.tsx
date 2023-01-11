@@ -5,6 +5,11 @@ import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { localProduct } from "../../types/product";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import {
+	addToWishlist,
+	selectWishlist,
+} from "../../features/wishlist/wishlistSlice";
 
 const CardContainer = styled.div`
 	position: relative;
@@ -128,7 +133,9 @@ const View = styled.span`
 		transform: scaleX(1);
 	}
 `;
-const Icon = styled.span``;
+const Icon = styled.span`
+	cursor: pointer;
+`;
 
 const Image = styled.img`
 	width: 100%;
@@ -167,19 +174,24 @@ const ProductCard: FC<IProps> = ({ item }) => {
 	const [isHover, setIsHover] = useState<boolean>(false);
 	const [isSale, setIsSale] = useState<boolean>(false);
 	const [salePrice, setSalePrice] = useState<number>();
+	const dispatch = useAppDispatch();
+	const { count, wishlistProducts } = useAppSelector(selectWishlist);
+
+	const handleWishlist = (item: localProduct): void => {
+		dispatch(addToWishlist(item));
+	};
+	useEffect(() => {
+		console.log(count);
+	}, [count]);
 
 	useEffect(() => {
-		if (item.sale !== undefined) {
-			setIsSale(item?.sale?.active || false);
-			if (item.sale.active) {
-				if (item.sale.type === "flat") {
-					item.sale.amount && setSalePrice(item.price - item.sale.amount);
-				} else {
-					if (item.sale.amount !== undefined) {
-						const saleAmount = (item?.sale?.amount / 100) * item.price;
-						setSalePrice(item.price - saleAmount);
-					}
-				}
+		if (item.sale) {
+			setIsSale(item.sale.active);
+			if (item.sale.type === "flat") {
+				setSalePrice(item.price - item.sale.amount);
+			} else {
+				const saleAmount = (item.sale.amount / 100) * item.price;
+				setSalePrice(item.price - saleAmount);
 			}
 		}
 	}, [item]);
@@ -206,7 +218,7 @@ const ProductCard: FC<IProps> = ({ item }) => {
 				))}
 			</Category>
 			<h2>
-				<Link to={`/products/${item?.id}`}>{item?.title}</Link>
+				<Link to={`/products/${item?._id}`}>{item?.title}</Link>
 			</h2>
 			{/* TODO: convert the prices from cent to actual prices and also use localization, use function */}
 			<Price isHover={isHover} sale={isSale}>
@@ -218,13 +230,13 @@ const ProductCard: FC<IProps> = ({ item }) => {
 			<ViewDetails isHover={isHover}>
 				{item?.inStock ? (
 					<>
-						<Link to={`/products/${item?.id}`}>
+						<Link to={`/products/${item?._id}`}>
 							<View>view details</View>
 						</Link>
 						<Icon>
 							<AiOutlineShoppingCart />
 						</Icon>
-						<Icon>
+						<Icon onClick={() => handleWishlist(item)}>
 							<MdFavoriteBorder />
 						</Icon>
 					</>

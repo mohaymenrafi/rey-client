@@ -15,10 +15,11 @@ export interface localProduct {
 	size: string[];
 	color: string[];
 	inStock: boolean;
-	id: string;
+	id?: string;
 	sale?: {
-		active?: boolean;
-		type?: string;
-		amount?: number;
+		active: boolean;
+		type: string;
+		amount: number;
 	};
+	_id: string;
 }

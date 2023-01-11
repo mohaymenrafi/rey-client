@@ -12,6 +12,13 @@ const axiosPublic = axios.create({
 		"Content-Type": "application/json",
 	},
 });
+const axiosAuth = axios.create({
+	baseURL: BASE_URL,
+	withCredentials: true,
+	headers: {
+		"Content-Type": "application/json",
+	},
+});
 
 const axiosPrivate = axios.create({
 	baseURL: BASE_URL,
@@ -90,7 +97,6 @@ const AxiosPrivateInterceptor = ({ children }: IProps) => {
 			async (error: AxiosError): Promise<AxiosError> => {
 				const prevRequest = error?.config as IReqConfig;
 				if (error?.response?.status === 403 && !prevRequest?.sent) {
-					console.log(prevRequest.sent);
 					prevRequest.sent = true;
 					const newToken = await refresh();
 					const accessToken = newToken?.accessToken;
@@ -98,7 +104,6 @@ const AxiosPrivateInterceptor = ({ children }: IProps) => {
 					prevRequest.headers["Authorization"] = `Bearer ${accessToken}`;
 					return axiosPrivate(prevRequest);
 				}
-				console.log(prevRequest);
 				return Promise.reject(error);
 			}
 		);
@@ -112,5 +117,5 @@ const AxiosPrivateInterceptor = ({ children }: IProps) => {
 	return children;
 };
 
-export { axiosPublic, axiosPrivate };
+export { axiosPublic, axiosPrivate, axiosAuth };
 export default AxiosPrivateInterceptor;

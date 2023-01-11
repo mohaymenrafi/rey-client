@@ -19,6 +19,8 @@ import {
 	TwitterIcon,
 	TwitterShareButton,
 } from "react-share";
+import { useAppSelector } from "../../app/hooks";
+import { selectAllProducts } from "../../features/product/productSlice";
 
 const ContainerExtended = styled(Container)`
 	padding-top: 30px;
@@ -287,6 +289,7 @@ interface IColors {
 
 const SingleProduct = () => {
 	const { id } = useParams();
+	const { products } = useAppSelector(selectAllProducts);
 	const [cartAmount, setCartAmount] = useState<number>(1);
 	const [wishList, setWishList] = useState<boolean>(false);
 	const [product, setProduct] = useState<localProduct | undefined>();
@@ -309,12 +312,12 @@ const SingleProduct = () => {
 	}, [product]);
 
 	useEffect(() => {
-		const item = Products.find((item) => item.id === id);
+		const item = products.find((item) => item._id === id);
 		if (item) {
 			setProduct(item);
 			setStock(item.inStock);
-			setIsSale(item.sale.active);
-			if (item.sale.active) {
+			if (item.sale) {
+				setIsSale(item.sale.active);
 				if (item.sale.type === "flat") {
 					setSalePrice(item.price - item.sale.amount);
 				} else {

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { axiosPublic } from "../../apis/apiConfig";
+import { axiosAuth, axiosPublic } from "../../apis/apiConfig";
 import { AuthUser, LoginInputs, RegsiterPostInputs } from "../../types/auth";
 import { RootState } from "../../app/store";
 
@@ -33,12 +33,17 @@ export const userLogin = createAsyncThunk(
 		const response = await axiosPublic.post("/auth", data, {
 			withCredentials: true,
 			headers: {
-				"content-type": "application/json",
+				"Content-Type": "application/json",
 			},
 		});
 		return response.data;
 	}
 );
+
+export const userLogout = createAsyncThunk("auth/logout", async () => {
+	const response = await axiosAuth.post("/auth/logout");
+	return response.data;
+});
 export const refreshToken = createAsyncThunk<
 	IRefreshToken,
 	void,
@@ -70,11 +75,6 @@ export const userRegistration = createAsyncThunk(
 		return response.data;
 	}
 );
-
-export const userLogout = createAsyncThunk("auth/logout", async () => {
-	const response = await axiosPublic.post("/auth/logout");
-	return response.data;
-});
 
 export const authSlice = createSlice({
 	name: "user",
@@ -117,7 +117,8 @@ export const authSlice = createSlice({
 			})
 
 			.addCase(userLogout.fulfilled, (state, action) => {
-				state.user = initialState.user;
+				state.user = null;
+				state.error = "";
 			});
 	},
 });

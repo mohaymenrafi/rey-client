@@ -94,7 +94,11 @@ const MobileMenu: FC<IHeaderProps> = ({ logo, setOpen, open }) => {
 	const { user } = useAppSelector(selectAuthUser);
 	const dispatch = useAppDispatch();
 	const handleLogout = async () => {
-		await dispatch(userLogout());
+		try {
+			await dispatch(userLogout()).unwrap();
+		} catch (error) {
+			console.error("logout error", error);
+		}
 		setOpen(false);
 	};
 	return (

@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userReducer from "../features/auth/authSlice";
 import productsReducer from "../features/product/productSlice";
+import wishlistReducer from "../features/wishlist/wishlistSlice";
 import {
 	persistStore,
 	persistReducer,
@@ -16,11 +17,19 @@ import storage from "redux-persist/lib/storage";
 const persistConfig = {
 	key: "root",
 	storage,
+	// blacklist: ["user"],
+};
+
+const userPersistConfig = {
+	key: "user",
+	storage,
+	blacklist: ["accessToken"],
 };
 
 const rootReducer = combineReducers({
 	user: userReducer,
 	products: productsReducer,
+	wishlist: wishlistReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -30,10 +39,10 @@ export const store = configureStore({
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({
 			serializableCheck: {
-				ignoredActions: [PERSIST],
+				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
 			},
 		}),
-	// devTools: process.env.NODE_ENV !== "production",
+	devTools: process.env.NODE_ENV !== "production",
 });
 
 export const persistor = persistStore(store);
@@ -42,6 +51,7 @@ export const persistor = persistStore(store);
 // 	reducer: {
 // 		user: userReducer,
 // 		products: productsReducer,
+// 		wishlist: wishlistReducer,
 // 	},
 // });
 

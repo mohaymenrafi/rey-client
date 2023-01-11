@@ -8,9 +8,13 @@ const useRefreshToken = () => {
 			const response = await dispatch(refreshToken()).unwrap();
 			return response;
 		} catch (error: any) {
-			console.log("Token Expired =>", error);
-			if (error.status === 403) {
-				await dispatch(userLogout());
+			console.error("Token Expired =>", error);
+			if (error.status === 403 || error.status === 401) {
+				try {
+					await dispatch(userLogout()).unwrap();
+				} catch (error) {
+					console.error("logout error", error);
+				}
 			}
 		}
 	};

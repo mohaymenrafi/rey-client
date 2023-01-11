@@ -32,6 +32,10 @@ const menuItem: IMenuItem[] = [
 		url: "/products",
 	},
 	{
+		name: "Wishlist",
+		url: "/wishlist",
+	},
+	{
 		name: "Contact",
 		url: "/contact",
 	},
