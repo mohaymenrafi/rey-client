@@ -6,7 +6,7 @@ export type Product = {
 	category: string;
 	id: string;
 };
-export interface localProduct {
+export interface IProductType {
 	img: string;
 	title: string;
 	desc: string;

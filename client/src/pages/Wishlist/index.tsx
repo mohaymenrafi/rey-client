@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useAppSelector } from "../../app/hooks";
 import { ProductCard } from "../../components";
@@ -7,7 +6,6 @@ import { selectWishlist } from "../../features/wishlist/wishlistSlice";
 import { Title } from "../../styles/CommonStyles";
 import Container from "../../styles/Container";
 import { theme } from "../../styles/theme";
-import { localProduct as ProductType } from "../../types/product";
 
 const NoProducts = styled.p`
 	color: ${theme.col.black};
@@ -22,13 +20,7 @@ const SectionTitle = styled(Title)`
 `;
 
 const WishlistPage = () => {
-	const { wishlistProducts: products, count } = useAppSelector(selectWishlist);
-	// const [products, setProducts] = useState<ProductType[]>(wishlistProducts);
-	useEffect(() => {
-		// setProducts(products);
-		// console.log(count);
-		// console.log(products);
-	}, [count, products]);
+	const { wishlistProducts: products } = useAppSelector(selectWishlist);
 
 	return (
 		<Container>

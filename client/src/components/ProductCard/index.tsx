@@ -4,12 +4,16 @@ import { theme } from "../../styles/theme";
 import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { Link } from "react-router-dom";
-import { localProduct } from "../../types/product";
+import { IProductType } from "../../types/product";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
 	addToWishlist,
+	removeFromWishlist,
 	selectWishlist,
 } from "../../features/wishlist/wishlistSlice";
+import { findIndex } from "lodash";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CardContainer = styled.div`
 	position: relative;
@@ -167,22 +171,47 @@ const SaleNotice = styled.p`
 `;
 
 interface IProps {
-	item: localProduct;
+	item: IProductType;
 }
 
 const ProductCard: FC<IProps> = ({ item }) => {
 	const [isHover, setIsHover] = useState<boolean>(false);
 	const [isSale, setIsSale] = useState<boolean>(false);
+	const [isFavourite, setIsFavourite] = useState<boolean>(false);
 	const [salePrice, setSalePrice] = useState<number>();
 	const dispatch = useAppDispatch();
-	const { count, wishlistProducts } = useAppSelector(selectWishlist);
+	const { wishlistProducts } = useAppSelector(selectWishlist);
 
-	const handleWishlist = (item: localProduct): void => {
+	const handleAddToWishlist = (item: IProductType): void => {
 		dispatch(addToWishlist(item));
+		//TODO: check the toast error
+		// toast.success("Product add to favorites", {
+		// 	position: "top-right",
+		// 	autoClose: 1000,
+		// 	hideProgressBar: false,
+		// 	closeOnClick: true,
+		// 	pauseOnHover: true,
+		// 	draggable: true,
+		// 	progress: undefined,
+		// 	theme: "dark",
+		// });
 	};
+	const handleRemoveFromWishlist = (item: IProductType): void => {
+		dispatch(removeFromWishlist({ id: item._id }));
+	};
+
 	useEffect(() => {
-		console.log(count);
-	}, [count]);
+		const isFound: number = findIndex(
+			wishlistProducts,
+			(product) => product._id === item._id
+		);
+		if (isFound > -1) {
+			setIsFavourite(true);
+		} else {
+			setIsFavourite(false);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [handleRemoveFromWishlist, handleAddToWishlist]);
 
 	useEffect(() => {
 		if (item.sale) {
@@ -200,6 +229,7 @@ const ProductCard: FC<IProps> = ({ item }) => {
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
 		>
+			{/* <ToastContainer /> */}
 			{isSale && (
 				<SaleNotice>
 					{item?.sale?.type === "flat" ? (
@@ -236,9 +266,15 @@ const ProductCard: FC<IProps> = ({ item }) => {
 						<Icon>
 							<AiOutlineShoppingCart />
 						</Icon>
-						<Icon onClick={() => handleWishlist(item)}>
-							<MdFavoriteBorder />
-						</Icon>
+						{isFavourite ? (
+							<Icon onClick={() => handleRemoveFromWishlist(item)}>
+								<MdFavorite />
+							</Icon>
+						) : (
+							<Icon onClick={() => handleAddToWishlist(item)}>
+								<MdFavoriteBorder />
+							</Icon>
+						)}
 					</>
 				) : (
 					<StockOut>This product is currently out of stock.</StockOut>

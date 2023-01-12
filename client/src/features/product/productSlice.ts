@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { localProduct as productType } from "../../types/product";
+import { IProductType as productType } from "../../types/product";
 import { RootState } from "../../app/store";
 import { axiosPrivate } from "../../apis/apiConfig";
 

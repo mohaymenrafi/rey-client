@@ -7,8 +7,8 @@ import { GiCancel } from "react-icons/gi";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { Text } from "../../styles/text";
 import { useParams } from "react-router-dom";
-import { localProduct as Products } from "../../localData";
-import { localProduct } from "../../types/product";
+import { IProductType as Products } from "../../localData";
+import { IProductType } from "../../types/product";
 import {
 	FacebookIcon,
 	FacebookShareButton,
@@ -292,7 +292,7 @@ const SingleProduct = () => {
 	const { products } = useAppSelector(selectAllProducts);
 	const [cartAmount, setCartAmount] = useState<number>(1);
 	const [wishList, setWishList] = useState<boolean>(false);
-	const [product, setProduct] = useState<localProduct | undefined>();
+	const [product, setProduct] = useState<IProductType | undefined>();
 	const [stock, setStock] = useState<boolean>(true);
 	const [isSale, setIsSale] = useState<boolean>(false);
 	const [salePrice, setSalePrice] = useState<number>();

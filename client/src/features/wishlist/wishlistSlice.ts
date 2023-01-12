@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { localProduct as ProductType } from "../../types/product";
+import { IProductType as ProductType } from "../../types/product";
+import { filter } from "lodash";
 
 interface IState {
 	wishlistProducts: ProductType[];
@@ -22,11 +23,10 @@ export const wishlistSlice = createSlice({
 		},
 		removeFromWishlist: (state, action: PayloadAction<{ id: string }>) => {
 			const { id } = action.payload;
-
-			const filteredProduct = state.wishlistProducts.filter(
-				(product) => product.id !== id
+			state.wishlistProducts = filter(
+				state.wishlistProducts,
+				(product) => product._id !== id
 			);
-			state.wishlistProducts = filteredProduct;
 			state.count = state.wishlistProducts.length;
 		},
 		clearWishlistt: (state) => {

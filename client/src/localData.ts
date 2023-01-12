@@ -1,6 +1,6 @@
 // TODO: convert the prices in cents
 
-export const localProduct = [
+export const IProductType = [
 	{
 		img: "https://res.cloudinary.com/mhabd/image/upload/v1672399094/rey-furnisher/28-600x489_znk9ya.jpg",
 		title: "Albert Ceiling Spotlight Bar, Charcoal",
