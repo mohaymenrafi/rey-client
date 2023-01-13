@@ -23,3 +23,9 @@ export interface IProductType {
 	};
 	_id: string;
 }
+
+export interface ICartProduct extends IProductType {
+	quantity: number;
+	selectedColor: boolean;
+	selectedSize: boolean;
+}

@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { theme } from "../../styles/theme";
 import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
-import { AiOutlineShoppingCart } from "react-icons/ai";
+// import { AiOutlineShoppingCart } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { IProductType } from "../../types/product";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
@@ -12,7 +12,7 @@ import {
 	selectWishlist,
 } from "../../features/wishlist/wishlistSlice";
 import { findIndex } from "lodash";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const CardContainer = styled.div`
@@ -121,6 +121,7 @@ const View = styled.span`
 	position: relative;
 	cursor: pointer;
 	font-size: ${theme.fs.sm};
+
 	&::after {
 		position: absolute;
 		content: "";
@@ -139,6 +140,7 @@ const View = styled.span`
 `;
 const Icon = styled.span`
 	cursor: pointer;
+	margin-top: 4px;
 `;
 
 const Image = styled.img`
@@ -260,12 +262,13 @@ const ProductCard: FC<IProps> = ({ item }) => {
 			<ViewDetails isHover={isHover}>
 				{item?.inStock ? (
 					<>
-						<Link to={`/products/${item?._id}`}>
-							<View>view details</View>
-						</Link>
-						<Icon>
+						<View>
+							<Link to={`/products/${item?._id}`}>view details</Link>
+						</View>
+
+						{/* <Icon>
 							<AiOutlineShoppingCart />
-						</Icon>
+						</Icon> */}
 						{isFavourite ? (
 							<Icon onClick={() => handleRemoveFromWishlist(item)}>
 								<MdFavorite />
