@@ -56,12 +56,6 @@ import {
 	RelatedProductsContainer,
 } from "./SingleProduct.styled";
 
-interface IColors {
-	id: number;
-	name: string;
-	selected: boolean;
-}
-
 const SingleProduct = () => {
 	const { id } = useParams();
 	const { products } = useAppSelector(selectAllProducts);
@@ -72,16 +66,38 @@ const SingleProduct = () => {
 	const [isSale, setIsSale] = useState<boolean>(false);
 	const [salePrice, setSalePrice] = useState<number>();
 	const [color, setColor] = useState<string>();
-	const [productColor, setProductColor] = useState<IColors[]>();
 	const [size, setSize] = useState<string>();
 	const dispatch = useAppDispatch();
 	const { wishlistProducts } = useAppSelector(selectWishlist);
+
+	const handleCartAmount = (e: React.ChangeEvent<HTMLInputElement>): void => {
+		let { value } = e.target;
+		let intValue = parseInt(value);
+		if (intValue >= 1) setCartAmount(intValue);
+	};
+	const handleAddToCart = (): void => {
+		console.log(cartAmount);
+	};
+
+	const handleColorSelection = (e: React.MouseEvent, color: string): void => {
+		e.preventDefault();
+		setColor(color);
+	};
+
+	//Wishlist
+	const handleAddToWishlist = (item: IProductType): void => {
+		dispatch(addToWishlist(item));
+	};
+	const handleRemoveFromWishlist = (item: IProductType): void => {
+		dispatch(removeFromWishlist({ id: item._id }));
+	};
 
 	useEffect(() => {
 		const item = products.find((item) => item._id === id);
 		if (item) {
 			setProduct(item);
 			setStock(item.inStock);
+			setColor(item.color[0]);
 			if (item.sale) {
 				setIsSale(item.sale.active);
 				if (item.sale.type === "flat") {
@@ -93,59 +109,6 @@ const SingleProduct = () => {
 			}
 		}
 	}, [id]);
-
-	useEffect(() => {
-		if (product !== undefined) {
-			setProductColor(
-				product.color.map((col, idx) => ({
-					id: idx + 1,
-					name: col,
-					selected: false,
-				}))
-			);
-		}
-	}, [product]);
-
-	const handleCartAmount = (e: React.ChangeEvent<HTMLInputElement>): void => {
-		let { value } = e.target;
-		let intValue = parseInt(value);
-		if (intValue >= 1) setCartAmount(intValue);
-	};
-	const handleAddToCart = (): void => {
-		console.log(cartAmount);
-	};
-	const handleColor = (
-		e: React.MouseEvent<HTMLElement>,
-		colorObj: IColors
-	): void => {
-		e.preventDefault();
-		setColor(colorObj.name);
-
-		setProductColor(
-			productColor?.map((item) => {
-				const currentAttributeId = (e.target as HTMLElement).getAttribute(
-					"data-id"
-				);
-
-				if (currentAttributeId !== null) {
-					if (item.id === parseInt(currentAttributeId)) {
-						return { ...item, selected: true };
-					} else {
-						return { ...item, selected: false };
-					}
-				}
-
-				return item;
-			})
-		);
-	};
-	//Wishlist
-	const handleAddToWishlist = (item: IProductType): void => {
-		dispatch(addToWishlist(item));
-	};
-	const handleRemoveFromWishlist = (item: IProductType): void => {
-		dispatch(removeFromWishlist({ id: item._id }));
-	};
 
 	useEffect(() => {
 		const isFound: number = findIndex(
@@ -207,18 +170,23 @@ const SingleProduct = () => {
 							</>
 						)}
 					</InStock>
-					{/* add color variation here */}
 					<ColorVariation>
 						<p>Color: </p>
 
-						{productColor?.map((colorObj) => {
+						{product.color?.map((currentColor, idx) => {
 							return (
 								<Color
-									data-id={colorObj.id}
-									onClick={(e) => handleColor(e, colorObj)}
-									key={colorObj.id}
-									color={colorObj.name}
-									selected={colorObj.selected && !!color}
+									onClick={(e) => handleColorSelection(e, currentColor)}
+									key={idx}
+									bgColor={currentColor}
+									type="button"
+									style={{
+										outlineColor: `${
+											currentColor === color
+												? "rgba(0,0,0,0.15)"
+												: "transparent"
+										}`,
+									}}
 								></Color>
 							);
 						})}

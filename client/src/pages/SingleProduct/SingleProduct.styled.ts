@@ -240,18 +240,15 @@ export const ColorVariation = styled.div`
 		font-weight: 500;
 	}
 `;
-export const Color = styled.p<{ color: string; selected: boolean }>`
+export const Color = styled.button<{ bgColor: string }>`
 	height: 15px;
 	width: 15px;
 	background-color: ${(props) =>
-		props.color === "mustard" ? "#FFDB58" : props.color};
+		props.bgColor === "mustard" ? "#FFDB58" : props.bgColor};
 	border-radius: 50%;
 	border: 1px solid rgba(0, 0, 0, 0.3);
 	cursor: pointer;
-	outline: ${(props) =>
-		props.selected === true
-			? "3px solid rgba(0, 0, 0, 0.1)"
-			: "3px solid transparent"};
+	outline: 3px solid transparent;
 `;
 
 export const SizeVariation = styled.div`
