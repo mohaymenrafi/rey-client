@@ -7,7 +7,6 @@ import { GiCancel } from "react-icons/gi";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { Text } from "../../styles/text";
 import { useParams } from "react-router-dom";
-import { IProductType as Products } from "../../localData";
 import { IProductType } from "../../types/product";
 import {
 	FacebookIcon,
@@ -19,8 +18,14 @@ import {
 	TwitterIcon,
 	TwitterShareButton,
 } from "react-share";
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { selectAllProducts } from "../../features/product/productSlice";
+import {
+	addToWishlist,
+	removeFromWishlist,
+	selectWishlist,
+} from "../../features/wishlist/wishlistSlice";
+import { findIndex } from "lodash";
 
 const ContainerExtended = styled(Container)`
 	padding-top: 30px;
@@ -291,25 +296,16 @@ const SingleProduct = () => {
 	const { id } = useParams();
 	const { products } = useAppSelector(selectAllProducts);
 	const [cartAmount, setCartAmount] = useState<number>(1);
-	const [wishList, setWishList] = useState<boolean>(false);
-	const [product, setProduct] = useState<IProductType | undefined>();
+	const [isFavourite, setIsFavourite] = useState<boolean>(false);
+	const [product, setProduct] = useState<IProductType>();
 	const [stock, setStock] = useState<boolean>(true);
 	const [isSale, setIsSale] = useState<boolean>(false);
 	const [salePrice, setSalePrice] = useState<number>();
 	const [color, setColor] = useState<string>();
 	const [productColor, setProductColor] = useState<IColors[]>();
 	const [size, setSize] = useState<string>();
-	useEffect(() => {
-		if (product !== undefined) {
-			setProductColor(
-				product.color.map((col, idx) => ({
-					id: idx + 1,
-					name: col,
-					selected: false,
-				}))
-			);
-		}
-	}, [product]);
+	const dispatch = useAppDispatch();
+	const { wishlistProducts } = useAppSelector(selectWishlist);
 
 	useEffect(() => {
 		const item = products.find((item) => item._id === id);
@@ -328,6 +324,18 @@ const SingleProduct = () => {
 		}
 	}, [id]);
 
+	useEffect(() => {
+		if (product !== undefined) {
+			setProductColor(
+				product.color.map((col, idx) => ({
+					id: idx + 1,
+					name: col,
+					selected: false,
+				}))
+			);
+		}
+	}, [product]);
+
 	const handleCartAmount = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		let { value } = e.target;
 		let intValue = parseInt(value);
@@ -336,13 +344,11 @@ const SingleProduct = () => {
 	const handleAddToCart = (): void => {
 		console.log(cartAmount);
 	};
-	const handleWishlist = (): void => {
-		setWishList((prev) => !prev);
-	};
 	const handleColor = (
 		e: React.MouseEvent<HTMLElement>,
 		colorObj: IColors
 	): void => {
+		e.preventDefault();
 		setColor(colorObj.name);
 
 		setProductColor(
@@ -363,11 +369,30 @@ const SingleProduct = () => {
 			})
 		);
 	};
+	//Wishlist
+	const handleAddToWishlist = (item: IProductType): void => {
+		dispatch(addToWishlist(item));
+	};
+	const handleRemoveFromWishlist = (item: IProductType): void => {
+		dispatch(removeFromWishlist({ id: item._id }));
+	};
 
-	// useEffect(() => {
-	// 	console.log(wishList);
-	// }, [wishList]);
+	useEffect(() => {
+		const isFound: number = findIndex(
+			wishlistProducts,
+			(item) => product?._id === item._id
+		);
+		if (isFound > -1) {
+			setIsFavourite(true);
+		} else {
+			setIsFavourite(false);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [handleRemoveFromWishlist, handleAddToWishlist]);
 
+	if (product === undefined) {
+		return <h2>The product you're looking for is not available</h2>;
+	}
 	return (
 		<ContainerExtended>
 			<Layout>
@@ -457,15 +482,17 @@ const SingleProduct = () => {
 							</button>
 						</AddToCart>
 					)}
-					<AddToWishlist onClick={handleWishlist}>
-						{wishList ? (
+					<AddToWishlist>
+						{isFavourite ? (
 							<>
-								<AiFillHeart />
+								<AiFillHeart
+									onClick={() => handleRemoveFromWishlist(product)}
+								/>
 								<span>Added to Wishlist</span>
 							</>
 						) : (
 							<>
-								<AiOutlineHeart />
+								<AiOutlineHeart onClick={() => handleAddToWishlist(product)} />
 								<span>Add to Wishlist</span>
 							</>
 						)}
