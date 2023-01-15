@@ -5,7 +5,7 @@ import { GiCancel } from "react-icons/gi";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { Text } from "../../styles/text";
 import { useParams } from "react-router-dom";
-import { IProductType } from "../../types/product";
+import { ICartProduct, IProductType } from "../../types/product";
 import {
 	FacebookIcon,
 	FacebookShareButton,
@@ -55,6 +55,7 @@ import {
 	RelatedProducts,
 	RelatedProductsContainer,
 } from "./SingleProduct.styled";
+import { addToCart } from "../../features/cart/cartSlice";
 
 const SingleProduct = () => {
 	const { id } = useParams();
@@ -70,13 +71,28 @@ const SingleProduct = () => {
 	const dispatch = useAppDispatch();
 	const { wishlistProducts } = useAppSelector(selectWishlist);
 
+	const url = "https://mhabdullah.vercel.app";
+
 	const handleCartAmount = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		let { value } = e.target;
 		let intValue = parseInt(value);
 		if (intValue >= 1) setCartAmount(intValue);
 	};
 	const handleAddToCart = (): void => {
-		console.log(cartAmount);
+		//tasks
+		//1. show success message on successfull addition to cart
+		//2. set the price to discounted amount if sale is on
+		if (product) {
+			if (color && size) {
+				const cartData: ICartProduct = {
+					...product,
+					quantity: cartAmount,
+					selectedColor: color,
+					selectedSize: size,
+				};
+				dispatch(addToCart(cartData));
+			}
+		}
 	};
 
 	const handleColorSelection = (e: React.MouseEvent, color: string): void => {
@@ -98,6 +114,7 @@ const SingleProduct = () => {
 			setProduct(item);
 			setStock(item.inStock);
 			setColor(item.color[0]);
+			setSize(item.size[0]);
 			if (item.sale) {
 				setIsSale(item.sale.active);
 				if (item.sale.type === "flat") {
@@ -190,7 +207,7 @@ const SingleProduct = () => {
 								></Color>
 							);
 						})}
-						{color && <span onClick={() => setColor("")}>Clear ({color})</span>}
+						{/* {color && <span onClick={() => setColor("")}>Clear ({color})</span>} */}
 					</ColorVariation>
 
 					<SizeVariation>
@@ -238,32 +255,16 @@ const SingleProduct = () => {
 					<Share>
 						<span>Share</span>
 						<ShareIcons>
-							<FacebookShareButton
-								url={
-									"https://stackoverflow.com/questions/28868071/onchange-event-using-react-js-for-drop-down"
-								}
-							>
+							<FacebookShareButton url={url}>
 								<FacebookIcon size={20} round />
 							</FacebookShareButton>
-							<TwitterShareButton
-								url={
-									"https://stackoverflow.com/questions/28868071/onchange-event-using-react-js-for-drop-down"
-								}
-							>
+							<TwitterShareButton url={url}>
 								<TwitterIcon size={20} round />
 							</TwitterShareButton>
-							<LinkedinShareButton
-								url={
-									"https://stackoverflow.com/questions/28868071/onchange-event-using-react-js-for-drop-down"
-								}
-							>
+							<LinkedinShareButton url={url}>
 								<LinkedinIcon size={20} round />
 							</LinkedinShareButton>
-							<EmailShareButton
-								url={
-									"https://stackoverflow.com/questions/28868071/onchange-event-using-react-js-for-drop-down"
-								}
-							>
+							<EmailShareButton url={url}>
 								<EmailIcon size={20} round />
 							</EmailShareButton>
 						</ShareIcons>

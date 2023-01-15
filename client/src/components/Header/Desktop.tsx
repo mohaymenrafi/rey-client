@@ -1,10 +1,12 @@
+import { map } from "lodash";
 import React from "react";
 import { BsBag } from "react-icons/bs";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { CartIcon, Icon, IHeaderProps, Logo } from ".";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { userLogout, selectAuthUser } from "../../features/auth/authSlice";
+import { selectCart } from "../../features/cart/cartSlice";
 import { SmallText } from "../../styles/SmallText";
 import { theme } from "../../styles/theme";
 
@@ -19,9 +21,7 @@ const DesktopNav = styled.div`
 	ul {
 		display: flex;
 		list-style: none;
-		li {
-			margin-right: 15px;
-		}
+		column-gap: 15px;
 	}
 	a {
 		text-decoration: none;
@@ -49,6 +49,9 @@ const DesktopNav = styled.div`
 	}
 `;
 
+// const CartIcon = styled(Icon)`
+// `
+
 const Right = styled.div`
 	display: flex;
 	justify-content: flex-end;
@@ -63,6 +66,7 @@ const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 	const { user } = useAppSelector(selectAuthUser);
+	const { count } = useAppSelector(selectCart);
 	const handleLogout = async () => {
 		try {
 			await dispatch(userLogout()).unwrap();
@@ -73,13 +77,20 @@ const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 	const hanldeLogoClick = () => {
 		navigate("/");
 	};
+	const activeStyle = {
+		fontWeight: "bold",
+	};
 	return (
 		<DesktopNav>
 			<ul>
-				{menuItem?.map((item, idx) => (
-					<li key={idx}>
-						<Link to={item.url}>{item.name}</Link>
-					</li>
+				{map(menuItem, (item, idx) => (
+					<NavLink
+						key={idx}
+						to={item.url}
+						// style={({ isActive }) => (isActive ? activeStyle : {})}
+					>
+						{item.name}
+					</NavLink>
 				))}
 			</ul>
 			<Logo
@@ -89,10 +100,12 @@ const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 				onClick={hanldeLogoClick}
 			/>
 			<Right>
-				<CartIcon amount={4}>
-					<Icon>
-						<BsBag />
-					</Icon>
+				<CartIcon amount={count}>
+					<Link to="/cart">
+						<Icon>
+							<BsBag />
+						</Icon>
+					</Link>
 				</CartIcon>
 				{user ? (
 					<>

@@ -1,6 +1,8 @@
 import styled from "styled-components";
+import { useAppSelector } from "../../app/hooks";
 import Container from "../../styles/Container";
 import { theme } from "../../styles/theme";
+import { selectCart } from "../../features/cart/cartSlice";
 const ContainerExtended = styled(Container)`
 	padding-top: 30px;
 	padding-bottom: 50px;
@@ -85,6 +87,8 @@ const CheckoutButton = styled.button`
 `;
 
 const CartPage = () => {
+	const { products, count } = useAppSelector(selectCart);
+	console.log(products);
 	return (
 		<ContainerExtended>
 			<CartTable>

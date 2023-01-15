@@ -7,6 +7,8 @@ import styled from "styled-components";
 import { theme } from "../../styles/theme";
 import { Link } from "react-router-dom";
 import MobileMenu from "./MobileMenu";
+import { useAppSelector } from "../../app/hooks";
+import { selectCart } from "../../features/cart/cartSlice";
 
 let amount: number = 3;
 const MobileNav = styled.div`
@@ -28,6 +30,7 @@ const MobileNav = styled.div`
 
 const Mobile: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 	const [open, setOpen] = useState<boolean>(false);
+	const { count } = useAppSelector(selectCart);
 	return (
 		<>
 			<MobileNav>
@@ -47,7 +50,7 @@ const Mobile: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 					</li> */}
 					<li>
 						<Link to="/cart">
-							<CartIcon amount={amount}>
+							<CartIcon amount={count}>
 								<BsBag />
 							</CartIcon>
 						</Link>

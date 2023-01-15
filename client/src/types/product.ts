@@ -26,6 +26,6 @@ export interface IProductType {
 
 export interface ICartProduct extends IProductType {
 	quantity: number;
-	selectedColor: boolean;
-	selectedSize: boolean;
+	selectedColor: string;
+	selectedSize: string;
 }

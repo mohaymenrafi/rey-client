@@ -78,7 +78,7 @@ export const Icon = styled.span`
 export const CartIcon = styled(Icon)<ICart>`
 	position: relative;
 	@media (min-width: ${theme.sc.lg}) {
-		margin-right: 35px;
+		margin-right: 7px;
 	}
 	&::after {
 		position: absolute;
@@ -95,8 +95,8 @@ export const CartIcon = styled(Icon)<ICart>`
 		align-items: center;
 		justify-content: center;
 		@media (min-width: ${theme.sc.lg}) {
-			right: -20px;
-			top: 2px;
+			right: -7px;
+			top: -1px;
 			width: 17px;
 			height: 17px;
 		}
