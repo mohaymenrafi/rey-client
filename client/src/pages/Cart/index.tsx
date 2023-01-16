@@ -3,6 +3,7 @@ import { useAppSelector } from "../../app/hooks";
 import Container from "../../styles/Container";
 import { theme } from "../../styles/theme";
 import { selectCart } from "../../features/cart/cartSlice";
+import { map } from "lodash";
 const ContainerExtended = styled(Container)`
 	padding-top: 30px;
 	padding-bottom: 50px;
@@ -86,9 +87,20 @@ const CheckoutButton = styled.button`
 	}
 `;
 
+const CartTitle = styled.span`
+	display: block;
+`;
+
+const ItemInfo = styled.span`
+	display: inline-block;
+	text-transform: uppercase;
+	font-size: ${theme.fs.xs};
+	font-weight: 600;
+`;
+
 const CartPage = () => {
-	const { products, count } = useAppSelector(selectCart);
-	console.log(products);
+	const { products, count, subTotal, tax, total } = useAppSelector(selectCart);
+
 	return (
 		<ContainerExtended>
 			<CartTable>
@@ -100,35 +112,34 @@ const CartPage = () => {
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td className="first">Chair</td>
-						<td className="second">5</td>
-						<td className="third">$500</td>
-					</tr>
-					<tr>
-						<td className="first">MX mechanical</td>
-						<td className="second">1</td>
-						<td className="third"> $100</td>
-					</tr>
-					<tr>
-						<td className="first">Table</td>
-						<td className="second">1</td>
-						<td className="third">$100</td>
-					</tr>
+					{map(products, (item, idx) => {
+						return (
+							<tr key={idx}>
+								<td className="first">
+									<CartTitle>{item.title}</CartTitle>
+									<ItemInfo>
+										{item.selectedColor}, {item.selectedSize}
+									</ItemInfo>
+								</td>
+								<td className="second">{item.quantity}</td>
+								<td className="third"> ${item.quantity * item.price}</td>
+							</tr>
+						);
+					})}
 				</tbody>
 			</CartTable>
 			<TotalContainer>
 				<div>
 					<span>Subtotal</span>
-					<span>$1200</span>
+					<span>${subTotal}</span>
 				</div>
 				<div>
 					<span>Tax</span>
-					<span>$300</span>
+					<span>${tax}</span>
 				</div>
 				<div>
 					<span>Total</span>
-					<span>$1500</span>
+					<span>${total}</span>
 				</div>
 				<CheckoutButton>Proceed To Checkout</CheckoutButton>
 			</TotalContainer>

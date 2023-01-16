@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ICartProduct } from "../../types/product";
-import { findIndex, reduce } from "lodash";
+import { filter, findIndex, reduce } from "lodash";
 import { RootState } from "../../app/store";
 
 interface IState {
@@ -52,6 +52,51 @@ const cartSlice = createSlice({
 			);
 			state.tax = (state.subTotal * 9) / 100;
 			state.total = state.subTotal + state.tax;
+		},
+		removeFromCart: (state, action: PayloadAction<ICartProduct>) => {
+			const { _id } = action.payload;
+			state.products = filter(state.products, (item) => item._id !== _id);
+			state.count = state.products.length;
+			state.subTotal = reduce(
+				state.products,
+				(sum, item) => {
+					return sum + item.price * item.quantity;
+				},
+				0
+			);
+			state.tax = (state.subTotal * 9) / 100;
+			state.total = state.subTotal + state.tax;
+		},
+		increase: (state, action: PayloadAction<ICartProduct>) => {
+			const { _id } = action.payload;
+			const itemIndex = findIndex(state.products, (item) => item._id === _id);
+			state.products[itemIndex].quantity += 1;
+			state.subTotal = reduce(
+				state.products,
+				(sum, item) => {
+					return sum + item.price * item.quantity;
+				},
+				0
+			);
+			state.tax = (state.subTotal * 9) / 100;
+			state.total = state.subTotal + state.tax;
+		},
+		decrease: (state, action: PayloadAction<ICartProduct>) => {
+			const { _id } = action.payload;
+			const itemIndex = findIndex(state.products, (item) => item._id === _id);
+			state.products[itemIndex].quantity -= 1;
+			state.subTotal = reduce(
+				state.products,
+				(sum, item) => {
+					return sum + item.price * item.quantity;
+				},
+				0
+			);
+			state.tax = (state.subTotal * 9) / 100;
+			state.total = state.subTotal + state.tax;
+		},
+		clearCart: (state) => {
+			state = initialState;
 		},
 	},
 });

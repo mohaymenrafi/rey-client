@@ -100,13 +100,13 @@ const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 				onClick={hanldeLogoClick}
 			/>
 			<Right>
-				<CartIcon amount={count}>
-					<Link to="/cart">
+				<Link to="/cart">
+					<CartIcon amount={count}>
 						<Icon>
 							<BsBag />
 						</Icon>
-					</Link>
-				</CartIcon>
+					</CartIcon>
+				</Link>
 				{user ? (
 					<>
 						<SmallText>
