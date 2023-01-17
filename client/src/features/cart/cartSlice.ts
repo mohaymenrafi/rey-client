@@ -27,21 +27,29 @@ const cartSlice = createSlice({
 			const { _id, quantity, selectedColor, selectedSize } = action.payload;
 			const hasIndex: number = findIndex(
 				state.products,
-				(item) => item._id === _id
+				(item) =>
+					item._id === _id &&
+					item.selectedColor === selectedColor &&
+					item.selectedSize === selectedSize
 			);
+
 			if (hasIndex > -1) {
 				const prevItem = state.products[hasIndex];
-				if (
-					selectedColor === prevItem.selectedColor &&
-					selectedSize === prevItem.selectedSize
-				) {
-					prevItem.quantity += quantity;
-				} else {
-					state.products.push(action.payload);
-				}
+				prevItem.quantity += quantity;
 			} else {
 				state.products.push(action.payload);
 			}
+			// 	if (
+			// 		selectedColor === prevItem.selectedColor &&
+			// 		selectedSize === prevItem.selectedSize
+			// 	) {
+			// 		prevItem.quantity += quantity;
+			// 	} else {
+			// 		state.products.push(action.payload);
+			// 	}
+			// } else {
+			// 	state.products.push(action.payload);
+			// }
 			state.count = state.products.length;
 			state.subTotal = reduce(
 				state.products,
@@ -53,9 +61,9 @@ const cartSlice = createSlice({
 			state.tax = (state.subTotal * 9) / 100;
 			state.total = state.subTotal + state.tax;
 		},
-		removeFromCart: (state, action: PayloadAction<ICartProduct>) => {
-			const { _id } = action.payload;
-			state.products = filter(state.products, (item) => item._id !== _id);
+		removeFromCart: (state, action: PayloadAction<{ index: number }>) => {
+			const { index } = action.payload;
+			state.products = filter(state.products, (_, idx) => idx !== index);
 			state.count = state.products.length;
 			state.subTotal = reduce(
 				state.products,
@@ -68,8 +76,14 @@ const cartSlice = createSlice({
 			state.total = state.subTotal + state.tax;
 		},
 		increase: (state, action: PayloadAction<ICartProduct>) => {
-			const { _id } = action.payload;
-			const itemIndex = findIndex(state.products, (item) => item._id === _id);
+			const { _id, selectedColor, selectedSize } = action.payload;
+			const itemIndex = findIndex(state.products, (item) => {
+				return (
+					item._id === _id &&
+					item.selectedColor === selectedColor &&
+					item.selectedSize === selectedSize
+				);
+			});
 			state.products[itemIndex].quantity += 1;
 			state.subTotal = reduce(
 				state.products,
@@ -82,8 +96,14 @@ const cartSlice = createSlice({
 			state.total = state.subTotal + state.tax;
 		},
 		decrease: (state, action: PayloadAction<ICartProduct>) => {
-			const { _id } = action.payload;
-			const itemIndex = findIndex(state.products, (item) => item._id === _id);
+			const { _id, selectedColor, selectedSize } = action.payload;
+			const itemIndex = findIndex(state.products, (item) => {
+				return (
+					item._id === _id &&
+					item.selectedColor === selectedColor &&
+					item.selectedSize === selectedSize
+				);
+			});
 			state.products[itemIndex].quantity -= 1;
 			state.subTotal = reduce(
 				state.products,
@@ -103,5 +123,6 @@ const cartSlice = createSlice({
 
 export const selectCart = (state: RootState) => state.cart;
 
-export const { addToCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, increase, decrease } =
+	cartSlice.actions;
 export default cartSlice.reducer;
