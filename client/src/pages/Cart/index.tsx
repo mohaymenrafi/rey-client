@@ -137,6 +137,15 @@ const DeleteButton = styled.button`
 	}
 `;
 
+const EmptyCart = styled.div`
+	font-size: ${theme.fs["lg-2"]};
+	font-weight: 600;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: calc(100vh - 481px);
+`;
+
 const CartPage = () => {
 	const { products, subTotal, tax, total } = useAppSelector(selectCart);
 	const dispatch = useAppDispatch();
@@ -148,63 +157,71 @@ const CartPage = () => {
 			dispatch(decrease(item));
 		}
 	};
-	const handleDelete = (idx: number): void => {
-		dispatch(removeFromCart({ index: idx }));
+	const handleDelete = (item: ICartProduct): void => {
+		dispatch(removeFromCart(item));
 	};
 	return (
 		<ContainerExtended>
-			<CartTable>
-				<thead>
-					<tr>
-						<th className="imgCol">Image</th>
-						<th className="nameCol">Product Name</th>
-						<th className="quantityCol">Quantity</th>
-						<th className="totalCol">Subtotal</th>
-					</tr>
-				</thead>
-				<tbody>
-					{map(products, (item, idx) => {
-						return (
-							<tr key={idx}>
-								<td className="imgCol">
-									<img src={item.img} alt={item.title} />
-								</td>
-								<td className="nameCol">
-									<CartTitle>{item.title}</CartTitle>
-									<ItemInfo>
-										{item.selectedColor}, {item.selectedSize}
-									</ItemInfo>
-									<DeleteButton onClick={() => handleDelete(idx)}>
-										<span> Remove from cart</span>
-										<AiFillDelete />
-									</DeleteButton>
-								</td>
-								<td className="quantityCol">
-									<AiOutlineMinus onClick={() => handleDecrease(item)} />
-									{item.quantity}
-									<AiOutlinePlus onClick={() => handleIncrease(item)} />
-								</td>
-								<td className="totalCol"> ${item.quantity * item.price}</td>
+			{products.length ? (
+				<>
+					<CartTable>
+						<thead>
+							<tr>
+								<th className="imgCol">Image</th>
+								<th className="nameCol">Product Name</th>
+								<th className="quantityCol">Quantity</th>
+								<th className="totalCol">Subtotal</th>
 							</tr>
-						);
-					})}
-				</tbody>
-			</CartTable>
-			<TotalContainer>
-				<div>
-					<span>Subtotal</span>
-					<span>${subTotal}</span>
-				</div>
-				<div>
-					<span>Tax</span>
-					<span>${tax}</span>
-				</div>
-				<div>
-					<span>Total</span>
-					<span>${total}</span>
-				</div>
-				<CheckoutButton>Proceed To Checkout</CheckoutButton>
-			</TotalContainer>
+						</thead>
+						<tbody>
+							{map(products, (item, idx) => {
+								return (
+									<tr key={idx}>
+										<td className="imgCol">
+											<img src={item.img} alt={item.title} />
+										</td>
+										<td className="nameCol">
+											<CartTitle>{item.title}</CartTitle>
+											<ItemInfo>
+												{item.selectedColor}, {item.selectedSize}
+											</ItemInfo>
+											<DeleteButton onClick={() => handleDelete(item)}>
+												<span> Remove from cart</span>
+												<AiFillDelete />
+											</DeleteButton>
+										</td>
+										<td className="quantityCol">
+											<AiOutlineMinus onClick={() => handleDecrease(item)} />
+											{item.quantity}
+											<AiOutlinePlus onClick={() => handleIncrease(item)} />
+										</td>
+										<td className="totalCol"> ${item.quantity * item.price}</td>
+									</tr>
+								);
+							})}
+						</tbody>
+					</CartTable>
+					<TotalContainer>
+						<div>
+							<span>Subtotal</span>
+							<span>${subTotal}</span>
+						</div>
+						<div>
+							<span>Tax</span>
+							<span>${tax}</span>
+						</div>
+						<div>
+							<span>Total</span>
+							<span>${total}</span>
+						</div>
+						<CheckoutButton>Proceed To Checkout</CheckoutButton>
+					</TotalContainer>
+				</>
+			) : (
+				<EmptyCart>
+					<span>No Products in the cart</span>
+				</EmptyCart>
+			)}
 		</ContainerExtended>
 	);
 };

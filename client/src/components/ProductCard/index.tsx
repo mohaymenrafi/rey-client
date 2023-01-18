@@ -2,7 +2,6 @@ import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import { theme } from "../../styles/theme";
 import { MdFavoriteBorder, MdFavorite } from "react-icons/md";
-// import { AiOutlineShoppingCart } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { IProductType } from "../../types/product";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";

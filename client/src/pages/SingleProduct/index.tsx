@@ -55,7 +55,7 @@ import {
 	RelatedProducts,
 	RelatedProductsContainer,
 } from "./SingleProduct.styled";
-import { addToCart } from "../../features/cart/cartSlice";
+import { addProductToCart, addToCart } from "../../features/cart/cartSlice";
 
 const SingleProduct = () => {
 	const { id } = useParams();
@@ -78,6 +78,13 @@ const SingleProduct = () => {
 		let intValue = parseInt(value);
 		if (intValue >= 1) setCartAmount(intValue);
 	};
+
+	// "productId": "1",
+	// "quantity": 4,
+	// "size": "md",
+	// "color": "red",
+	// "title": "This is a demo product for cart",
+	// "price": 233.99
 	const handleAddToCart = (): void => {
 		//tasks
 		//1. show success message on successfull addition to cart
@@ -91,6 +98,13 @@ const SingleProduct = () => {
 					selectedSize: size,
 				};
 				dispatch(addToCart(cartData));
+				// try {
+				// 	dispatch(addProductToCart()).unwrap();
+				// } catch (error) {
+				// 	//dispatch remove from the cart
+				// 	// dispatch()
+				// 	console.error(error);
+				// }
 			}
 		}
 	};
