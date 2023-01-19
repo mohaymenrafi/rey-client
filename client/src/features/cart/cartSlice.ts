@@ -3,6 +3,7 @@ import { ICartProduct, IUpdateCartData } from "../../types/product";
 import { filter, findIndex, reduce } from "lodash";
 import { RootState } from "../../app/store";
 import { axiosPrivate } from "../../apis/apiConfig";
+import { cartCalculator } from "../../utils/cartCalculator";
 
 interface IState {
 	products: ICartProduct[];
@@ -10,6 +11,11 @@ interface IState {
 	subTotal: number;
 	tax?: number;
 	total: number;
+}
+
+interface IUpdateCart {
+	product: ICartProduct;
+	operation: "INCREASE" | "DECREASE";
 }
 
 const initialState: IState = {
@@ -61,6 +67,7 @@ export const updateProductsFromCart = createAsyncThunk(
 		const userId = (getState() as RootState)?.user?.user?.id;
 		try {
 			const response = await axiosPrivate.put(`/cart/${userId}`, data);
+			return response.data;
 		} catch (error: any) {
 			if (!error.response) {
 				throw error;
@@ -77,7 +84,7 @@ const cartSlice = createSlice({
 	initialState,
 	reducers: {
 		addToCart: (state, action: PayloadAction<ICartProduct>) => {
-			const { productId, quantity, color, size, price } = action.payload;
+			const { productId, quantity, color, size } = action.payload;
 			const hasIndex: number = findIndex(
 				state.products,
 				(item) =>
@@ -92,17 +99,11 @@ const cartSlice = createSlice({
 			} else {
 				state.products.push(action.payload);
 			}
-
-			state.count = state.products.length;
-			state.subTotal = reduce(
-				state.products,
-				(sum, item) => {
-					return sum + price * item.quantity;
-				},
-				0
-			);
-			state.tax = (state.subTotal * 9) / 100;
-			state.total = state.subTotal + state.tax;
+			const { count, subTotal, tax, total } = cartCalculator(state.products);
+			state.count = count;
+			state.subTotal = subTotal;
+			state.tax = tax;
+			state.total = total;
 		},
 		removeFromCart: (state, action: PayloadAction<ICartProduct>) => {
 			const { productId, color, size, price } = action.payload;
@@ -114,19 +115,14 @@ const cartSlice = createSlice({
 				);
 			});
 			state.products = filter(state.products, (_, idx) => idx !== itemIndex);
-			state.count = state.products.length;
-			state.subTotal = reduce(
-				state.products,
-				(sum, item) => {
-					return sum + price * item.quantity;
-				},
-				0
-			);
-			state.tax = (state.subTotal * 9) / 100;
-			state.total = state.subTotal + state.tax;
+			const { count, subTotal, tax, total } = cartCalculator(state.products);
+			state.count = count;
+			state.subTotal = subTotal;
+			state.tax = tax;
+			state.total = total;
 		},
-		increase: (state, action: PayloadAction<ICartProduct>) => {
-			const { productId, color, size, price } = action.payload;
+		updateCart: (state, action: PayloadAction<IUpdateCart>) => {
+			const { productId, color, size, price } = action.payload.product;
 			const itemIndex = findIndex(state.products, (item) => {
 				return (
 					item.productId === productId &&
@@ -134,37 +130,18 @@ const cartSlice = createSlice({
 					item.size === size
 				);
 			});
-			state.products[itemIndex].quantity += 1;
-			state.subTotal = reduce(
-				state.products,
-				(sum, item) => {
-					return sum + price * item.quantity;
-				},
-				0
-			);
-			state.tax = (state.subTotal * 9) / 100;
-			state.total = state.subTotal + state.tax;
+			if (action.payload.operation === "INCREASE") {
+				state.products[itemIndex].quantity += 1;
+			} else if (action.payload.operation === "DECREASE") {
+				state.products[itemIndex].quantity -= 1;
+			}
+			const { count, subTotal, tax, total } = cartCalculator(state.products);
+			state.count = count;
+			state.subTotal = subTotal;
+			state.tax = tax;
+			state.total = total;
 		},
-		decrease: (state, action: PayloadAction<ICartProduct>) => {
-			const { productId, color, size, price } = action.payload;
-			const itemIndex = findIndex(state.products, (item) => {
-				return (
-					item.productId === productId &&
-					item.color === color &&
-					item.size === size
-				);
-			});
-			state.products[itemIndex].quantity -= 1;
-			state.subTotal = reduce(
-				state.products,
-				(sum, item) => {
-					return sum + price * item.quantity;
-				},
-				0
-			);
-			state.tax = (state.subTotal * 9) / 100;
-			state.total = state.subTotal + state.tax;
-		},
+
 		clearCart: (state) => {
 			state = initialState;
 		},
@@ -174,16 +151,11 @@ const cartSlice = createSlice({
 			getProductsFromCart.fulfilled,
 			(state, action: PayloadAction<ICartProduct[]>) => {
 				state.products = action.payload;
-				state.count = state.products.length;
-				state.subTotal = reduce(
-					state.products,
-					(sum, item) => {
-						return sum + item.price * item.quantity;
-					},
-					0
-				);
-				state.tax = (state.subTotal * 9) / 100;
-				state.total = state.subTotal + state.tax;
+				const { count, subTotal, tax, total } = cartCalculator(state.products);
+				state.count = count;
+				state.subTotal = subTotal;
+				state.tax = tax;
+				state.total = total;
 			}
 		);
 	},
@@ -191,6 +163,5 @@ const cartSlice = createSlice({
 
 export const selectCart = (state: RootState) => state.cart;
 
-export const { addToCart, removeFromCart, increase, decrease } =
-	cartSlice.actions;
+export const { addToCart, removeFromCart, updateCart } = cartSlice.actions;
 export default cartSlice.reducer;

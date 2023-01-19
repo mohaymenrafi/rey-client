@@ -4,11 +4,10 @@ import Container from "../../styles/Container";
 import { theme } from "../../styles/theme";
 import {
 	addToCart,
-	decrease,
 	getProductsFromCart,
-	increase,
 	removeFromCart,
 	selectCart,
+	updateCart,
 	updateProductsFromCart,
 } from "../../features/cart/cartSlice";
 import { map } from "lodash";
@@ -157,25 +156,25 @@ const CartPage = () => {
 	const { products, subTotal, tax, total } = useAppSelector(selectCart);
 	const dispatch = useAppDispatch();
 	const handleIncrease = async (item: ICartProduct): Promise<void> => {
-		dispatch(increase(item));
+		dispatch(updateCart({ product: item, operation: "INCREASE" }));
 		try {
-			const response = await dispatch(
+			await dispatch(
 				updateProductsFromCart({ ...item, action: "INCREMENT" })
 			).unwrap();
 		} catch (error) {
-			dispatch(decrease(item));
+			dispatch(updateCart({ product: item, operation: "DECREASE" }));
 			console.log("cart increase error", error);
 		}
 	};
 	const handleDecrease = async (item: ICartProduct): Promise<void> => {
 		if (item.quantity > 1) {
-			dispatch(decrease(item));
+			dispatch(updateCart({ product: item, operation: "DECREASE" }));
 			try {
-				const response = await dispatch(
+				await dispatch(
 					updateProductsFromCart({ ...item, action: "DECREMENT" })
 				).unwrap();
 			} catch (error) {
-				dispatch(increase(item));
+				dispatch(updateCart({ product: item, operation: "INCREASE" }));
 				console.log("cart increase error", error);
 			}
 		}
@@ -183,7 +182,7 @@ const CartPage = () => {
 	const handleDelete = async (item: ICartProduct): Promise<void> => {
 		dispatch(removeFromCart(item));
 		try {
-			const response = await dispatch(
+			await dispatch(
 				updateProductsFromCart({ ...item, action: "DELETEITEM" })
 			).unwrap();
 		} catch (error) {

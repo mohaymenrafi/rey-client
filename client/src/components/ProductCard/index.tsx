@@ -11,9 +11,10 @@ import {
 	selectWishlist,
 } from "../../features/wishlist/wishlistSlice";
 import { findIndex } from "lodash";
-// import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { formatPrice } from "../../utils/currencyFormatter";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { successToast } from "../../utils/showToast";
 
 const CardContainer = styled.div`
 	position: relative;
@@ -187,16 +188,7 @@ const ProductCard: FC<IProps> = ({ item }) => {
 	const handleAddToWishlist = (item: IProductType): void => {
 		dispatch(addToWishlist(item));
 		//TODO: check the toast error
-		// toast.success("Product add to favorites", {
-		// 	position: "top-right",
-		// 	autoClose: 1000,
-		// 	hideProgressBar: false,
-		// 	closeOnClick: true,
-		// 	pauseOnHover: true,
-		// 	draggable: true,
-		// 	progress: undefined,
-		// 	theme: "dark",
-		// });
+		successToast("product added to wishlist");
 	};
 	const handleRemoveFromWishlist = (item: IProductType): void => {
 		dispatch(removeFromWishlist({ id: item._id }));
@@ -231,11 +223,10 @@ const ProductCard: FC<IProps> = ({ item }) => {
 			onMouseEnter={() => setIsHover(true)}
 			onMouseLeave={() => setIsHover(false)}
 		>
-			{/* <ToastContainer /> */}
 			{isSale && (
 				<SaleNotice>
 					{item?.sale?.type === "flat" ? (
-						<>-${item?.sale?.amount} FLAT OFF</>
+						<>-{formatPrice(item?.sale?.amount)} FLAT OFF</>
 					) : (
 						<>-{item?.sale?.amount}% OFF</>
 					)}
@@ -282,6 +273,7 @@ const ProductCard: FC<IProps> = ({ item }) => {
 					<StockOut>This product is currently out of stock.</StockOut>
 				)}
 			</ViewDetails>
+			<ToastContainer />
 		</CardContainer>
 	);
 };

@@ -61,6 +61,10 @@ import {
 	removeFromCart,
 } from "../../features/cart/cartSlice";
 import { formatPrice } from "../../utils/currencyFormatter";
+import { successToast } from "../../utils/showToast";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { productColorName } from "../../utils/productColorName";
 
 //Add react toast on successfull add to cart
 
@@ -111,6 +115,7 @@ const SingleProduct = () => {
 							price: isSale ? salePrice : product.price,
 						})
 					).unwrap();
+					if (response) successToast("product added to cart");
 				} catch (error) {
 					dispatch(removeFromCart(cartData));
 					console.log({ cartError: error });
@@ -127,6 +132,7 @@ const SingleProduct = () => {
 	//Wishlist
 	const handleAddToWishlist = (item: IProductType): void => {
 		dispatch(addToWishlist(item));
+		successToast("product added to wishlist");
 	};
 	const handleRemoveFromWishlist = (item: IProductType): void => {
 		dispatch(removeFromWishlist({ id: item._id }));
@@ -191,7 +197,7 @@ const SingleProduct = () => {
 								<Sale>${formatPrice(salePrice)}</Sale>
 								<PriceOff>
 									{product?.sale?.type === "flat" ? (
-										<>-${product?.sale?.amount} FLAT OFF</>
+										<>-{formatPrice(product?.sale?.amount)} FLAT OFF</>
 									) : (
 										<span>-{product?.sale?.amount}% OFF</span>
 									)}
@@ -233,7 +239,7 @@ const SingleProduct = () => {
 								></Color>
 							);
 						})}
-						{color && <span>({color})</span>}
+						{color && <span>({productColorName[color]})</span>}
 					</ColorVariation>
 
 					<SizeVariation>
@@ -356,6 +362,7 @@ const SingleProduct = () => {
 					</RelatedProducts>
 				</RelatedProductsContainer>
 			</Layout>
+			<ToastContainer />
 		</ContainerExtended>
 	);
 };
