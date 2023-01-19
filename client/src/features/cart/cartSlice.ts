@@ -20,20 +20,6 @@ const initialState: IState = {
 	total: 0,
 };
 
-// 1. add product to cart
-// 2. remove product from cart
-// 3. update quantity (increae and decrease)
-// 4. Delete All products from cart(Clear cart on succesfull order or if user wants to clear a cart)
-
-// interface IAddToCartProduct {
-// 	productId: string;
-// 	quantity: number;
-// 	title: string;
-// 	price: number;
-// 	color: string;
-// 	size: string;
-// }
-
 export const addProductToCart = createAsyncThunk(
 	"/addProductToCart",
 	async (data: ICartProduct, { rejectWithValue, getState }) => {
@@ -68,12 +54,11 @@ export const getProductsFromCart = createAsyncThunk(
 	}
 );
 
-//for update, need to pass action -> INCREMENT | DECREMENT | DELETEITEM
+//for update, need to pass action inside data -> INCREMENT | DECREMENT | DELETEITEM
 export const updateProductsFromCart = createAsyncThunk(
 	"updateProductsFromCart",
 	async (data: IUpdateCartData, { getState, rejectWithValue }) => {
 		const userId = (getState() as RootState)?.user?.user?.id;
-		// const userId = state?.user?.user?.id;
 		try {
 			const response = await axiosPrivate.put(`/cart/${userId}`, data);
 		} catch (error: any) {
@@ -84,6 +69,8 @@ export const updateProductsFromCart = createAsyncThunk(
 		}
 	}
 );
+
+// Refactor cart state calculations.
 
 const cartSlice = createSlice({
 	name: "cart",

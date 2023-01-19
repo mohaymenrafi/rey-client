@@ -62,6 +62,8 @@ import {
 } from "../../features/cart/cartSlice";
 import { formatPrice } from "../../utils/currencyFormatter";
 
+//Add react toast on successfull add to cart
+
 const SingleProduct = () => {
 	const { id } = useParams();
 	const { products } = useAppSelector(selectAllProducts);
@@ -85,16 +87,6 @@ const SingleProduct = () => {
 	};
 
 	const handleAddToCart = async (): Promise<void> => {
-		//tasks
-		//1. show success message on successfull addition to cart
-		//2. set the price to discounted amount if sale is on
-		// 	title: string;
-		// _id: string;
-		// img: string;
-		// quantity: number;
-		// color: string;
-		// size: string;
-		// price: number;
 		if (product) {
 			if (color && size) {
 				const cartData: ICartProduct = {
@@ -120,7 +112,6 @@ const SingleProduct = () => {
 						})
 					).unwrap();
 				} catch (error) {
-					//dispatch remove from the cart
 					dispatch(removeFromCart(cartData));
 					console.log({ cartError: error });
 				}
