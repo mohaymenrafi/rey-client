@@ -13,6 +13,7 @@ import {
 import { findIndex } from "lodash";
 // import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { formatPrice } from "../../utils/currencyFormatter";
 
 const CardContainer = styled.div`
 	position: relative;
@@ -179,7 +180,7 @@ const ProductCard: FC<IProps> = ({ item }) => {
 	const [isHover, setIsHover] = useState<boolean>(false);
 	const [isSale, setIsSale] = useState<boolean>(false);
 	const [isFavourite, setIsFavourite] = useState<boolean>(false);
-	const [salePrice, setSalePrice] = useState<number>();
+	const [salePrice, setSalePrice] = useState<number>(0);
 	const dispatch = useAppDispatch();
 	const { wishlistProducts } = useAppSelector(selectWishlist);
 
@@ -251,12 +252,11 @@ const ProductCard: FC<IProps> = ({ item }) => {
 			<h2>
 				<Link to={`/products/${item?._id}`}>{item?.title}</Link>
 			</h2>
-			{/* TODO: convert the prices from cent to actual prices and also use localization, use function */}
+
 			<Price isHover={isHover} sale={isSale}>
-				<span className="mainPrice">${item?.price}</span>
-				{isSale && <span className="salePrice">${salePrice}</span>}
+				<span className="mainPrice">{formatPrice(item?.price)}</span>
+				{isSale && <span className="salePrice">{formatPrice(salePrice)}</span>}
 			</Price>
-			{/* TODO: later add tooltip from mui  */}
 
 			<ViewDetails isHover={isHover}>
 				{item?.inStock ? (

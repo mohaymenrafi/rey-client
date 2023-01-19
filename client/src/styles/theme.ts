@@ -1,4 +1,7 @@
-const theme = {
+// I need to fix this later "any"  type. Only product colors will be any type, others will be strcitly types.
+//TODO: update the product colors in the mongodb file. change from static name to hex codes there.
+
+const theme: any = {
 	col: {
 		skyblue: "#EBF6FC",
 		darkBlue: "#1E306E",
@@ -13,6 +16,7 @@ const theme = {
 		"black-2": "#111E49",
 		red: "#eb0014",
 	},
+
 	fs: {
 		xxs: "10px",
 		xs: "12px",
@@ -43,3 +47,20 @@ const theme = {
 };
 
 export { theme };
+
+// productColor: {
+// 	gray: "#485056",
+// 	white: "#ffffff",
+// 	black: "#000000",
+// 	mustard: "#FFDB58",
+// 	golden: "##FFD700",
+// 	yellow: "#FFFF00",
+// 	brown: "#964B00",
+// 	cream: "#FFFDD0",
+// 	blue: "#1c4966",
+// 	red: "#FF0000",
+// 	chocolate: "#7B3F00",
+// 	green: "#00FF00",
+// 	wood: "#deb886",
+// 	skyblue: "#87CEEB",
+// },

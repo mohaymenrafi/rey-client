@@ -3,14 +3,20 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import Container from "../../styles/Container";
 import { theme } from "../../styles/theme";
 import {
+	addToCart,
 	decrease,
+	getProductsFromCart,
 	increase,
 	removeFromCart,
 	selectCart,
+	updateProductsFromCart,
 } from "../../features/cart/cartSlice";
 import { map } from "lodash";
 import { AiOutlineMinus, AiOutlinePlus, AiFillDelete } from "react-icons/ai";
 import { ICartProduct } from "../../types/product";
+import { useEffect, useState } from "react";
+import Loader from "../../components/Loader";
+import { formatPrice } from "../../utils/currencyFormatter";
 
 const ContainerExtended = styled(Container)`
 	padding-top: 30px;
@@ -147,19 +153,60 @@ const EmptyCart = styled.div`
 `;
 
 const CartPage = () => {
+	const [loading, setLoading] = useState(false);
 	const { products, subTotal, tax, total } = useAppSelector(selectCart);
 	const dispatch = useAppDispatch();
-	const handleIncrease = (item: ICartProduct): void => {
+	const handleIncrease = async (item: ICartProduct): Promise<void> => {
 		dispatch(increase(item));
-	};
-	const handleDecrease = (item: ICartProduct): void => {
-		if (item.quantity > 1) {
+		try {
+			const response = await dispatch(
+				updateProductsFromCart({ ...item, action: "INCREMENT" })
+			).unwrap();
+		} catch (error) {
 			dispatch(decrease(item));
+			console.log("cart increase error", error);
 		}
 	};
-	const handleDelete = (item: ICartProduct): void => {
-		dispatch(removeFromCart(item));
+	const handleDecrease = async (item: ICartProduct): Promise<void> => {
+		if (item.quantity > 1) {
+			dispatch(decrease(item));
+			try {
+				const response = await dispatch(
+					updateProductsFromCart({ ...item, action: "DECREMENT" })
+				).unwrap();
+			} catch (error) {
+				dispatch(increase(item));
+				console.log("cart increase error", error);
+			}
+		}
 	};
+	const handleDelete = async (item: ICartProduct): Promise<void> => {
+		dispatch(removeFromCart(item));
+		try {
+			const response = await dispatch(
+				updateProductsFromCart({ ...item, action: "DELETEITEM" })
+			).unwrap();
+		} catch (error) {
+			dispatch(addToCart(item));
+			console.log("cart increase error", error);
+		}
+	};
+	useEffect(() => {
+		const getCart = async () => {
+			setLoading(true);
+			try {
+				const response = await dispatch(getProductsFromCart()).unwrap();
+				setLoading(false);
+			} catch (error) {
+				console.log("Cart load error", error);
+				setLoading(false);
+			}
+		};
+		getCart();
+	}, []);
+	if (loading) {
+		return <Loader />;
+	}
 	return (
 		<ContainerExtended>
 			{products.length ? (
@@ -183,7 +230,7 @@ const CartPage = () => {
 										<td className="nameCol">
 											<CartTitle>{item.title}</CartTitle>
 											<ItemInfo>
-												{item.selectedColor}, {item.selectedSize}
+												{item.color}, {item.size}
 											</ItemInfo>
 											<DeleteButton onClick={() => handleDelete(item)}>
 												<span> Remove from cart</span>
@@ -195,7 +242,10 @@ const CartPage = () => {
 											{item.quantity}
 											<AiOutlinePlus onClick={() => handleIncrease(item)} />
 										</td>
-										<td className="totalCol"> ${item.quantity * item.price}</td>
+										<td className="totalCol">
+											{" "}
+											{formatPrice(item.quantity * item.price)}
+										</td>
 									</tr>
 								);
 							})}
@@ -204,15 +254,15 @@ const CartPage = () => {
 					<TotalContainer>
 						<div>
 							<span>Subtotal</span>
-							<span>${subTotal}</span>
+							<span>{formatPrice(subTotal)}</span>
 						</div>
 						<div>
 							<span>Tax</span>
-							<span>${tax}</span>
+							<span>{formatPrice(tax || 0)}</span>
 						</div>
 						<div>
 							<span>Total</span>
-							<span>${total}</span>
+							<span>{formatPrice(total)}</span>
 						</div>
 						<CheckoutButton>Proceed To Checkout</CheckoutButton>
 					</TotalContainer>

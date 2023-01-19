@@ -243,8 +243,7 @@ export const ColorVariation = styled.div`
 export const Color = styled.button<{ bgColor: string }>`
 	height: 15px;
 	width: 15px;
-	background-color: ${(props) =>
-		props.bgColor === "mustard" ? "#FFDB58" : props.bgColor};
+	background-color: ${(props) => props.bgColor};
 	border-radius: 50%;
 	border: 1px solid rgba(0, 0, 0, 0.3);
 	cursor: pointer;

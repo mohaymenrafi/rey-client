@@ -55,7 +55,12 @@ import {
 	RelatedProducts,
 	RelatedProductsContainer,
 } from "./SingleProduct.styled";
-import { addProductToCart, addToCart } from "../../features/cart/cartSlice";
+import {
+	addProductToCart,
+	addToCart,
+	removeFromCart,
+} from "../../features/cart/cartSlice";
+import { formatPrice } from "../../utils/currencyFormatter";
 
 const SingleProduct = () => {
 	const { id } = useParams();
@@ -65,7 +70,7 @@ const SingleProduct = () => {
 	const [product, setProduct] = useState<IProductType>();
 	const [stock, setStock] = useState<boolean>(true);
 	const [isSale, setIsSale] = useState<boolean>(false);
-	const [salePrice, setSalePrice] = useState<number>();
+	const [salePrice, setSalePrice] = useState<number>(0);
 	const [color, setColor] = useState<string>();
 	const [size, setSize] = useState<string>();
 	const dispatch = useAppDispatch();
@@ -79,32 +84,46 @@ const SingleProduct = () => {
 		if (intValue >= 1) setCartAmount(intValue);
 	};
 
-	// "productId": "1",
-	// "quantity": 4,
-	// "size": "md",
-	// "color": "red",
-	// "title": "This is a demo product for cart",
-	// "price": 233.99
-	const handleAddToCart = (): void => {
+	const handleAddToCart = async (): Promise<void> => {
 		//tasks
 		//1. show success message on successfull addition to cart
 		//2. set the price to discounted amount if sale is on
+		// 	title: string;
+		// _id: string;
+		// img: string;
+		// quantity: number;
+		// color: string;
+		// size: string;
+		// price: number;
 		if (product) {
 			if (color && size) {
 				const cartData: ICartProduct = {
-					...product,
+					productId: product._id,
+					title: product.title,
+					img: product.img,
 					quantity: cartAmount,
-					selectedColor: color,
-					selectedSize: size,
+					color: color,
+					size: size,
+					price: isSale ? salePrice : product.price,
 				};
 				dispatch(addToCart(cartData));
-				// try {
-				// 	dispatch(addProductToCart()).unwrap();
-				// } catch (error) {
-				// 	//dispatch remove from the cart
-				// 	// dispatch()
-				// 	console.error(error);
-				// }
+				try {
+					const response = await dispatch(
+						addProductToCart({
+							productId: product._id,
+							title: product.title,
+							img: product.img,
+							quantity: cartAmount,
+							color: color,
+							size: size,
+							price: isSale ? salePrice : product.price,
+						})
+					).unwrap();
+				} catch (error) {
+					//dispatch remove from the cart
+					dispatch(removeFromCart(cartData));
+					console.log({ cartError: error });
+				}
 			}
 		}
 	};
@@ -123,7 +142,9 @@ const SingleProduct = () => {
 	};
 
 	useEffect(() => {
-		const item = products.find((item) => item._id === id);
+		const item: IProductType | undefined = products.find(
+			(item) => item._id === id
+		);
 		if (item) {
 			setProduct(item);
 			setStock(item.inStock);
@@ -173,10 +194,10 @@ const SingleProduct = () => {
 					{/* <Brand>IGUERA</Brand> */}
 					{/* convert price from cents to price and also add localization  */}
 					<Price>
-						<Regular sale={isSale}>${product?.price}</Regular>
+						<Regular sale={isSale}>{formatPrice(product?.price)}</Regular>
 						{isSale && (
 							<>
-								<Sale>${salePrice}</Sale>
+								<Sale>${formatPrice(salePrice)}</Sale>
 								<PriceOff>
 									{product?.sale?.type === "flat" ? (
 										<>-${product?.sale?.amount} FLAT OFF</>
@@ -221,7 +242,7 @@ const SingleProduct = () => {
 								></Color>
 							);
 						})}
-						{/* {color && <span onClick={() => setColor("")}>Clear ({color})</span>} */}
+						{color && <span>({color})</span>}
 					</ColorVariation>
 
 					<SizeVariation>

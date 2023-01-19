@@ -10,6 +10,7 @@ import {
 	selectAllProducts,
 } from "../../features/product/productSlice";
 import { Puff } from "react-loader-spinner";
+import Loader from "../../components/Loader";
 
 const ContainerExtended = styled(Container)`
 	background: url("${ShopBanner}") no-repeat center center;
@@ -125,23 +126,7 @@ const Shop = () => {
 	}, []);
 
 	if (loading === "pending") {
-		return (
-			<Puff
-				height="80"
-				width="80"
-				radius={1}
-				color={theme.col.darkBlue}
-				ariaLabel="puff-loading"
-				wrapperStyle={{
-					justifyContent: "center",
-					padding: "20px ",
-					minHeight: "calc(100vh - 398px)",
-					alignItems: "center",
-				}}
-				wrapperClass=""
-				visible={true}
-			/>
-		);
+		return <Loader />;
 	}
 	if (error) {
 		console.log(error);

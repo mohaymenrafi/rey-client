@@ -24,8 +24,16 @@ export interface IProductType {
 	_id: string;
 }
 
-export interface ICartProduct extends IProductType {
+export interface ICartProduct {
+	title: string;
+	productId: string;
+	img: string;
 	quantity: number;
-	selectedColor: string;
-	selectedSize: string;
+	color: string;
+	size: string;
+	price: number;
+}
+
+export interface IUpdateCartData extends ICartProduct {
+	action: "INCREMENT" | "DECREMENT" | "DELETEITEM";
 }
