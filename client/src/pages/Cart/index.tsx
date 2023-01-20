@@ -16,6 +16,8 @@ import { ICartProduct } from "../../types/product";
 import { useEffect, useState } from "react";
 import Loader from "../../components/Loader";
 import { formatPrice } from "../../utils/currencyFormatter";
+import { createCheckoutSession } from "../../services/checkout";
+import { selectAuthUser } from "../../features/auth/authSlice";
 
 const ContainerExtended = styled(Container)`
 	padding-top: 30px;
@@ -154,6 +156,7 @@ const EmptyCart = styled.div`
 const CartPage = () => {
 	const [loading, setLoading] = useState(false);
 	const { products, subTotal, tax, total } = useAppSelector(selectCart);
+	const { user } = useAppSelector(selectAuthUser);
 	const dispatch = useAppDispatch();
 	const handleIncrease = async (item: ICartProduct): Promise<void> => {
 		dispatch(updateCart({ product: item, operation: "INCREASE" }));
@@ -203,6 +206,19 @@ const CartPage = () => {
 		};
 		getCart();
 	}, []);
+
+	const handleCheckout = async (): Promise<void> => {
+		if (user !== null) {
+			try {
+				const response = await createCheckoutSession(user.id);
+				const { url } = response.data;
+				window.location.href = url;
+			} catch (error) {
+				console.log(error);
+			}
+		}
+	};
+
 	if (loading) {
 		return <Loader />;
 	}
@@ -263,7 +279,9 @@ const CartPage = () => {
 							<span>Total</span>
 							<span>{formatPrice(total)}</span>
 						</div>
-						<CheckoutButton>Proceed To Checkout</CheckoutButton>
+						<CheckoutButton onClick={handleCheckout}>
+							Proceed To Checkout
+						</CheckoutButton>
 					</TotalContainer>
 				</>
 			) : (

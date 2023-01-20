@@ -12,6 +12,7 @@ import {
 	CartPage,
 	SingleProduct,
 	MyAccount,
+	Success,
 } from "./pages";
 
 function App() {
@@ -25,6 +26,14 @@ function App() {
 					element={
 						<PrivateRoute>
 							<Shop />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path="order/success"
+					element={
+						<PrivateRoute>
+							<Success />
 						</PrivateRoute>
 					}
 				/>
