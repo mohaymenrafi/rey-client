@@ -1,11 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import { useAppSelector } from "../../app/hooks";
+import { selectAllProducts } from "../../features/product/productSlice";
 import Container from "../../styles/Container";
-import { SmallText } from "../../styles/SmallText";
 import { theme } from "../../styles/theme";
 import ProductCard from "../ProductCard";
-
-const picks: number[] = [1, 2, 4, 5];
 
 const ContainerExtended = styled(Container)`
 	padding: 50px 15px;
@@ -37,14 +36,14 @@ export const CardContainer = styled.div`
 `;
 
 const TopPicks = () => {
+	const { products } = useAppSelector(selectAllProducts);
 	return (
 		<ContainerExtended>
 			<SectionTitle>BEST SELLING PICKS</SectionTitle>
 
 			<CardContainer>
-				{picks.map((item, index) => (
-					// <ProductCard key={index} />
-					<p key={index}>TOP picks , need to pass actual product items</p>
+				{products.slice(9, 13).map((item, index) => (
+					<ProductCard item={item} key={index} />
 				))}
 			</CardContainer>
 		</ContainerExtended>

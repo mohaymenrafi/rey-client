@@ -10,13 +10,12 @@ export function cartCalculator(products: ICartProduct[]) {
 		},
 		0
 	);
-	const tax = (subTotal * 9) / 100;
-	const total = subTotal + tax;
+
+	const total = subTotal;
 
 	return {
 		count,
 		subTotal,
-		tax,
 		total,
 	};
 }

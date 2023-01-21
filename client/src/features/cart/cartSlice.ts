@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ICartProduct, IUpdateCartData } from "../../types/product";
-import { filter, findIndex, reduce } from "lodash";
+import { filter, findIndex } from "lodash";
 import { RootState } from "../../app/store";
 import { axiosPrivate } from "../../apis/apiConfig";
 import { cartCalculator } from "../../utils/cartCalculator";
@@ -9,7 +9,6 @@ interface IState {
 	products: ICartProduct[];
 	count: number;
 	subTotal: number;
-	tax?: number;
 	total: number;
 }
 
@@ -22,7 +21,6 @@ const initialState: IState = {
 	products: [],
 	count: 0,
 	subTotal: 0,
-	tax: 0,
 	total: 0,
 };
 
@@ -77,7 +75,21 @@ export const updateProductsFromCart = createAsyncThunk(
 	}
 );
 
-// Refactor cart state calculations.
+export const clearProductsFromCart = createAsyncThunk(
+	"clearProductsFrom",
+	async (_, { getState, rejectWithValue }) => {
+		const userId = (getState() as RootState)?.user?.user?.id;
+		try {
+			const response = await axiosPrivate.delete(`/cart/${userId}`);
+			return response.data;
+		} catch (error: any) {
+			if (!error.response) {
+				throw error;
+			}
+			return rejectWithValue(error.response);
+		}
+	}
+);
 
 const cartSlice = createSlice({
 	name: "cart",
@@ -99,14 +111,13 @@ const cartSlice = createSlice({
 			} else {
 				state.products.push(action.payload);
 			}
-			const { count, subTotal, tax, total } = cartCalculator(state.products);
+			const { count, subTotal, total } = cartCalculator(state.products);
 			state.count = count;
 			state.subTotal = subTotal;
-			state.tax = tax;
 			state.total = total;
 		},
 		removeFromCart: (state, action: PayloadAction<ICartProduct>) => {
-			const { productId, color, size, price } = action.payload;
+			const { productId, color, size } = action.payload;
 			const itemIndex = findIndex(state.products, (item) => {
 				return (
 					item.productId === productId &&
@@ -115,14 +126,14 @@ const cartSlice = createSlice({
 				);
 			});
 			state.products = filter(state.products, (_, idx) => idx !== itemIndex);
-			const { count, subTotal, tax, total } = cartCalculator(state.products);
+			const { count, subTotal, total } = cartCalculator(state.products);
 			state.count = count;
 			state.subTotal = subTotal;
-			state.tax = tax;
+
 			state.total = total;
 		},
 		updateCart: (state, action: PayloadAction<IUpdateCart>) => {
-			const { productId, color, size, price } = action.payload.product;
+			const { productId, color, size } = action.payload.product;
 			const itemIndex = findIndex(state.products, (item) => {
 				return (
 					item.productId === productId &&
@@ -135,33 +146,44 @@ const cartSlice = createSlice({
 			} else if (action.payload.operation === "DECREASE") {
 				state.products[itemIndex].quantity -= 1;
 			}
-			const { count, subTotal, tax, total } = cartCalculator(state.products);
+			const { count, subTotal, total } = cartCalculator(state.products);
 			state.count = count;
 			state.subTotal = subTotal;
-			state.tax = tax;
+
 			state.total = total;
 		},
 
 		clearCart: (state) => {
-			state = initialState;
+			state.products = [];
+			state.count = 0;
+			state.subTotal = 0;
+			state.total = 0;
 		},
 	},
 	extraReducers(builder) {
-		builder.addCase(
-			getProductsFromCart.fulfilled,
-			(state, action: PayloadAction<ICartProduct[]>) => {
-				state.products = action.payload;
-				const { count, subTotal, tax, total } = cartCalculator(state.products);
-				state.count = count;
-				state.subTotal = subTotal;
-				state.tax = tax;
-				state.total = total;
-			}
-		);
+		builder
+			.addCase(
+				getProductsFromCart.fulfilled,
+				(state, action: PayloadAction<ICartProduct[]>) => {
+					state.products = action.payload;
+					const { count, subTotal, total } = cartCalculator(state.products);
+					state.count = count;
+					state.subTotal = subTotal;
+
+					state.total = total;
+				}
+			)
+			.addCase(clearProductsFromCart.fulfilled, (state) => {
+				state.products = [];
+				state.count = 0;
+				state.subTotal = 0;
+				state.total = 0;
+			});
 	},
 });
 
 export const selectCart = (state: RootState) => state.cart;
 
-export const { addToCart, removeFromCart, updateCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, updateCart, clearCart } =
+	cartSlice.actions;
 export default cartSlice.reducer;

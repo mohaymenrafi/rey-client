@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { AiFillCheckCircle } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import styled from "styled-components";
+import { useAppDispatch } from "../../app/hooks";
+import {
+	clearCart,
+	clearProductsFromCart,
+} from "../../features/cart/cartSlice";
 import Container from "../../styles/Container";
 import { theme } from "../../styles/theme";
 
@@ -36,6 +41,23 @@ const TextBox = styled.div`
 `;
 
 const Success = () => {
+	const [searchParams] = useSearchParams();
+	const dispatch = useAppDispatch();
+	const session = searchParams.get("session_id");
+
+	useEffect(() => {
+		const clearProducts = async () => {
+			if (session) {
+				dispatch(clearCart());
+				try {
+					dispatch(clearProductsFromCart()).unwrap();
+				} catch (error) {
+					console.error("clear cart error", error);
+				}
+			}
+		};
+		clearProducts();
+	}, [session]);
 	return (
 		<Container>
 			<TextBox>

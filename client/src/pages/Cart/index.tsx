@@ -18,6 +18,8 @@ import Loader from "../../components/Loader";
 import { formatPrice } from "../../utils/currencyFormatter";
 import { createCheckoutSession } from "../../services/checkout";
 import { selectAuthUser } from "../../features/auth/authSlice";
+import { productColorName } from "../../utils/productColorName";
+import { Link } from "react-router-dom";
 
 const ContainerExtended = styled(Container)`
 	padding-top: 30px;
@@ -155,7 +157,7 @@ const EmptyCart = styled.div`
 
 const CartPage = () => {
 	const [loading, setLoading] = useState(false);
-	const { products, subTotal, tax, total } = useAppSelector(selectCart);
+	const { products, subTotal, total } = useAppSelector(selectCart);
 	const { user } = useAppSelector(selectAuthUser);
 	const dispatch = useAppDispatch();
 	const handleIncrease = async (item: ICartProduct): Promise<void> => {
@@ -197,7 +199,7 @@ const CartPage = () => {
 		const getCart = async () => {
 			setLoading(true);
 			try {
-				const response = await dispatch(getProductsFromCart()).unwrap();
+				await dispatch(getProductsFromCart()).unwrap();
 				setLoading(false);
 			} catch (error) {
 				console.log("Cart load error", error);
@@ -243,9 +245,11 @@ const CartPage = () => {
 											<img src={item.img} alt={item.title} />
 										</td>
 										<td className="nameCol">
-											<CartTitle>{item.title}</CartTitle>
+											<Link to={`/products/${item.productId}`}>
+												<CartTitle>{item.title}</CartTitle>
+											</Link>
 											<ItemInfo>
-												{item.color}, {item.size}
+												{productColorName[item.color]}, {item.size}
 											</ItemInfo>
 											<DeleteButton onClick={() => handleDelete(item)}>
 												<span> Remove from cart</span>
@@ -272,8 +276,8 @@ const CartPage = () => {
 							<span>{formatPrice(subTotal)}</span>
 						</div>
 						<div>
-							<span>Tax</span>
-							<span>{formatPrice(tax || 0)}</span>
+							<span>Tax will be calculated based on shipping address</span>
+							<span></span>
 						</div>
 						<div>
 							<span>Total</span>

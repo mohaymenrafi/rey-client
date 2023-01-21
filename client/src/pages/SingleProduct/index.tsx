@@ -23,7 +23,7 @@ import {
 	removeFromWishlist,
 	selectWishlist,
 } from "../../features/wishlist/wishlistSlice";
-import { findIndex } from "lodash";
+import { filter, findIndex } from "lodash";
 import {
 	ContainerExtended,
 	Image,
@@ -65,6 +65,7 @@ import { successToast } from "../../utils/showToast";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { productColorName } from "../../utils/productColorName";
+import { ProductCard } from "../../components";
 
 //Add react toast on successfull add to cart
 
@@ -81,6 +82,7 @@ const SingleProduct = () => {
 	const [size, setSize] = useState<string>();
 	const dispatch = useAppDispatch();
 	const { wishlistProducts } = useAppSelector(selectWishlist);
+	const [relatedProducts, setRelatedProducts] = useState<IProductType[]>([]);
 
 	const url = "https://mhabdullah.vercel.app";
 
@@ -127,6 +129,7 @@ const SingleProduct = () => {
 	const handleColorSelection = (e: React.MouseEvent, color: string): void => {
 		e.preventDefault();
 		setColor(color);
+		console.log(color);
 	};
 
 	//Wishlist
@@ -136,6 +139,16 @@ const SingleProduct = () => {
 	};
 	const handleRemoveFromWishlist = (item: IProductType): void => {
 		dispatch(removeFromWishlist({ id: item._id }));
+	};
+
+	const getRelatedProduct = (product: IProductType) => {
+		const filteredProducts = filter(
+			products,
+			(item) =>
+				item._id !== product._id &&
+				item.categories.includes(product.categories[0])
+		);
+		setRelatedProducts(filteredProducts);
 	};
 
 	useEffect(() => {
@@ -156,6 +169,7 @@ const SingleProduct = () => {
 					setSalePrice(item.price - saleAmount);
 				}
 			}
+			getRelatedProduct(item);
 		}
 	}, [id]);
 
@@ -239,7 +253,7 @@ const SingleProduct = () => {
 								></Color>
 							);
 						})}
-						{color && <span>({productColorName[color]})</span>}
+						{color && <span>({productColorName[color.toLowerCase()]})</span>}
 					</ColorVariation>
 
 					<SizeVariation>
@@ -355,10 +369,14 @@ const SingleProduct = () => {
 				<RelatedProductsContainer>
 					<h2>Related Products</h2>
 					<RelatedProducts>
-						{Array.from({ length: 4 }).map((item, idx) => (
-							// <ProductCard />
-							<p key={idx}> Need to add related products to show data</p>
-						))}
+						{relatedProducts.length ? (
+							(relatedProducts.length > 4
+								? relatedProducts.slice(0, 4)
+								: relatedProducts
+							).map((item, idx) => <ProductCard item={item} key={idx} />)
+						) : (
+							<h2> No Related Products Found</h2>
+						)}
 					</RelatedProducts>
 				</RelatedProductsContainer>
 			</Layout>
