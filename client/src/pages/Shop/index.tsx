@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Container from "../../styles/Container";
 import ShopBanner from "../../assets/bg-cover.webp";
@@ -9,8 +9,15 @@ import {
 	getAllProducts,
 	selectAllProducts,
 } from "../../features/product/productSlice";
-import { Puff } from "react-loader-spinner";
 import Loader from "../../components/Loader";
+import Pagination from "@mui/material/Pagination";
+
+const PaginationContainer = styled(Container)`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 20px auto 40px;
+`;
 
 const ContainerExtended = styled(Container)`
 	background: url("${ShopBanner}") no-repeat center center;
@@ -110,27 +117,39 @@ const SpacerDiv = styled.div``;
 
 const Shop = () => {
 	const dispatch = useAppDispatch();
-
-	const { products, loading, error } = useAppSelector(selectAllProducts);
+	const {
+		products: { products, totalPages },
+		loading,
+		error,
+	} = useAppSelector(selectAllProducts);
+	const [page, setPage] = useState<number>(1);
+	const [limit, setLimit] = useState<number>(12);
 
 	const loadProducts = async () => {
 		try {
-			await dispatch(getAllProducts()).unwrap();
+			await dispatch(getAllProducts({ limit, page })).unwrap();
 		} catch (err) {
 			//TODO:handle product load error from here!!
 			console.error(err);
 		}
 	};
+
 	useEffect(() => {
 		loadProducts();
-	}, []);
+		console.log(page);
+	}, [page]);
 
-	if (loading === "pending") {
-		return <Loader />;
-	}
+	const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+		setPage(value);
+	};
+
 	if (error) {
 		console.log(error);
 		return <h2>Error Loading Products, Please try again</h2>;
+	}
+
+	if (loading === "pending") {
+		return <Loader />;
 	}
 
 	return (
@@ -157,6 +176,17 @@ const Shop = () => {
 					)}
 				</CardContainer>
 			</Container>
+			<PaginationContainer>
+				<Pagination
+					count={totalPages}
+					variant="outlined"
+					color="primary"
+					boundaryCount={1}
+					siblingCount={0}
+					page={page}
+					onChange={handleChange}
+				/>
+			</PaginationContainer>
 		</>
 	);
 };

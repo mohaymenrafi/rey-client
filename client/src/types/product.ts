@@ -6,6 +6,7 @@ export type Product = {
 	category: string;
 	id: string;
 };
+
 export interface IProductType {
 	img: string;
 	title: string;
@@ -22,6 +23,12 @@ export interface IProductType {
 		amount: number;
 	};
 	_id: string;
+}
+
+export interface IProductResponse {
+	products: IProductType[];
+	totalPages: number;
+	currentPage: number;
 }
 
 export interface ICartProduct {

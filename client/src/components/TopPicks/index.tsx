@@ -42,7 +42,7 @@ const TopPicks = () => {
 			<SectionTitle>BEST SELLING PICKS</SectionTitle>
 
 			<CardContainer>
-				{products.slice(9, 13).map((item, index) => (
+				{products.products.slice(5, 9).map((item, index) => (
 					<ProductCard item={item} key={index} />
 				))}
 			</CardContainer>

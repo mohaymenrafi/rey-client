@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IProductType as productType } from "../../types/product";
+import { IProductResponse } from "../../types/product";
 import { RootState } from "../../app/store";
 import { axiosPrivate } from "../../apis/apiConfig";
 
@@ -12,27 +12,36 @@ interface IError {
 }
 
 interface IState {
-	products: productType[];
+	products: IProductResponse;
 	loading: "idle" | "pending" | "succeeded" | "failed";
 	error: string | IError;
 }
 
 const initialState: IState = {
-	products: [],
+	products: {
+		products: [],
+		totalPages: 0,
+		currentPage: 1,
+	},
 	loading: "idle",
 	error: "",
 };
 
 export const getAllProducts = createAsyncThunk<
-	productType[],
-	void,
+	IProductResponse,
+	{
+		limit: number;
+		page: number;
+	},
 	{
 		rejectValue: IError;
 	}
->("/products", async (_, { rejectWithValue }) => {
+>("/products", async ({ limit, page }, { rejectWithValue }) => {
 	try {
-		const response = await axiosPrivate.get("/products");
-		return response.data as productType[];
+		const response = await axiosPrivate.get(
+			`/products?limit=${limit}&page=${page}`
+		);
+		return response.data as IProductResponse;
 	} catch (error: any) {
 		if (!error.response) {
 			throw error;
@@ -62,9 +71,11 @@ export const productSlice = createSlice({
 			})
 			.addCase(
 				getAllProducts.fulfilled,
-				(state, action: PayloadAction<productType[]>) => {
+				(state, action: PayloadAction<IProductResponse>) => {
 					state.loading = "succeeded";
-					state.products = action.payload;
+					state.products.products = action.payload.products;
+					state.products.totalPages = action.payload.totalPages;
+					state.products.currentPage = action.payload.currentPage;
 				}
 			)
 			.addCase(getAllProducts.rejected, (state, action) => {
@@ -72,7 +83,9 @@ export const productSlice = createSlice({
 				if (action.payload) {
 					state.error = action.payload;
 					if (action.payload.status === 403) {
-						state.products = [];
+						state.products.products = [];
+						state.products.totalPages = 0;
+						state.products.currentPage = 1;
 					}
 				}
 				state.error = {

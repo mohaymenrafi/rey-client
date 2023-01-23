@@ -71,7 +71,9 @@ import { ProductCard } from "../../components";
 
 const SingleProduct = () => {
 	const { id } = useParams();
-	const { products } = useAppSelector(selectAllProducts);
+	const {
+		products: { products },
+	} = useAppSelector(selectAllProducts);
 	const [cartAmount, setCartAmount] = useState<number>(1);
 	const [isFavourite, setIsFavourite] = useState<boolean>(false);
 	const [product, setProduct] = useState<IProductType>();
