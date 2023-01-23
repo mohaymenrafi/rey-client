@@ -149,7 +149,6 @@ const Shop = () => {
 
 	useEffect(() => {
 		loadProducts();
-		console.log(page);
 	}, [page, categoryFilter]);
 
 	const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -172,10 +171,6 @@ const Shop = () => {
 			</Error>
 		);
 	}
-
-	// if (loading === "pending") {
-	// 	return <Loader />;
-	// }
 
 	return (
 		<>
