@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IProductResponse } from "../../types/product";
 import { RootState } from "../../app/store";
 import { axiosPrivate } from "../../apis/apiConfig";
+import { queryString } from "../../utils/queryStringBuilder";
 
 interface IError {
 	message?: string;
@@ -32,15 +33,23 @@ export const getAllProducts = createAsyncThunk<
 	{
 		limit: number;
 		page: number;
+		categoryFilter: string;
+		color?: string;
+		size?: string;
 	},
 	{
 		rejectValue: IError;
 	}
->("/products", async ({ limit, page }, { rejectWithValue }) => {
+>("/products", async ({ limit, page, categoryFilter }, { rejectWithValue }) => {
+	const filtersObj = {
+		category: categoryFilter,
+	};
+	const url: string = queryString(filtersObj);
+	const fullUrl: string = `/products?limit=${limit}&page=${page}&${url}`;
+	console.log({ fullUrl });
+	// `/products?limit=${limit}&page=${page}}`
 	try {
-		const response = await axiosPrivate.get(
-			`/products?limit=${limit}&page=${page}`
-		);
+		const response = await axiosPrivate.get(fullUrl);
 		return response.data as IProductResponse;
 	} catch (error: any) {
 		if (!error.response) {

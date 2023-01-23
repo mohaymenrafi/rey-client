@@ -115,6 +115,18 @@ const categories: string[] = [
 
 const SpacerDiv = styled.div``;
 
+const Error = styled.div`
+	min-height: calc(100vh - 400px);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	h2 {
+		font-size: ${theme.fs.lg};
+		font-weight: 700;
+		color: ${theme.col.darkBlue};
+	}
+`;
+
 const Shop = () => {
 	const dispatch = useAppDispatch();
 	const {
@@ -124,10 +136,11 @@ const Shop = () => {
 	} = useAppSelector(selectAllProducts);
 	const [page, setPage] = useState<number>(1);
 	const [limit, setLimit] = useState<number>(12);
+	const [categoryFilter, setCategoryFilter] = useState<string>("");
 
 	const loadProducts = async () => {
 		try {
-			await dispatch(getAllProducts({ limit, page })).unwrap();
+			await dispatch(getAllProducts({ limit, page, categoryFilter })).unwrap();
 		} catch (err) {
 			//TODO:handle product load error from here!!
 			console.error(err);
@@ -137,20 +150,32 @@ const Shop = () => {
 	useEffect(() => {
 		loadProducts();
 		console.log(page);
-	}, [page]);
+	}, [page, categoryFilter]);
 
 	const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
 		setPage(value);
 	};
 
+	const handleCatClick = (item: string): void => {
+		if (item.toLowerCase() === "all") {
+			setCategoryFilter("");
+		} else {
+			setCategoryFilter(item.toLowerCase());
+		}
+	};
+
 	if (error) {
 		console.log(error);
-		return <h2>Error Loading Products, Please try again</h2>;
+		return (
+			<Error>
+				<h2>Error loading products, please try again</h2>
+			</Error>
+		);
 	}
 
-	if (loading === "pending") {
-		return <Loader />;
-	}
+	// if (loading === "pending") {
+	// 	return <Loader />;
+	// }
 
 	return (
 		<>
@@ -160,33 +185,41 @@ const Shop = () => {
 				<CategoryBox>
 					<ul>
 						{categories.map((item, idx) => (
-							<li key={idx}>{item}</li>
+							<li key={idx} onClick={() => handleCatClick(item)}>
+								{item}
+							</li>
 						))}
 					</ul>
 				</CategoryBox>
 			</ContainerExtended>
-			<Container>
-				<CardContainer>
-					{products.length ? (
-						products.map((item, index) => (
-							<ProductCard item={item} key={index} />
-						))
-					) : (
-						<NoProducts>No Products Found</NoProducts>
-					)}
-				</CardContainer>
-			</Container>
-			<PaginationContainer>
-				<Pagination
-					count={totalPages}
-					variant="outlined"
-					color="primary"
-					boundaryCount={1}
-					siblingCount={0}
-					page={page}
-					onChange={handleChange}
-				/>
-			</PaginationContainer>
+			{loading === "pending" ? (
+				<Loader />
+			) : (
+				<>
+					<Container>
+						<CardContainer>
+							{products.length ? (
+								products.map((item, index) => (
+									<ProductCard item={item} key={index} />
+								))
+							) : (
+								<NoProducts>No Products Found</NoProducts>
+							)}
+						</CardContainer>
+					</Container>
+					<PaginationContainer>
+						<Pagination
+							count={totalPages}
+							variant="outlined"
+							color="primary"
+							boundaryCount={1}
+							siblingCount={0}
+							page={page}
+							onChange={handleChange}
+						/>
+					</PaginationContainer>{" "}
+				</>
+			)}
 		</>
 	);
 };
