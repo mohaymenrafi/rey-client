@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Container from "../../styles/Container";
 import { Text } from "../../styles/text";
@@ -63,7 +63,43 @@ const Submit = styled.button`
 	}
 `;
 
+const SuccessMessage = styled.p`
+	display: inline-block;
+	margin-top: 10px;
+	color: ${theme.col.darkBlue};
+	font-size: ${theme.fs.base};
+	font-weight: 500;
+`;
+
+interface IProps {
+	name: string;
+	email: string;
+	message: string;
+}
+
 const Contact: React.FC = () => {
+	const [inputs, setInputs] = useState<IProps>({
+		name: "",
+		email: "",
+		message: "",
+	});
+	const [showSuccess, setShowSuccess] = useState<boolean>(false);
+	const handleSubmit = (e: React.SyntheticEvent) => {
+		e.preventDefault();
+		setInputs({
+			name: "",
+			email: "",
+			message: "",
+		});
+		setShowSuccess(true);
+		setTimeout(() => {
+			setShowSuccess(false);
+		}, 2000);
+	};
+	// useEffect(() => {
+
+	// }, [showSuccess]);
+
 	return (
 		<ExtendedContainer>
 			<div>
@@ -79,19 +115,41 @@ const Contact: React.FC = () => {
 				<Title>Contact Ray Furnisher</Title>
 				<Form>
 					<InputContainer>
-						<label htmlFor="name">Your Name (required)</label>
-						<input type="text" />
+						<label htmlFor="name">Your Name </label>
+						<input
+							type="text"
+							name="name"
+							value={inputs.name}
+							onChange={(e) => setInputs({ ...inputs, name: e.target.value })}
+						/>
 					</InputContainer>
 					<InputContainer>
-						<label htmlFor="name">Your Email (required)</label>
-						<input type="email" />
+						<label htmlFor="email">Your Email </label>
+						<input
+							type="email"
+							name="email"
+							value={inputs.email}
+							onChange={(e) => setInputs({ ...inputs, email: e.target.value })}
+						/>
 					</InputContainer>
 					<InputContainer>
-						<label htmlFor="name">Your Message</label>
-						<textarea rows={4} />
+						<label htmlFor="message">Your Message</label>
+						<textarea
+							rows={4}
+							name="message"
+							value={inputs.message}
+							onChange={(e) =>
+								setInputs({ ...inputs, message: e.target.value })
+							}
+						/>
 					</InputContainer>
-					<Submit>SEND MESSAGE</Submit>
+					<Submit type="submit" onClick={(e) => handleSubmit(e)}>
+						SEND MESSAGE
+					</Submit>
 				</Form>
+				{showSuccess && (
+					<SuccessMessage>We've received your message.</SuccessMessage>
+				)}
 			</div>
 		</ExtendedContainer>
 	);

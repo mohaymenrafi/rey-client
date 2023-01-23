@@ -142,7 +142,6 @@ const Shop = () => {
 		try {
 			await dispatch(getAllProducts({ limit, page, categoryFilter })).unwrap();
 		} catch (err) {
-			//TODO:handle product load error from here!!
 			console.error(err);
 		}
 	};

@@ -31,9 +31,9 @@ const initialState: IState = {
 export const getAllProducts = createAsyncThunk<
 	IProductResponse,
 	{
-		limit: number;
-		page: number;
-		categoryFilter: string;
+		limit?: number;
+		page?: number;
+		categoryFilter?: string;
 		color?: string;
 		size?: string;
 	},
