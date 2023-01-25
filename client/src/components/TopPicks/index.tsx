@@ -1,9 +1,16 @@
-import React from "react";
+import { map } from "lodash";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useAppSelector } from "../../app/hooks";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { selectAllProducts } from "../../features/product/productSlice";
+import {
+	getTopPicks,
+	selectTopPicks,
+} from "../../features/topPicks/topPicksSlice";
 import Container from "../../styles/Container";
 import { theme } from "../../styles/theme";
+import { IProductType } from "../../types/product";
+import Loader from "../Loader";
 import ProductCard from "../ProductCard";
 
 const ContainerExtended = styled(Container)`
@@ -36,13 +43,18 @@ export const CardContainer = styled.div`
 `;
 
 const TopPicks = () => {
-	const { products } = useAppSelector(selectAllProducts);
+	const { products, loading, error } = useAppSelector(selectTopPicks);
+
+	if (loading === "pending") return <Loader />;
+	if (error) {
+		return <h2>There's some error, please try again</h2>;
+	}
 	return (
 		<ContainerExtended>
-			<SectionTitle>BEST SELLING PICKS</SectionTitle>
+			<SectionTitle>BEST SELLING</SectionTitle>
 
 			<CardContainer>
-				{products.products.slice(5, 9).map((item, index) => (
+				{products.map((item: IProductType, index: number) => (
 					<ProductCard item={item} key={index} />
 				))}
 			</CardContainer>

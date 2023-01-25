@@ -77,9 +77,7 @@ const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 	const hanldeLogoClick = () => {
 		navigate("/");
 	};
-	const activeStyle = {
-		fontWeight: "bold",
-	};
+
 	return (
 		<DesktopNav>
 			<ul>

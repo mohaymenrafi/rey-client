@@ -40,28 +40,36 @@ export const getAllProducts = createAsyncThunk<
 	{
 		rejectValue: IError;
 	}
->("/products", async ({ limit, page, categoryFilter }, { rejectWithValue }) => {
-	const filtersObj = {
-		category: categoryFilter,
-	};
-	const url: string = queryString(filtersObj);
-	const fullUrl: string = `/products?limit=${limit}&page=${page}&${url}`;
-	console.log({ fullUrl });
-	// `/products?limit=${limit}&page=${page}}`
-	try {
-		const response = await axiosPrivate.get(fullUrl);
-		return response.data as IProductResponse;
-	} catch (error: any) {
-		if (!error.response) {
-			throw error;
+>(
+	"/products",
+	async (
+		{ limit, page, categoryFilter, size = "", color = "" },
+		{ rejectWithValue }
+	) => {
+		const filtersObj = {
+			category: categoryFilter,
+			color,
+			size,
+		};
+		const url: string = queryString(filtersObj);
+		const fullUrl: string = `/products?limit=${limit}&page=${page}&${url}`;
+		console.log({ fullUrl });
+		// `/products?limit=${limit}&page=${page}}`
+		try {
+			const response = await axiosPrivate.get(fullUrl);
+			return response.data as IProductResponse;
+		} catch (error: any) {
+			if (!error.response) {
+				throw error;
+			}
+			return rejectWithValue({
+				data: error.response.data,
+				status: error.reponse.status,
+				message: error.reponse.statusText,
+			} as IError);
 		}
-		return rejectWithValue({
-			data: error.response.data,
-			status: error.reponse.status,
-			message: error.reponse.statusText,
-		} as IError);
 	}
-});
+);
 
 export const productSlice = createSlice({
 	name: "products",
