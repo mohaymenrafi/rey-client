@@ -9,8 +9,9 @@ import { Link } from "react-router-dom";
 import MobileMenu from "./MobileMenu";
 import { useAppSelector } from "../../app/hooks";
 import { selectCart } from "../../features/cart/cartSlice";
+import { MdFavoriteBorder } from "react-icons/md";
+import { selectAuthUser } from "../../features/auth/authSlice";
 
-let amount: number = 3;
 const MobileNav = styled.div`
 	display: flex;
 	justify-content: space-between;
@@ -28,9 +29,14 @@ const MobileNav = styled.div`
 	}
 `;
 
+const UserName = styled.span`
+	font-size: ${theme.fs.base};
+`;
+
 const Mobile: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 	const [open, setOpen] = useState<boolean>(false);
 	const { count } = useAppSelector(selectCart);
+	const { user } = useAppSelector(selectAuthUser);
 	return (
 		<>
 			<MobileNav>
@@ -43,11 +49,13 @@ const Mobile: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 					</Icon>
 				</Left>
 				<ul>
-					{/* <li>
-						<Icon>
-							<FiSearch />
-						</Icon>
-					</li> */}
+					<li>
+						<Link to="/wishlist">
+							<CartIcon amount={count}>
+								<MdFavoriteBorder />
+							</CartIcon>
+						</Link>
+					</li>
 					<li>
 						<Link to="/cart">
 							<CartIcon amount={count}>
@@ -59,6 +67,7 @@ const Mobile: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 						<Link to="/my-account">
 							<Icon>
 								<FiUser />
+								{user && <UserName> ({user.username})</UserName>}
 							</Icon>
 						</Link>
 					</li>

@@ -1,6 +1,7 @@
 import { map } from "lodash";
 import React from "react";
 import { BsBag } from "react-icons/bs";
+import { MdFavoriteBorder } from "react-icons/md";
 import { Link, useNavigate, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { CartIcon, Icon, IHeaderProps, Logo } from ".";
@@ -98,13 +99,20 @@ const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 				onClick={hanldeLogoClick}
 			/>
 			<Right>
-				<Link to="/cart">
+				<span onClick={() => navigate("wishlist")}>
+					<CartIcon amount={count}>
+						<Icon>
+							<MdFavoriteBorder />
+						</Icon>
+					</CartIcon>
+				</span>
+				<span onClick={() => navigate("cart")}>
 					<CartIcon amount={count}>
 						<Icon>
 							<BsBag />
 						</Icon>
 					</CartIcon>
-				</Link>
+				</span>
 				{user ? (
 					<>
 						<SmallText>

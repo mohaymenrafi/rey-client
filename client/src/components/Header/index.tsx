@@ -74,6 +74,9 @@ export const Icon = styled.span`
 	color: ${theme.col["black-2"]};
 	font-size: ${theme.fs["md-2"]};
 	cursor: pointer;
+	display: flex;
+	align-items: center;
+	column-gap: 5px;
 `;
 export const CartIcon = styled(Icon)<ICart>`
 	position: relative;
@@ -95,8 +98,8 @@ export const CartIcon = styled(Icon)<ICart>`
 		align-items: center;
 		justify-content: center;
 		@media (min-width: ${theme.sc.lg}) {
-			right: -7px;
-			top: -1px;
+			right: -8px;
+			top: -5px;
 			width: 17px;
 			height: 17px;
 		}

@@ -6,6 +6,7 @@ import { theme } from "../../styles/theme";
 import bannerOne from "../../assets/bannerOne.jpeg";
 import bannerTwo from "../../assets/bannerTwo.jpeg";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
+import useNavigateToShop from "../../hooks/useNavigateToShop";
 
 const ContainerExtended = styled(Container)`
 	display: grid;
@@ -65,6 +66,7 @@ const BannerTextSM = styled.button<{ bgColor?: string }>`
 	padding: 0.5em 1.5em;
 	font-size: ${theme.fs.sm};
 	font-weight: 600;
+	cursor: pointer;
 	background-color: ${(props) =>
 		props.bgColor === "blue" ? theme.col.darkBlue : theme.col["white-2"]};
 	border: 0px;
@@ -79,12 +81,13 @@ const BannerTextSM = styled.button<{ bgColor?: string }>`
 `;
 
 const Banner = () => {
+	const { navigateToShop } = useNavigateToShop();
 	return (
 		<StyledBackground blue={true}>
 			<ContainerExtended>
 				<Left>
 					<BannerText>TABLES & CHAIRS</BannerText>
-					<BannerTextSM>
+					<BannerTextSM onClick={() => navigateToShop()}>
 						<span>DISCOVER</span> <HiOutlineArrowNarrowRight />
 					</BannerTextSM>
 				</Left>
@@ -95,7 +98,7 @@ const Banner = () => {
 					<div>
 						<BannerText bgColor="blue">SELECTED SOFAS</BannerText>
 					</div>
-					<BannerTextSM bgColor="blue">
+					<BannerTextSM bgColor="blue" onClick={() => navigateToShop()}>
 						<span>DISCOVER</span> <HiOutlineArrowNarrowRight />
 					</BannerTextSM>
 				</Right>

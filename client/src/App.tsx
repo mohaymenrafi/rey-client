@@ -21,11 +21,29 @@ function App() {
 		<Routes>
 			<Route path="/" element={<Laylout />}>
 				<Route index element={<Home />} />
+				<Route path="products" element={<Shop />} />
+
 				<Route
-					path="products"
+					path="my-account"
 					element={
 						<PrivateRoute>
-							<Shop />
+							<MyAccount />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path="cart"
+					element={
+						<PrivateRoute>
+							<CartPage />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path="wishlist"
+					element={
+						<PrivateRoute>
+							<WishlistPage />
 						</PrivateRoute>
 					}
 				/>
@@ -38,15 +56,13 @@ function App() {
 					}
 				/>
 				<Route path="products/:id" element={<SingleProduct />} />
-				<Route path="cart" element={<CartPage />} />
-				<Route path="wishlist" element={<WishlistPage />} />
+
 				<Route path="contact" element={<Contact />} />
 				<Route path="login" element={user ? <Navigate to="/" /> : <Login />} />
 				<Route
 					path="register"
 					element={user ? <Navigate to="/" /> : <Register />}
 				/>
-				<Route path="my-account" element={<MyAccount />} />
 			</Route>
 		</Routes>
 	);

@@ -36,10 +36,6 @@ export default function Home() {
 		loadTopPicks();
 	}, []);
 
-	// if (loading) return <Loader />;
-	// if (error) {
-	// 	return <h2>There's some error, please try again</h2>;
-	// }
 	return (
 		<>
 			<Banner />
