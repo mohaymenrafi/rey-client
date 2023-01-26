@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAppSelector } from "../app/hooks";
 import { selectAuthUser } from "../features/auth/authSlice";
 import useRefreshToken from "../hooks/useRefreshToken";

@@ -22,11 +22,11 @@ const persistConfig = {
 	// blacklist: ["user"],
 };
 
-const userPersistConfig = {
-	key: "user",
-	storage,
-	blacklist: ["accessToken"],
-};
+// const userPersistConfig = {
+// 	key: "user",
+// 	storage,
+// 	blacklist: ["accessToken"],
+// };
 
 const rootReducer = combineReducers({
 	user: userReducer,
