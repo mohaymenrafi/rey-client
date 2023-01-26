@@ -4,7 +4,10 @@ import { useAppSelector } from "../app/hooks";
 import { selectAuthUser } from "../features/auth/authSlice";
 import useRefreshToken from "../hooks/useRefreshToken";
 
-const BASE_URL = "http://localhost:5000/api";
+const SERVER_URL = "https://rey-server.onrender.com/api";
+const LOCAL_URL = "http://localhost:5000/api";
+const BASE_URL =
+	process.env.NODE_ENV === "development" ? LOCAL_URL : SERVER_URL;
 
 const axiosPublic = axios.create({
 	baseURL: BASE_URL,
