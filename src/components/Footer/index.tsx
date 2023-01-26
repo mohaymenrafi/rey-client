@@ -139,13 +139,15 @@ const Footer: React.FC = () => {
 							<li>Contact</li>
 						</Link>
 						<li>Blog</li>
-						<li>My account</li>
+						<li>
+							<Link to="/my-account">My account</Link>
+						</li>
 					</ul>
 				</LinksContainer>
 			</ContainerExtended>
 			<Container>
 				<Copyright>
-					<p>&copy; MhAbdullah 2022. </p>
+					<p>&copy; MhAbdullah 2023. </p>
 				</Copyright>
 			</Container>
 		</StyledBg>

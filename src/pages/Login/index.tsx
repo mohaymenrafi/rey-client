@@ -168,9 +168,9 @@ const Login = () => {
 					{error && <Error>{error}</Error>}
 				</FormContainer>
 				<Info>
-					<Link to="/auth/forget-password">
+					{/* <Link to="/auth/forget-password">
 						<p>Forgot Password</p>
-					</Link>
+					</Link> */}
 					<Link to="/register">
 						<p>Signup</p>
 					</Link>
