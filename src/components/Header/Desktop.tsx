@@ -8,6 +8,7 @@ import { CartIcon, Icon, IHeaderProps, Logo } from ".";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { userLogout, selectAuthUser } from "../../features/auth/authSlice";
 import { selectCart } from "../../features/cart/cartSlice";
+import { selectWishlist } from "../../features/wishlist/wishlistSlice";
 import { SmallText } from "../../styles/SmallText";
 import { theme } from "../../styles/theme";
 
@@ -68,6 +69,8 @@ const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 	const navigate = useNavigate();
 	const { user } = useAppSelector(selectAuthUser);
 	const { count } = useAppSelector(selectCart);
+	const { count: wishlistCount } = useAppSelector(selectWishlist);
+
 	const handleLogout = async () => {
 		try {
 			await dispatch(userLogout()).unwrap();
@@ -100,7 +103,7 @@ const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 			/>
 			<Right>
 				<span onClick={() => navigate("wishlist")}>
-					<CartIcon amount={count}>
+					<CartIcon amount={wishlistCount}>
 						<Icon>
 							<MdFavoriteBorder />
 						</Icon>

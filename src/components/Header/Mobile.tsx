@@ -11,6 +11,7 @@ import { useAppSelector } from "../../app/hooks";
 import { selectCart } from "../../features/cart/cartSlice";
 import { MdFavoriteBorder } from "react-icons/md";
 import { selectAuthUser } from "../../features/auth/authSlice";
+import { selectWishlist } from "../../features/wishlist/wishlistSlice";
 
 const MobileNav = styled.div`
 	display: flex;
@@ -37,6 +38,7 @@ const Mobile: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 	const [open, setOpen] = useState<boolean>(false);
 	const { count } = useAppSelector(selectCart);
 	const { user } = useAppSelector(selectAuthUser);
+	const { count: wishlistCount } = useAppSelector(selectWishlist);
 	return (
 		<>
 			<MobileNav>
@@ -51,7 +53,7 @@ const Mobile: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 				<ul>
 					<li>
 						<Link to="/wishlist">
-							<CartIcon amount={count}>
+							<CartIcon amount={wishlistCount}>
 								<MdFavoriteBorder />
 							</CartIcon>
 						</Link>
