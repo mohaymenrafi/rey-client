@@ -192,7 +192,7 @@ const Shop = () => {
 				<>
 					<Container>
 						<CardContainer>
-							{products.length ? (
+							{products?.length ? (
 								products.map((item, index) => (
 									<ProductCard item={item} key={index} />
 								))

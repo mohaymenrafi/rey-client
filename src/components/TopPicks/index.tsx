@@ -54,7 +54,7 @@ const TopPicks = () => {
 			<SectionTitle>BEST SELLING</SectionTitle>
 
 			<CardContainer>
-				{products.map((item: IProductType, index: number) => (
+				{products?.map((item: IProductType, index: number) => (
 					<ProductCard item={item} key={index} />
 				))}
 			</CardContainer>
