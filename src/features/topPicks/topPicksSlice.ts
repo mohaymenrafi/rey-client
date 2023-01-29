@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { axiosAuth, axiosPublic } from "../../apis/apiConfig";
+import { axiosPublic } from "../../apis/apiConfig";
 import { RootState } from "../../app/store";
 import { IProductType } from "../../types/product";
 
@@ -19,7 +19,7 @@ export const getTopPicks = createAsyncThunk(
 	"getTopPicks",
 	async (_, { rejectWithValue }) => {
 		try {
-			const response = await axiosAuth.get("/products/toppicks");
+			const response = await axiosPublic.get("/products/toppicks");
 			return response.data as IProductType[];
 		} catch (error: any) {
 			if (!error.response) {

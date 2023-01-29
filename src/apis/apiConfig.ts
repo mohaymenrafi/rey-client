@@ -4,8 +4,9 @@ import { useAppSelector } from "../app/hooks";
 import { selectAuthUser } from "../features/auth/authSlice";
 import useRefreshToken from "../hooks/useRefreshToken";
 
+const BASE_URL = "https://rey-server-production.up.railway.app/api";
 // const BASE_URL = "http://localhost:5000/api";
-const BASE_URL = "https://rey-server.onrender.com/api";
+// const BASE_URL = "https://rey-server.onrender.com/api";
 
 const axiosPublic = axios.create({
 	baseURL: BASE_URL,

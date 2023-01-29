@@ -17,13 +17,12 @@ import {
 	TwitterShareButton,
 } from "react-share";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectAllProducts } from "../../features/product/productSlice";
 import {
 	addToWishlist,
 	removeFromWishlist,
 	selectWishlist,
 } from "../../features/wishlist/wishlistSlice";
-import { filter, findIndex } from "lodash";
+import { findIndex } from "lodash";
 import {
 	ContainerExtended,
 	Image,
@@ -66,14 +65,13 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { productColorName } from "../../utils/productColorName";
 import { ProductCard } from "../../components";
+import { getSingleItem } from "../../services/singleItem";
+import Loader from "../../components/Loader";
 
 //Add react toast on successfull add to cart
 
 const SingleProduct = () => {
 	const { id } = useParams();
-	const {
-		products: { products },
-	} = useAppSelector(selectAllProducts);
 	const [cartAmount, setCartAmount] = useState<number>(1);
 	const [isFavourite, setIsFavourite] = useState<boolean>(false);
 	const [product, setProduct] = useState<IProductType>();
@@ -85,6 +83,7 @@ const SingleProduct = () => {
 	const dispatch = useAppDispatch();
 	const { wishlistProducts } = useAppSelector(selectWishlist);
 	const [relatedProducts, setRelatedProducts] = useState<IProductType[]>([]);
+	const [loading, setLoading] = useState<boolean>(false);
 
 	const url = "https://mhabdullah.vercel.app";
 
@@ -143,35 +142,42 @@ const SingleProduct = () => {
 		dispatch(removeFromWishlist({ id: item._id }));
 	};
 
-	const getRelatedProduct = (product: IProductType) => {
-		const filteredProducts = filter(
-			products,
-			(item) =>
-				item._id !== product._id &&
-				item.categories.includes(product.categories[0])
-		);
-		setRelatedProducts(filteredProducts);
+	const setItemData = (item: IProductType) => {
+		setProduct(item);
+		setStock(item.inStock);
+		setColor(item.color[0]);
+		setSize(item.size[0]);
+	};
+
+	const setSaleData = (item: IProductType) => {
+		if (!item.sale) return;
+		setIsSale(item.sale.active);
+		const saleAmount =
+			item.sale.type === "flat"
+				? item.price - item.sale.amount
+				: (item.sale.amount / 100) * item.price;
+		setSalePrice(item.price - saleAmount);
+	};
+
+	const fetchProduct = async (id: string) => {
+		setLoading(true);
+		try {
+			const response = await getSingleItem(id);
+			const { product: item, relatedProducts: relatedProductsFromAPI } =
+				response.data;
+			setItemData(item);
+			setRelatedProducts(relatedProductsFromAPI);
+			setSaleData(item);
+		} catch (error) {
+			console.error("single product fetch error", error);
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	useEffect(() => {
-		const item: IProductType | undefined = products.find(
-			(item) => item._id === id
-		);
-		if (item) {
-			setProduct(item);
-			setStock(item.inStock);
-			setColor(item.color[0]);
-			setSize(item.size[0]);
-			if (item.sale) {
-				setIsSale(item.sale.active);
-				if (item.sale.type === "flat") {
-					setSalePrice(item.price - item.sale.amount);
-				} else {
-					const saleAmount = (item.sale.amount / 100) * item.price;
-					setSalePrice(item.price - saleAmount);
-				}
-			}
-			getRelatedProduct(item);
+		if (id) {
+			fetchProduct(id);
 		}
 	}, [id]);
 
@@ -188,9 +194,13 @@ const SingleProduct = () => {
 	}, [handleRemoveFromWishlist, handleAddToWishlist]);
 
 	//Add a nice error message here if product not available
+	if (loading) {
+		return <Loader />;
+	}
 	if (product === undefined) {
 		return <h2>The product you're looking for is not available</h2>;
 	}
+
 	return (
 		<ContainerExtended>
 			<Layout>
