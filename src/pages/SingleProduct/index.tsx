@@ -4,7 +4,7 @@ import { BsPatchCheck } from "react-icons/bs";
 import { GiCancel } from "react-icons/gi";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import { Text } from "../../styles/text";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ICartProduct, IProductType } from "../../types/product";
 import {
 	FacebookIcon,
@@ -67,6 +67,7 @@ import { productColorName } from "../../utils/productColorName";
 import { ProductCard } from "../../components";
 import { getSingleItem } from "../../services/singleItem";
 import Loader from "../../components/Loader";
+import { selectAuthUser } from "../../features/auth/authSlice";
 
 //Add react toast on successfull add to cart
 
@@ -84,6 +85,9 @@ const SingleProduct = () => {
 	const { wishlistProducts } = useAppSelector(selectWishlist);
 	const [relatedProducts, setRelatedProducts] = useState<IProductType[]>([]);
 	const [loading, setLoading] = useState<boolean>(false);
+	const { user } = useAppSelector(selectAuthUser);
+	const navigate = useNavigate();
+	const location = useLocation();
 
 	const url = "https://mhabdullah.vercel.app";
 
@@ -94,36 +98,40 @@ const SingleProduct = () => {
 	};
 
 	const handleAddToCart = async (): Promise<void> => {
-		if (product) {
-			if (color && size) {
-				const cartData: ICartProduct = {
-					productId: product._id,
-					title: product.title,
-					img: product.img,
-					quantity: cartAmount,
-					color: color,
-					size: size,
-					price: isSale ? salePrice : product.price,
-				};
-				dispatch(addToCart(cartData));
-				try {
-					const response = await dispatch(
-						addProductToCart({
-							productId: product._id,
-							title: product.title,
-							img: product.img,
-							quantity: cartAmount,
-							color: color,
-							size: size,
-							price: isSale ? salePrice : product.price,
-						})
-					).unwrap();
-					if (response) successToast("product added to cart");
-				} catch (error) {
-					dispatch(removeFromCart(cartData));
-					console.log({ cartError: error });
+		if (user) {
+			if (product) {
+				if (color && size) {
+					const cartData: ICartProduct = {
+						productId: product._id,
+						title: product.title,
+						img: product.img,
+						quantity: cartAmount,
+						color: color,
+						size: size,
+						price: isSale ? salePrice : product.price,
+					};
+					dispatch(addToCart(cartData));
+					try {
+						const response = await dispatch(
+							addProductToCart({
+								productId: product._id,
+								title: product.title,
+								img: product.img,
+								quantity: cartAmount,
+								color: color,
+								size: size,
+								price: isSale ? salePrice : product.price,
+							})
+						).unwrap();
+						if (response) successToast("product added to cart");
+					} catch (error) {
+						dispatch(removeFromCart(cartData));
+						console.log({ cartError: error });
+					}
 				}
 			}
+		} else {
+			navigate("/login", { state: { from: location } });
 		}
 	};
 

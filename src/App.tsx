@@ -39,14 +39,7 @@ function App() {
 						</PrivateRoute>
 					}
 				/>
-				<Route
-					path="wishlist"
-					element={
-						<PrivateRoute>
-							<WishlistPage />
-						</PrivateRoute>
-					}
-				/>
+				<Route path="wishlist" element={<WishlistPage />} />
 				<Route
 					path="order/success"
 					element={

@@ -15,6 +15,7 @@ import { formatPrice } from "../../utils/currencyFormatter";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { successToast } from "../../utils/showToast";
+import { selectAuthUser } from "../../features/auth/authSlice";
 
 const CardContainer = styled.div`
 	position: relative;
@@ -184,6 +185,7 @@ const ProductCard: FC<IProps> = ({ item }) => {
 	const [salePrice, setSalePrice] = useState<number>(0);
 	const dispatch = useAppDispatch();
 	const { wishlistProducts } = useAppSelector(selectWishlist);
+	const { user } = useAppSelector(selectAuthUser);
 
 	const handleAddToWishlist = (item: IProductType): void => {
 		dispatch(addToWishlist(item));

@@ -10,6 +10,7 @@ import {
 	Logos,
 } from "../../components";
 import Loader from "../../components/Loader";
+import { getProductsFromCart } from "../../features/cart/cartSlice";
 import { getTopPicks } from "../../features/topPicks/topPicksSlice";
 
 interface CustomizedState {
@@ -32,8 +33,16 @@ export default function Home() {
 			console.log("top picks fetch error", error);
 		}
 	};
+	const loadCart = async () => {
+		try {
+			await dispatch(getProductsFromCart()).unwrap();
+		} catch (error: any) {
+			console.log("cart load error", error);
+		}
+	};
 	useEffect(() => {
 		loadTopPicks();
+		loadCart();
 	}, []);
 
 	return (
