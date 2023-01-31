@@ -160,6 +160,7 @@ const Shop = () => {
 		} else {
 			setCategoryFilter(item.toLowerCase());
 		}
+		setPage(1);
 	};
 
 	if (error) {
