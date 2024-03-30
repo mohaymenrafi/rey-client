@@ -198,7 +198,7 @@ const Shop = () => {
 									<ProductCard item={item} key={index} />
 								))
 							) : (
-								<NoProducts>No Products Found</NoProducts>
+								<NoProducts>No products found</NoProducts>
 							)}
 						</CardContainer>
 					</Container>

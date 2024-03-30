@@ -46,10 +46,12 @@ export const getProductsFromCart = createAsyncThunk(
 	async (_, { getState, rejectWithValue }) => {
 		const state = getState() as RootState;
 		const userId = state?.user?.user?.id;
+
 		try {
 			const response = await axiosPrivate.get(`/cart/${userId}`);
 			return response.data.products;
 		} catch (error: any) {
+			console.log(error);
 			if (!error.response) {
 				throw error;
 			}
@@ -165,6 +167,7 @@ const cartSlice = createSlice({
 			.addCase(
 				getProductsFromCart.fulfilled,
 				(state, action: PayloadAction<ICartProduct[]>) => {
+					if (!action.payload) return;
 					state.products = action.payload;
 					const { count, subTotal, total } = cartCalculator(state.products);
 					state.count = count;

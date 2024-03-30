@@ -4,9 +4,11 @@ import { useAppSelector } from "../app/hooks";
 import { selectAuthUser } from "../features/auth/authSlice";
 import useRefreshToken from "../hooks/useRefreshToken";
 
-const BASE_URL = "https://rey-server-production.up.railway.app/api";
-// const BASE_URL = "http://localhost:5000/api";
-// const BASE_URL = "https://rey-server.onrender.com/api";
+const { REACT_APP_DEV_BASE_URL, REACT_APP_PROD_BASE_URL, NODE_ENV } =
+	process.env;
+
+const BASE_URL =
+	NODE_ENV === "production" ? REACT_APP_PROD_BASE_URL : REACT_APP_DEV_BASE_URL;
 
 const axiosPublic = axios.create({
 	baseURL: BASE_URL,
