@@ -51,7 +51,6 @@ export const getProductsFromCart = createAsyncThunk(
 			const response = await axiosPrivate.get(`/cart/${userId}`);
 			return response.data.products;
 		} catch (error: any) {
-			console.log(error);
 			if (!error.response) {
 				throw error;
 			}

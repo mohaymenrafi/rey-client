@@ -213,6 +213,7 @@ const CartPage = () => {
 		if (user !== null) {
 			try {
 				const response = await createCheckoutSession(user.id);
+				console.log(response.data);
 				const { url } = response.data;
 				window.location.href = url;
 			} catch (error) {

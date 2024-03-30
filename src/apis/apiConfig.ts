@@ -4,11 +4,13 @@ import { useAppSelector } from "../app/hooks";
 import { selectAuthUser } from "../features/auth/authSlice";
 import useRefreshToken from "../hooks/useRefreshToken";
 
-const { REACT_APP_DEV_BASE_URL, REACT_APP_PROD_BASE_URL, NODE_ENV } =
+const { REACT_APP_DEV_BASE_URL, REACT_APP_PROD_BASE_URL, REACT_APP_NODE_ENV } =
 	process.env;
 
 const BASE_URL =
-	NODE_ENV === "production" ? REACT_APP_PROD_BASE_URL : REACT_APP_DEV_BASE_URL;
+	REACT_APP_NODE_ENV === "production"
+		? REACT_APP_PROD_BASE_URL
+		: REACT_APP_DEV_BASE_URL;
 
 const axiosPublic = axios.create({
 	baseURL: BASE_URL,
