@@ -61,15 +61,11 @@ import {
 } from "../../features/cart/cartSlice";
 import { formatPrice } from "../../utils/currencyFormatter";
 import { successToast } from "../../utils/showToast";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { productColorName } from "../../utils/productColorName";
 import { ProductCard } from "../../components";
 import { getSingleItem } from "../../services/singleItem";
 import Loader from "../../components/Loader";
 import { selectAuthUser } from "../../features/auth/authSlice";
-
-//Add react toast on successfull add to cart
 
 const SingleProduct = () => {
 	const { id } = useParams();
@@ -98,6 +94,7 @@ const SingleProduct = () => {
 	};
 
 	const handleAddToCart = async (): Promise<void> => {
+		successToast("product added to cart");
 		if (user) {
 			if (product) {
 				if (color && size) {
@@ -123,7 +120,6 @@ const SingleProduct = () => {
 								price: isSale ? salePrice : product.price,
 							})
 						).unwrap();
-						if (response) successToast("product added to cart");
 					} catch (error) {
 						dispatch(removeFromCart(cartData));
 						console.log({ cartError: error });
@@ -143,8 +139,8 @@ const SingleProduct = () => {
 
 	//Wishlist
 	const handleAddToWishlist = (item: IProductType): void => {
-		dispatch(addToWishlist(item));
 		successToast("product added to wishlist");
+		dispatch(addToWishlist(item));
 	};
 	const handleRemoveFromWishlist = (item: IProductType): void => {
 		dispatch(removeFromWishlist({ id: item._id }));
@@ -400,7 +396,6 @@ const SingleProduct = () => {
 					</RelatedProducts>
 				</RelatedProductsContainer>
 			</Layout>
-			<ToastContainer />
 		</ContainerExtended>
 	);
 };

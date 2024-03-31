@@ -1,12 +1,6 @@
-import { map } from "lodash";
-import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectAllProducts } from "../../features/product/productSlice";
-import {
-	getTopPicks,
-	selectTopPicks,
-} from "../../features/topPicks/topPicksSlice";
+import { useAppSelector } from "../../app/hooks";
+import { selectTopPicks } from "../../features/topPicks/topPicksSlice";
 import Container from "../../styles/Container";
 import { theme } from "../../styles/theme";
 import { IProductType } from "../../types/product";
@@ -37,9 +31,6 @@ export const CardContainer = styled.div`
 		padding-top: 50px;
 		grid-template-columns: repeat(4, 1fr);
 	}
-	@media (min-width: ${theme.sc["2xl"]}) {
-		grid-template-columns: repeat(5, 1fr);
-	}
 `;
 
 const TopPicks = () => {
@@ -52,7 +43,6 @@ const TopPicks = () => {
 	return (
 		<ContainerExtended>
 			<SectionTitle>BEST SELLING</SectionTitle>
-
 			<CardContainer>
 				{products?.map((item: IProductType, index: number) => (
 					<ProductCard item={item} key={index} />

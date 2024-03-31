@@ -12,7 +12,6 @@ import {
 } from "../../features/wishlist/wishlistSlice";
 import { findIndex } from "lodash";
 import { formatPrice } from "../../utils/currencyFormatter";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { successToast } from "../../utils/showToast";
 import { selectAuthUser } from "../../features/auth/authSlice";
@@ -275,7 +274,6 @@ const ProductCard: FC<IProps> = ({ item }) => {
 					<StockOut>This product is currently out of stock.</StockOut>
 				)}
 			</ViewDetails>
-			<ToastContainer />
 		</CardContainer>
 	);
 };
