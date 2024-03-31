@@ -175,6 +175,7 @@ const Login = () => {
 						<p>Signup</p>
 					</Link>
 				</Info>
+				<Info> username: test | password: 123456</Info>
 			</div>
 		</ContainerExtended>
 	);
