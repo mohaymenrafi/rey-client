@@ -1,4 +1,4 @@
-// I need to fix this later "any"  type. Only product colors will be any type, others will be strcitly types.
+// I need to fix this later "any"  type. Only product colors will be any type, others will be strcitly typed.
 //TODO: update the product colors in the mongodb file. change from static name to hex codes there.
 
 const theme: any = {

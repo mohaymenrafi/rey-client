@@ -188,7 +188,6 @@ const ProductCard: FC<IProps> = ({ item }) => {
 
 	const handleAddToWishlist = (item: IProductType): void => {
 		dispatch(addToWishlist(item));
-		//TODO: check the toast error
 		successToast("product added to wishlist");
 	};
 	const handleRemoveFromWishlist = (item: IProductType): void => {
@@ -196,17 +195,18 @@ const ProductCard: FC<IProps> = ({ item }) => {
 	};
 
 	useEffect(() => {
-		const isFound: number = findIndex(
-			wishlistProducts,
-			(product) => product._id === item._id
-		);
-		if (isFound > -1) {
-			setIsFavourite(true);
-		} else {
-			setIsFavourite(false);
+		if (wishlistProducts) {
+			const isFound: number = findIndex(
+				wishlistProducts,
+				(product) => product._id === item._id
+			);
+			if (isFound > -1) {
+				setIsFavourite(true);
+			} else {
+				setIsFavourite(false);
+			}
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [handleRemoveFromWishlist, handleAddToWishlist]);
+	}, [wishlistProducts, item]);
 
 	useEffect(() => {
 		if (item.sale) {

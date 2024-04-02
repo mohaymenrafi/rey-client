@@ -18,7 +18,16 @@ export const wishlistSlice = createSlice({
 	initialState,
 	reducers: {
 		addToWishlist: (state, action: PayloadAction<ProductType>) => {
-			state.wishlistProducts.push(action.payload);
+			const newProducts = [...state.wishlistProducts];
+			const index = newProducts.findIndex(
+				(product) => product._id === action.payload._id
+			);
+			if (index > -1) {
+				return;
+			}
+			newProducts.push(action.payload);
+
+			state.wishlistProducts = newProducts;
 			state.count = state.count + 1;
 		},
 		removeFromWishlist: (state, action: PayloadAction<{ id: string }>) => {
