@@ -147,7 +147,7 @@ const Footer: React.FC = () => {
 			</ContainerExtended>
 			<Container>
 				<Copyright>
-					<p>&copy; MhAbdullah 2023. </p>
+					<p>&copy; MhAbdullah 2024 </p>
 				</Copyright>
 			</Container>
 		</StyledBg>
