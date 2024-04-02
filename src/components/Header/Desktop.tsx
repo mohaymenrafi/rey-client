@@ -4,13 +4,14 @@ import { BsBag } from "react-icons/bs";
 import { MdFavoriteBorder } from "react-icons/md";
 import { Link, useNavigate, NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { CartIcon, Icon, IHeaderProps, Logo } from ".";
+import { IHeaderProps, Logo } from ".";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { userLogout, selectAuthUser } from "../../features/auth/authSlice";
-import { selectCart } from "../../features/cart/cartSlice";
+import { clearCart, selectCart } from "../../features/cart/cartSlice";
 import { selectWishlist } from "../../features/wishlist/wishlistSlice";
 import { SmallText } from "../../styles/SmallText";
 import { theme } from "../../styles/theme";
+import IconText from "../Common/IconText";
 
 const DesktopNav = styled.div`
 	display: none;
@@ -51,9 +52,6 @@ const DesktopNav = styled.div`
 	}
 `;
 
-// const CartIcon = styled(Icon)`
-// `
-
 const Right = styled.div`
 	display: flex;
 	justify-content: flex-end;
@@ -74,6 +72,7 @@ const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 	const handleLogout = async () => {
 		try {
 			await dispatch(userLogout()).unwrap();
+			dispatch(clearCart());
 		} catch (error) {
 			console.error("logout error", error);
 		}
@@ -86,11 +85,7 @@ const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 		<DesktopNav>
 			<ul>
 				{map(menuItem, (item, idx) => (
-					<NavLink
-						key={idx}
-						to={item.url}
-						// style={({ isActive }) => (isActive ? activeStyle : {})}
-					>
+					<NavLink key={idx} to={item.url}>
 						{item.name}
 					</NavLink>
 				))}
@@ -102,20 +97,13 @@ const Desktop: React.FC<IHeaderProps> = ({ logo, menuItem }) => {
 				onClick={hanldeLogoClick}
 			/>
 			<Right>
-				<span onClick={() => navigate("wishlist")}>
-					<CartIcon amount={wishlistCount}>
-						<Icon>
-							<MdFavoriteBorder />
-						</Icon>
-					</CartIcon>
-				</span>
-				<span onClick={() => navigate("cart")}>
-					<CartIcon amount={count}>
-						<Icon>
-							<BsBag />
-						</Icon>
-					</CartIcon>
-				</span>
+				<IconText
+					func={() => navigate("wishlist")}
+					text={wishlistCount}
+					IconEl={MdFavoriteBorder}
+				/>
+				<IconText func={() => navigate("cart")} text={count} IconEl={BsBag} />
+
 				{user ? (
 					<>
 						<SmallText>

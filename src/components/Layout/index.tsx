@@ -15,14 +15,6 @@ const Container = styled.div`
 const Main = styled.main`
 	flex-grow: 1;
 `;
-const ToastContainer = styled.div`
-	[data-rich-colors="true"] [data-sonner-toast][data-type="success"],
-	[data-rich-colors="true"]
-		[data-sonner-toast][data-type="success"]
-		[data-close-button] {
-		padding: 12px 20px;
-	}
-`;
 
 const Layout = () => {
 	return (
@@ -35,9 +27,16 @@ const Layout = () => {
 				</Main>
 				<Footer />
 			</Container>
-			<ToastContainer>
-				<Toaster richColors position="top-right" />
-			</ToastContainer>
+			<Toaster
+				richColors
+				toastOptions={{
+					style: {
+						padding: "8px 12px",
+					},
+				}}
+				closeButton
+				position="top-right"
+			/>
 		</Theme>
 	);
 };

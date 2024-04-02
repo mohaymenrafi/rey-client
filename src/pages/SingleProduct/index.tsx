@@ -186,16 +186,18 @@ const SingleProduct = () => {
 	}, [id]);
 
 	useEffect(() => {
-		const isFound: number = findIndex(
-			wishlistProducts,
-			(item) => product?._id === item._id
-		);
-		if (isFound > -1) {
-			setIsFavourite(true);
-		} else {
-			setIsFavourite(false);
+		if (product) {
+			const isFound: number = findIndex(
+				wishlistProducts,
+				(item) => item._id === product._id
+			);
+			if (isFound > -1) {
+				setIsFavourite(true);
+			} else {
+				setIsFavourite(false);
+			}
 		}
-	}, [handleRemoveFromWishlist, handleAddToWishlist]);
+	}, [wishlistProducts, product]);
 
 	//Add a nice error message here if product not available
 	if (loading) {
@@ -305,12 +307,16 @@ const SingleProduct = () => {
 								<AiFillHeart
 									onClick={() => handleRemoveFromWishlist(product)}
 								/>
-								<span>Added to Wishlist</span>
+								<span onClick={() => handleRemoveFromWishlist(product)}>
+									Added to Wishlist
+								</span>
 							</>
 						) : (
 							<>
 								<AiOutlineHeart onClick={() => handleAddToWishlist(product)} />
-								<span>Add to Wishlist</span>
+								<span onClick={() => handleAddToWishlist(product)}>
+									Add to Wishlist
+								</span>
 							</>
 						)}
 					</AddToWishlist>
