@@ -242,7 +242,7 @@ const ProductCard: FC<IProps> = ({ item }) => {
 				))}
 			</Category>
 			<h2>
-				<Link to={`/products/${item?._id}`}>{item?.title}</Link>
+				<Link to={`/product/${item?._id}`}>{item?.title}</Link>
 			</h2>
 
 			<Price isHover={isHover} sale={isSale}>
@@ -254,12 +254,9 @@ const ProductCard: FC<IProps> = ({ item }) => {
 				{item?.inStock ? (
 					<>
 						<View>
-							<Link to={`/products/${item?._id}`}>view details</Link>
+							<Link to={`/product/${item?._id}`}>view details</Link>
 						</View>
 
-						{/* <Icon>
-							<AiOutlineShoppingCart />
-						</Icon> */}
 						{isFavourite ? (
 							<Icon onClick={() => handleRemoveFromWishlist(item)}>
 								<MdFavorite />

@@ -67,7 +67,7 @@ const CardMedia = styled.img`
 `;
 
 const Card: React.FC<IProps> = ({ text, image, height }) => {
-	const { navigateToShop } = useNavigateToShop();
+	const { navigateToShop } = useNavigateToShop(text);
 	return (
 		<CardContainer height={height}>
 			<CardMedia src={image} alt="text" />

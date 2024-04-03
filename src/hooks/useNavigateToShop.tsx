@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router-dom";
 
-const useNavigateToShop = () => {
+const useNavigateToShop = (cat: string) => {
 	const naviagte = useNavigate();
 	const navigateToShop = () => {
-		naviagte("/products");
+		naviagte("/products/", { state: { cat } });
 	};
 	return { navigateToShop };
 };

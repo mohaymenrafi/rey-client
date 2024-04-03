@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import Container from "../../../styles/Container";
 import StyledBackground from "../../../styles/StyledBackground";
@@ -7,6 +6,8 @@ import { FaFacebookF, FaInstagram, FaPinterestP } from "react-icons/fa";
 import Card from "../Card/Card";
 import Beds from "../../../assets/beds.jpeg";
 import Chair from "../../../assets/chairs.jpeg";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const ExtendedContainer = styled(Container)`
 	display: grid;
@@ -116,6 +117,9 @@ const Icon = styled.span`
 	color: ${theme.col["black-2"]};
 	font-size: ${theme.fs.md};
 	margin-right: 20px;
+	:hover {
+		cursor: pointer;
+	}
 `;
 
 const Middle = styled.div`
@@ -125,6 +129,17 @@ const Middle = styled.div`
 `;
 
 const DisplayCatOne = () => {
+	const [email, setEmail] = useState<string>("");
+	const handleNewletterSubmit = (
+		event: React.FormEvent<HTMLFormElement>
+	): void => {
+		event.preventDefault();
+		if (email) {
+			toast.success("You have successfully subscribed to our newsletter");
+		}
+		setEmail("");
+	};
+
 	return (
 		<StyledBackground blue={true}>
 			<ExtendedContainer>
@@ -136,10 +151,15 @@ const DisplayCatOne = () => {
 							YOUR FIRST PURCHASE
 						</h2>
 					</div>
-					<form>
+					<form onSubmit={handleNewletterSubmit}>
 						<div>
-							<input type="text" placeholder="YOUR EMAIL ADDRESS" />
-							<button>JOIN</button>
+							<input
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+								type="email"
+								placeholder="YOUR EMAIL ADDRESS"
+							/>
+							<button type="submit">JOIN</button>
 						</div>
 					</form>
 					<div>

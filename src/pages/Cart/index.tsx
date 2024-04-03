@@ -246,7 +246,7 @@ const CartPage = () => {
 											<img src={item.img} alt={item.title} />
 										</td>
 										<td className="nameCol">
-											<Link to={`/products/${item.productId}`}>
+											<Link to={`/product/${item.productId}`}>
 												<CartTitle>{item.title}</CartTitle>
 											</Link>
 											<ItemInfo>

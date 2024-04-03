@@ -13,6 +13,7 @@ import {
 	SingleProduct,
 	MyAccount,
 	Success,
+	NotFound,
 } from "./pages";
 
 function App() {
@@ -22,6 +23,8 @@ function App() {
 			<Route path="/" element={<Laylout />}>
 				<Route index element={<Home />} />
 				<Route path="products" element={<Shop />} />
+
+				<Route path="product/:id" element={<SingleProduct />} />
 
 				<Route
 					path="my-account"
@@ -48,7 +51,6 @@ function App() {
 						</PrivateRoute>
 					}
 				/>
-				<Route path="products/:id" element={<SingleProduct />} />
 
 				<Route path="contact" element={<Contact />} />
 				<Route path="login" element={user ? <Navigate to="/" /> : <Login />} />
@@ -57,6 +59,7 @@ function App() {
 					element={user ? <Navigate to="/" /> : <Register />}
 				/>
 			</Route>
+			<Route path="*" element={<NotFound />} />
 		</Routes>
 	);
 }
