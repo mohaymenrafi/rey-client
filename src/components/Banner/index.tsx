@@ -81,7 +81,7 @@ const BannerTextSM = styled.button<{ bgColor?: string }>`
 `;
 
 const Banner = () => {
-	const { navigateToShop } = useNavigateToShop();
+	const { navigateToShop } = useNavigateToShop("");
 	return (
 		<StyledBackground blue={true}>
 			<ContainerExtended>

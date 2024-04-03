@@ -8,3 +8,4 @@ export { default as SingleProduct } from "./SingleProduct";
 export { default as WishlistPage } from "./Wishlist";
 export { default as MyAccount } from "./MyAccount";
 export { default as Success } from "./Success";
+export { default as NotFound } from "./NotFound";

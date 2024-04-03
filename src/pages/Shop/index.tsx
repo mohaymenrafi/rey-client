@@ -11,6 +11,7 @@ import {
 } from "../../features/product/productSlice";
 import Loader from "../../components/Loader";
 import Pagination from "@mui/material/Pagination";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const PaginationContainer = styled(Container)`
 	display: flex;
@@ -85,6 +86,9 @@ const CategoryBox = styled.div`
 				display: block;
 				transform: scaleX(0);
 			}
+			&[data-active="true"]::after {
+				transform: scaleX(1);
+			}
 			&:hover {
 				&::after {
 					transform: scaleX(1);
@@ -127,6 +131,24 @@ const Error = styled.div`
 	}
 `;
 
+const SHOP_CATEGORY = [
+	"beds",
+	"chairs",
+	"lighting",
+	"sofas",
+	"storage",
+	"tables",
+];
+
+const categoryObj: Record<string, any> = {
+	"BEDS & MATTRESES": "beds",
+	CHAIRS: "chairs",
+	LIGHTING: "lighting",
+	STORAGE: "storage",
+	"ACCENT CHAIRS": "chairs",
+	RUGS: "sofas",
+};
+
 const Shop = () => {
 	const dispatch = useAppDispatch();
 	const {
@@ -136,7 +158,16 @@ const Shop = () => {
 	} = useAppSelector(selectAllProducts);
 	const [page, setPage] = useState<number>(1);
 	const [limit, setLimit] = useState<number>(12);
-	const [categoryFilter, setCategoryFilter] = useState<string>("");
+	const location = useLocation();
+	const navigate = useNavigate();
+	const catObj = location.state as { cat: string } | null;
+	let cat = "";
+	if (catObj) {
+		cat = SHOP_CATEGORY.includes(categoryObj[catObj.cat])
+			? categoryObj[catObj.cat]
+			: "";
+	}
+	const [categoryFilter, setCategoryFilter] = useState<string>(cat);
 
 	const loadProducts = async () => {
 		try {
@@ -150,11 +181,16 @@ const Shop = () => {
 		loadProducts();
 	}, [page, categoryFilter]);
 
+	useEffect(() => {
+		navigate(location.pathname, { state: null });
+	}, []);
+
 	const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
 		setPage(value);
 	};
 
 	const handleCatClick = (item: string): void => {
+		console.log("cat name=>", item.toLowerCase());
 		if (item.toLowerCase() === "all") {
 			setCategoryFilter("");
 		} else {
@@ -179,11 +215,21 @@ const Shop = () => {
 				<SpacerDiv />
 				<CategoryBox>
 					<ul>
-						{categories.map((item, idx) => (
-							<li key={idx} onClick={() => handleCatClick(item)}>
-								{item}
-							</li>
-						))}
+						{categories.map((item, idx) => {
+							const isActive =
+								item.toLowerCase() === categoryFilter ||
+								(idx === 0 && categoryFilter === "");
+
+							return (
+								<li
+									data-active={isActive}
+									key={idx}
+									onClick={() => handleCatClick(item)}
+								>
+									{item}
+								</li>
+							);
+						})}
 					</ul>
 				</CategoryBox>
 			</ContainerExtended>
